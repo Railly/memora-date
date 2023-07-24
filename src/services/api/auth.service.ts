@@ -16,13 +16,13 @@ class ServerAuthService {
 
       return { error, data };
     } catch (error) {
+      console.error(error);
       return {
         data: null,
         error: {
           name: AUTH_ERROR,
           message: "Something went wrong, please try again later",
           status: 500,
-          error,
         },
       };
     }
@@ -38,13 +38,35 @@ class ServerAuthService {
 
       return { error, data };
     } catch (error) {
+      console.error(error);
       return {
         data: null,
         error: {
           name: AUTH_ERROR,
           message: "Something went wrong, please try again later",
           status: 500,
-          error,
+        },
+      };
+    }
+  }
+
+  async signOut() {
+    try {
+      const { error, data } = await supabase.auth.getSession();
+      if (error) {
+        return { error, data };
+      }
+      if (data.session) {
+        await supabase.auth.signOut();
+      }
+    } catch (error) {
+      console.error(error);
+      return {
+        data: null,
+        error: {
+          name: AUTH_ERROR,
+          message: "Something went wrong, please try again later",
+          status: 500,
         },
       };
     }
