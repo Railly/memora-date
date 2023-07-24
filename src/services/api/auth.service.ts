@@ -71,6 +71,29 @@ class ServerAuthService {
       };
     }
   }
+
+  async signInWithProvider(provider: "google" | "github") {
+    try {
+      const response = await supabase.auth.signInWithOAuth({
+        provider,
+        options: {
+          redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/callback`,
+        },
+      });
+
+      return response;
+    } catch (error) {
+      console.error(error);
+      return {
+        data: null,
+        error: {
+          name: AUTH_ERROR,
+          message: "Something went wrong, please try again later",
+          status: 500,
+        },
+      };
+    }
+  }
 }
 
 export default ServerAuthService;

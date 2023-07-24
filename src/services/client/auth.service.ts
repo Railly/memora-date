@@ -6,7 +6,7 @@ class ClientAuthService {
   async signInWithEmailAndPassword(body: SignInSchema) {
     try {
       const { email, password } = body;
-      const response = await fetch("/api/auth/sign-in", {
+      const response = await fetch("/api/auth/sign-in/email", {
         method: "POST",
         body: JSON.stringify({ email, password }),
         headers: {
@@ -62,6 +62,31 @@ class ClientAuthService {
       if (!response.ok) {
         throw new HttpError(response.status, response.statusText);
       }
+    } catch (error) {
+      if (error instanceof HttpError) {
+        console.error(`HTTP Error: ${error.status} - ${error.statusText}`);
+      } else {
+        console.error(error);
+      }
+      throw error;
+    }
+  }
+
+  async signInWithProvider(provider: "google" | "github") {
+    try {
+      const response = await fetch(
+        `/api/auth/sign-in/oauth?provider=${provider}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      if (!response.ok) {
+        throw new HttpError(response.status, response.statusText);
+      }
+      return response.json();
     } catch (error) {
       if (error instanceof HttpError) {
         console.error(`HTTP Error: ${error.status} - ${error.statusText}`);

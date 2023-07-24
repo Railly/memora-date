@@ -27,11 +27,10 @@ export default function LoginPage() {
 
   const onSubmit = async (data: SignInSchema) => {
     console.log(data);
-    const response = await clientApiProvider.auth.signUpWithEmailAndPassword(
-      data
-    );
-
-    console.log({ response });
+    const response = await clientApiProvider.auth.signInWithProvider("google");
+    if (!response.error) {
+      router.push(response.data.data.url);
+    }
   };
 
   const handleSignUp = async (data: SignInSchema) => {
