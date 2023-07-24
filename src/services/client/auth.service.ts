@@ -1,4 +1,4 @@
-import { SignInSchema } from "@/app/schemas/auth.schema";
+import { SignInSchema } from "@/schemas/auth.schema";
 import { AUTH_ERROR } from "../constants";
 
 class ClientAuthService {

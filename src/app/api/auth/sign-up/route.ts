@@ -1,5 +1,5 @@
 import serverApiProvider from "@/services/api";
-import { signInSchema } from "@/app/schemas/auth.schema";
+import { signInSchema } from "@/schemas/auth.schema";
 import { CustomResponse } from "../../utils/response.utils";
 import { validateBody } from "../../utils/validation.utils";
 

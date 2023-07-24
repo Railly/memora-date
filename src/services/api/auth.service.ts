@@ -1,4 +1,4 @@
-import { SignInSchema } from "@/app/schemas/auth.schema";
+import { SignInSchema } from "@/schemas/auth.schema";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { AUTH_ERROR } from "../constants";
