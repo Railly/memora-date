@@ -1,6 +1,5 @@
 "use client";
 import { useForm } from "react-hook-form";
-import * as zod from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
@@ -8,25 +7,16 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-
-const schema = zod.object({
-  email: zod.string().email({
-    message: "Please enter a valid email",
-  }),
-  password: zod
-    .string()
-    .min(10, { message: "Password must be at least 10 characters long" }),
-});
-
-type LoginForm = zod.infer<typeof schema>;
+import { SignInSchema, signInSchema } from "../schemas/auth.schema";
+import clientApiProvider from "@/services/client";
 
 export default function LoginPage() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<LoginForm>({
-    resolver: zodResolver(schema),
+  } = useForm<SignInSchema>({
+    resolver: zodResolver(signInSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -34,14 +24,17 @@ export default function LoginPage() {
   });
   const router = useRouter();
   const supabase = createClientComponentClient();
-  // const supabase = createClientComponentClient<Database>()
 
-  const onSubmit = (data: LoginForm) => {
+  const onSubmit = async (data: SignInSchema) => {
     console.log(data);
-    handleSignIn(data);
+    const response = await clientApiProvider.auth.signUpWithEmailAndPassword(
+      data
+    );
+
+    console.log({ response });
   };
 
-  const handleSignUp = async (data: LoginForm) => {
+  const handleSignUp = async (data: SignInSchema) => {
     console.log("handleSignUp");
     const { email, password } = data;
     await supabase.auth.signUp({
@@ -54,7 +47,7 @@ export default function LoginPage() {
     router.refresh();
   };
 
-  const handleSignIn = async (data: LoginForm) => {
+  const handleSignIn = async (data: SignInSchema) => {
     console.log("handleSignIn");
     const { email, password } = data;
     await supabase.auth.signInWithPassword({
