@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { SignInSchema, signInSchema } from "../schemas/auth.schema";
+import { SignInSchema, signInSchema } from "../../schemas/auth.schema";
 import clientApiProvider from "@/services/client";
 import LogoMemora from "@/components/icons/logo-memora";
 import At from "@/components/icons/at";
@@ -34,11 +34,10 @@ export default function LoginPage() {
 
   const onSubmit = async (data: SignInSchema) => {
     console.log(data);
-    const response = await clientApiProvider.auth.signUpWithEmailAndPassword(
-      data
-    );
-
-    console.log({ response });
+    const response = await clientApiProvider.auth.signInWithProvider("google");
+    if (!response.error) {
+      router.push(response.data.data.url);
+    }
   };
 
   const handleSignUp = async (data: SignInSchema) => {
