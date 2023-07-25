@@ -1,7 +1,7 @@
 import serverApiProvider from "@/services/api";
 import { signInSchema } from "@/schemas/auth.schema";
-import { ApiResponse } from "../../utils/response.utils";
-import { validateBody } from "../../utils/validation.utils";
+import { ApiResponse } from "../../../utils/response.utils";
+import { validateBody } from "../../../utils/validation.utils";
 
 export async function POST(req: Request) {
   try {
@@ -9,15 +9,13 @@ export async function POST(req: Request) {
     if (body.error) {
       return ApiResponse.clientError("Invalid request body", body.error);
     }
-
-    const response = await serverApiProvider.auth.signUpWithEmailAndPassword(
+    const response = await serverApiProvider.auth.signInWithEmailAndPassword(
       body.data
     );
     if (response.error) {
       return ApiResponse.serverError(response.error.message, response.error);
     }
-
-    return ApiResponse.success({ data: response.data });
+    return ApiResponse.success(response);
   } catch (error) {
     return ApiResponse.serverError(
       "Something went wrong, please try again later",
