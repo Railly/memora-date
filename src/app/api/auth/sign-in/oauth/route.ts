@@ -1,5 +1,5 @@
 import serverApiProvider from "@/services/api";
-import { CustomResponse } from "../../../utils/response.utils";
+import { ApiResponse } from "../../../utils/response.utils";
 
 export async function POST(req: Request) {
   try {
@@ -13,9 +13,9 @@ export async function POST(req: Request) {
     }
 
     const response = await serverApiProvider.auth.signInWithProvider(provider);
-    return CustomResponse.success(response);
+    return ApiResponse.success(response);
   } catch (error) {
-    return CustomResponse.serverError(
+    return ApiResponse.serverError(
       "Something went wrong, please try again later",
       error
     );
