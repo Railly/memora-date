@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { SignInSchema, signInSchema } from "../../schemas/auth.schema";
+import { SignInSchema, signInSchema } from "@/schemas/auth.schema";
 import clientApiProvider from "@/services/client";
 import LogoMemora from "@/components/icons/logo-memora";
 import At from "@/components/icons/at";
@@ -30,43 +30,15 @@ export default function LoginPage() {
     },
   });
   const router = useRouter();
-  const supabase = createClientComponentClient();
 
   const onSubmit = async (data: SignInSchema) => {
     console.log(data);
-    const response = await clientApiProvider.auth.signInWithProvider("google");
+    const response = await clientApiProvider.auth.signInWithEmailAndPassword(
+      data
+    );
     if (!response.error) {
-      router.push(response.data.data.url);
+      router.push("/dashboard");
     }
-  };
-
-  const handleSignUp = async (data: SignInSchema) => {
-    console.log("handleSignUp");
-    const { email, password } = data;
-    await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        emailRedirectTo: `${window.location.origin}/api/auth/callback`,
-      },
-    });
-    router.refresh();
-  };
-
-  const handleSignIn = async (data: SignInSchema) => {
-    console.log("handleSignIn");
-    const { email, password } = data;
-    await supabase.auth.signInWithPassword({
-      email,
-      password,
-    });
-    router.refresh();
-  };
-
-  const handleSignOut = async () => {
-    console.log("handleSignOut");
-    await supabase.auth.signOut();
-    router.refresh();
   };
 
   return (
@@ -76,21 +48,28 @@ export default function LoginPage() {
         <p className="py-8 text-3xl font-bold text-center text-white">
           Log In your Account
         </p>
-        <form className="flex flex-col w-full gap-4">
+        <form
+          className="flex flex-col w-full gap-4"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <div>
-            <Label>Email</Label>
+            <Label htmlFor="email">Email</Label>
             <Input
+              id="email"
               type="email"
               placeholder="Your Email Address"
               withIcon={<At />}
+              {...register("email", { required: true })}
             />
           </div>
           <div>
-            <Label>Password</Label>
+            <Label htmlFor="password">Password</Label>
             <Input
+              id="password"
               type="password"
               placeholder="Your Password"
               withIcon={<Lock />}
+              {...register("password", { required: true })}
             />
           </div>
           <p className="py-2 text-sm font-semibold text-center">
@@ -101,7 +80,7 @@ export default function LoginPage() {
               Sign Up
             </Link>
           </p>
-          <Button>Log In</Button>
+          <Button type="submit">Log In</Button>
         </form>
         <div className="flex flex-row items-center justify-between w-full my-4">
           <Separator className="w-[45%] border bg-zinc-500" />

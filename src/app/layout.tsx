@@ -3,6 +3,7 @@ import "./globals.css";
 import type { Metadata } from "next";
 import { cn } from "@/lib/utils";
 import { fontMono, fontSans } from "@/lib/fonts";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: {
@@ -79,6 +80,7 @@ export default function RootLayout({
         )}
       >
         {children}
+        <Toaster />
       </body>
     </html>
   );

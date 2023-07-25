@@ -1,4 +1,8 @@
+import { useRouter } from "next/navigation";
+
 export default function Home() {
+  const router = useRouter();
+  router.push("/sign-in");
   return (
     <div className="flex items-center justify-center min-h-screen p-5 bg-gray-100 min-w-screen">
       <div className="flex space-x-2 animate-pulse">

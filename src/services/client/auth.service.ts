@@ -1,5 +1,4 @@
-import { SignInSchema } from "@/schemas/auth.schema";
-import { AUTH_ERROR } from "../constants";
+import { SignInSchema, SignUpSchema } from "@/schemas/auth.schema";
 import { HttpError } from "../errors";
 
 class ClientAuthService {
@@ -27,12 +26,12 @@ class ClientAuthService {
     }
   }
 
-  async signUpWithEmailAndPassword(body: SignInSchema) {
+  async signUpWithEmailAndPassword(body: SignUpSchema) {
     try {
-      const { email, password } = body;
+      const { name, email, password } = body;
       const response = await fetch("/api/auth/sign-up", {
         method: "POST",
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ name, email, password }),
         headers: {
           "Content-Type": "application/json",
         },
