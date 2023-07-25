@@ -110,11 +110,11 @@ export default function LoginPage() {
           <Separator className="w-[45%] border bg-zinc-500" />
         </div>
         <div className="flex flex-col w-full gap-3">
-          <Button className="h-10 font-medium text-white bg-button-google">
+          <Button className="h-10 font-medium text-white bg-button-google hover:bg-button-google/90">
             <Google className="mr-3" />
             Continue with Google
           </Button>
-          <Button className="h-10 text-white bg-button-github">
+          <Button className="h-10 text-white bg-button-github hover:bg-button-github/90">
             <GitHub className="mr-3" />
             Continue with GitHub
           </Button>
