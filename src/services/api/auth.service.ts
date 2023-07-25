@@ -1,4 +1,4 @@
-import { SignInSchema } from "@/schemas/auth.schema";
+import { SignInSchema, SignUpSchema } from "@/schemas/auth.schema";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { AUTH_ERROR } from "../constants";
@@ -28,12 +28,15 @@ class ServerAuthService {
     }
   }
 
-  async signUpWithEmailAndPassword(body: SignInSchema) {
+  async signUpWithEmailAndPassword(body: SignUpSchema) {
     try {
-      const { email, password } = body;
+      const { email, password, name } = body;
       const { error, data } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: { name },
+        },
       });
 
       return { error, data };

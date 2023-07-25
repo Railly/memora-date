@@ -1,14 +1,14 @@
 /** @type {import('tailwindcss').Config} */
-const { fontFamily } = require("tailwindcss/defaultTheme")
+const { fontFamily } = require("tailwindcss/defaultTheme");
 
 module.exports = {
   darkMode: ["class"],
   content: [
-    './pages/**/*.{ts,tsx}',
-    './components/**/*.{ts,tsx}',
-    './app/**/*.{ts,tsx}',
-    './src/**/*.{ts,tsx}',
-	],
+    "./pages/**/*.{ts,tsx}",
+    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{ts,tsx}",
+    "./src/**/*.{ts,tsx}",
+  ],
   theme: {
     container: {
       center: true,
@@ -52,6 +52,28 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        input: {
+          DEFAULT: "#252525",
+          light: "hsl(var(--bginput-light))",
+          dark: "#252525",
+          border: {
+            DEFAULT: "#FFFFFF",
+            light: "hsl(var(--input-border-light))",
+            dark: "#FFFFFF",
+          },
+        },
+        button: {
+          DEFAULT: "#C5DC96",
+          google: "#303030",
+          github: "#263B73",
+          light: "hsl(var(--button-light))",
+          dark: "#C5DC96",
+          border: {
+            DEFAULT: "hsl(var(--button-border))",
+            light: "hsl(var(--button-border-light))",
+            dark: "hsl(var(--button-border-dark))",
+          },
+        },
       },
       borderRadius: {
         lg: "var(--radius)",
@@ -61,6 +83,9 @@ module.exports = {
       fontFamily: {
         sans: ["var(--font-sans)", ...fontFamily.sans],
         mono: ["var(--font-mono)", ...fontFamily.mono],
+      },
+      fontSize: {
+        "2xs": "0.625rem",
       },
       keyframes: {
         "accordion-down": {
@@ -79,4 +104,4 @@ module.exports = {
     },
   },
   plugins: [require("tailwindcss-animate")],
-}
+};
