@@ -46,7 +46,7 @@ export default function SignUpPage() {
 
   return (
     <div className="flex items-center justify-center w-screen h-screen dark:bg-black">
-      <div className="flex flex-col items-center w-80">
+      <div className="flex flex-col items-center mx-4 w-[20.625rem]">
         <LogoMemora />
         <p className="py-8 text-3xl font-bold text-center text-white">
           Create your Account
@@ -85,7 +85,7 @@ export default function SignUpPage() {
               {...register("password", { required: true })}
             />
           </div>
-          <p className="py-2 text-sm font-semibold text-center">
+          <p className="py-2 text-base font-semibold text-center">
             <span className="text-zinc-500">Already have an account?{` `}</span>
             <Link href={"/sign-in"} className="text-blue-500">
               Log in

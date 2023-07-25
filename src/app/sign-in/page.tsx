@@ -43,10 +43,10 @@ export default function LoginPage() {
 
   return (
     <div className="flex items-center justify-center w-screen h-screen dark:bg-black">
-      <div className="flex flex-col items-center w-80">
+      <div className="flex flex-col items-center mx-4 w-[20.625rem]">
         <LogoMemora />
         <p className="py-8 text-3xl font-bold text-center text-white">
-          Log In your Account
+          Login to your Account
         </p>
         <form
           className="flex flex-col w-full gap-4"
@@ -72,7 +72,7 @@ export default function LoginPage() {
               {...register("password", { required: true })}
             />
           </div>
-          <p className="py-2 text-sm font-semibold text-center">
+          <p className="py-2 text-base font-semibold text-center">
             <span className="text-zinc-500">
               Don´t have an account yet?{` `}
             </span>
@@ -80,7 +80,7 @@ export default function LoginPage() {
               Sign Up
             </Link>
           </p>
-          <Button type="submit">Log In</Button>
+          <Button type="submit">Login</Button>
         </form>
         <div className="flex flex-row items-center justify-between w-full my-4">
           <Separator className="w-[45%] border bg-zinc-500" />
