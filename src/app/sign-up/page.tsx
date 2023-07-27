@@ -13,8 +13,13 @@ import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import clientApiProvider from "@/services/client";
 import { useToast } from "@/components/ui/use-toast";
+import Loader from "@/components/icons/loader";
+import { useState } from "react";
 
 export default function SignUpPage() {
+  const router = useRouter();
+  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -27,8 +32,6 @@ export default function SignUpPage() {
       password: "",
     },
   });
-  const router = useRouter();
-  const { toast } = useToast();
 
   const onSubmit = async (data: SignUpSchema) => {
     console.log(data);
@@ -54,6 +57,7 @@ export default function SignUpPage() {
         <form
           className="flex flex-col w-full gap-4"
           onSubmit={handleSubmit(onSubmit)}
+          noValidate
         >
           <div>
             <Label htmlFor="name">Name</Label>
@@ -63,7 +67,14 @@ export default function SignUpPage() {
               placeholder="Your Full Name"
               withIcon={<User />}
               {...register("name", { required: true })}
+              variant={errors.name ? "error" : "default"}
+              className="mt-1"
             />
+            {errors.name && (
+              <p className="absolute text-xs text-red-500">
+                {errors.name?.message}
+              </p>
+            )}
           </div>
           <div>
             <Label htmlFor="email">Email</Label>
@@ -73,7 +84,14 @@ export default function SignUpPage() {
               placeholder="Your Email Address"
               withIcon={<At />}
               {...register("email", { required: true })}
+              variant={errors.email ? "error" : "default"}
+              className="mt-1"
             />
+            {errors.email && (
+              <p className="absolute text-xs text-red-500">
+                {errors.email?.message}
+              </p>
+            )}
           </div>
           <div>
             <Label htmlFor="password">Password</Label>
@@ -83,15 +101,27 @@ export default function SignUpPage() {
               placeholder="Your Password"
               withIcon={<Lock />}
               {...register("password", { required: true })}
+              variant={errors.password ? "error" : "default"}
+              className="mt-1"
             />
+            {errors.password && (
+              <p className="absolute text-xs text-red-500">
+                {errors.password?.message}
+              </p>
+            )}
           </div>
+          <Button type="submit" className="mt-3" disabled={isLoading}>
+            {isLoading && (
+              <Loader className="absolute w-4 h-4 mr-2 transition ease-in-out animate-spin inset-x-32" />
+            )}
+            Register
+          </Button>
           <p className="py-2 text-base font-semibold text-center">
             <span className="text-zinc-500">Already have an account?{` `}</span>
             <Link href={"/sign-in"} className="text-blue-500">
               Log in
             </Link>
           </p>
-          <Button type="submit">Register</Button>
         </form>
       </div>
     </div>
