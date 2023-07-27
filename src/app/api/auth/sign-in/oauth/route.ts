@@ -13,7 +13,7 @@ export async function POST(req: Request) {
     }
 
     const response = await serverApiProvider.auth.signInWithProvider(provider);
-    return ApiResponse.success(response);
+    return ApiResponse.success(response.data);
   } catch (error) {
     return ApiResponse.serverError(
       "Something went wrong, please try again later",

@@ -1,9 +1,24 @@
-import { siteConfig } from "@/config/site";
 import "./globals.css";
+import {
+  Barlow_Semi_Condensed as FontSans,
+  Ubuntu_Mono as FontMono,
+} from "next/font/google";
+import { siteConfig } from "@/config/site";
 import type { Metadata } from "next";
 import { cn } from "@/lib/utils";
-import { fontMono, fontSans } from "@/lib/fonts";
 import { Toaster } from "@/components/ui/toaster";
+
+export const fontSans = FontSans({
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-sans",
+});
+
+export const fontMono = FontMono({
+  weight: ["400", "700"],
+  subsets: ["latin"],
+  variable: "--font-mono",
+});
 
 export const metadata: Metadata = {
   title: {
@@ -74,7 +89,7 @@ export default function RootLayout({
     <html lang="en" className="dark">
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased",
+          "min-h-screen bg-background font-sans antialiased font-medium",
           fontMono.variable,
           fontSans.variable
         )}

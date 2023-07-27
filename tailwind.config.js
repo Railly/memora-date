@@ -19,6 +19,12 @@ module.exports = {
     },
     extend: {
       colors: {
+        'memora-purple': "hsl(var(--memora-purple))",
+        'memora-green': "hsl(var(--memora-green))",
+        'memora-blue': "hsl(var(--memora-blue))",
+        'memora-yellow': "hsl(var(--memora-yellow))",
+        'memora-pink': "hsl(var(--memora-pink))",
+        'memora-orange': "hsl(var(--memora-orange))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",

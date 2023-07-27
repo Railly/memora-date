@@ -17,7 +17,7 @@ export async function POST(req: Request) {
       return ApiResponse.serverError(response.error.message, response.error);
     }
 
-    return ApiResponse.success({ data: response.data });
+    return ApiResponse.success(response.data);
   } catch (error) {
     return ApiResponse.serverError(
       "Something went wrong, please try again later",

@@ -2,8 +2,9 @@ import { SignInSchema, SignUpSchema } from "@/schemas/auth.schema";
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { cookies } from "next/headers";
 import { AUTH_ERROR } from "../constants";
+import type { Database } from "@/types/supabase";
 
-const supabase = createRouteHandlerClient({ cookies });
+const supabase = createRouteHandlerClient<Database>({ cookies });
 
 class ServerAuthService {
   async signInWithEmailAndPassword(body: SignInSchema) {
