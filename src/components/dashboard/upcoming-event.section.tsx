@@ -34,13 +34,13 @@ export default async function UpcomingEventSection({
               <div className="flex justify-between">
                 <Badge
                   icon={
-                    eventTypeUtils[event.EventType?.value || "default"].icon
+                    eventTypeUtils[event.event_type?.value || "default"].icon
                   }
                   variant={
-                    eventTypeUtils[event.EventType?.value || "default"].color
+                    eventTypeUtils[event.event_type?.value || "default"].color
                   }
                 >
-                  {event.EventType?.value}
+                  {event.event_type?.value}
                 </Badge>
                 <TimeLeft date={event.date} />
               </div>
