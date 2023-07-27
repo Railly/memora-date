@@ -1,25 +1,58 @@
-"use client";
+/* eslint-disable @next/next/no-img-element */
+import { cookies } from "next/headers";
+import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import { Database } from "@/types/supabase";
+import { redirect } from "next/navigation";
+import NextEventSection from "@/components/dashboard/next-event.section";
+import UpcomingEventSection from "@/components/dashboard/upcoming-event.section";
 
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
-import { useEffect, useState } from "react";
-export default function DashBoardPage() {
-  const [user, setUser] = useState(null);
-  const supabase = createClientComponentClient();
-  // const user = supabase.auth.getUser();
+export default async function DashBoardPage() {
+  const supabase = createServerComponentClient<Database>({ cookies });
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
 
-  useEffect(() => {
-    (async () => {
-      const user = await supabase.auth.getUser();
-      setUser(user.data.user?.user_metadata);
-      console.log({ user });
-    })();
-  }, []);
+  if (!session) {
+    redirect("/sign-in");
+  }
+
+  const events = await supabase
+    .from("event")
+    .select(
+      `*,
+      event_type (
+        value
+      )`
+    )
+    .order("date", { ascending: true });
+
+  console.log({ events });
+
+  const nextEvent = events.data?.[0];
+  // const reminders = await supabase.from("Reminder").select("*");
+  // const contacts = await supabase.from("Contact").select("*");
+  // const eventTypes = await supabase.from("EventType").select("*");
+
+  /**
+   * TODO: Find a better way for fetching the events and reminders
+   * Just to retrieve the necessary data
+   * Example: Fetch only 5 events, then fetch the respective reminders
+   */
 
   return (
-    <div>
-      <h1>Dashboard</h1>
-      <h2>{user?.email}</h2>
-      <h3>{user?.name}</h3>
+    <div className="flex justify-center w-full">
+      <div className="flex flex-col items-center w-9/12 gap-8">
+        {/* <TestComponent
+        session={session}
+        contacts={contacts}
+        events={events}
+        reminders={reminders}
+        eventTypes={eventTypes}
+      /> */}
+        {/* <pre>{JSON.stringify(events, null, 2)}</pre> */}
+        <NextEventSection event={nextEvent} />
+        <UpcomingEventSection events={events.data} />
+      </div>
     </div>
   );
 }

@@ -1,7 +1,6 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -36,8 +35,36 @@ export default function LoginPage() {
     const response = await clientApiProvider.auth.signInWithEmailAndPassword(
       data
     );
-    if (!response.error) {
+    if (response.ok) {
       router.push("/dashboard");
+    }
+  };
+
+  const handleGoogleSignIn = async () => {
+    try {
+      const response = await clientApiProvider.auth.signInWithProvider(
+        "google"
+      );
+      if (response.ok) {
+        console.log({ response });
+        router.push(response.data.url);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleGithubSignIn = async () => {
+    try {
+      const response = await clientApiProvider.auth.signInWithProvider(
+        "github"
+      );
+      if (response.ok) {
+        console.log({ response });
+        router.push(response.data.url);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -88,11 +115,19 @@ export default function LoginPage() {
           <Separator className="w-[45%] border bg-zinc-500" />
         </div>
         <div className="flex flex-col w-full gap-3">
-          <Button className="h-10 font-medium text-white bg-button-google hover:bg-button-google/90">
+          <Button
+            type="button"
+            onClick={handleGoogleSignIn}
+            className="h-10 font-medium text-white bg-button-google hover:bg-button-google/90"
+          >
             <Google className="mr-3" />
             Continue with Google
           </Button>
-          <Button className="h-10 text-white bg-button-github hover:bg-button-github/90">
+          <Button
+            type="button"
+            onClick={handleGithubSignIn}
+            className="h-10 text-white bg-button-github hover:bg-button-github/90"
+          >
             <GitHub className="mr-3" />
             Continue with GitHub
           </Button>
