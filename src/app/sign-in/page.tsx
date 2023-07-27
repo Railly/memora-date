@@ -1,7 +1,6 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { createClientComponentClient } from "@supabase/auth-helpers-nextjs";
 import { useRouter } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
@@ -63,12 +62,31 @@ export default function LoginPage() {
     }
   };
 
-  const handleGithubLogin = async () => {
-    setIsLoading(true);
-    const response = await clientApiProvider.auth.signInWithProvider("github");
-    if (!response.error) {
-      router.push("/dashboard");
-      setIsLoading(false);
+  const handleGoogleSignIn = async () => {
+    try {
+      const response = await clientApiProvider.auth.signInWithProvider(
+        "google"
+      );
+      if (response.ok) {
+        console.log({ response });
+        router.push(response.data.url);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleGithubSignIn = async () => {
+    try {
+      const response = await clientApiProvider.auth.signInWithProvider(
+        "github"
+      );
+      if (response.ok) {
+        console.log({ response });
+        router.push(response.data.url);
+      }
+    } catch (error) {
+      console.log(error);
     }
   };
 
@@ -135,6 +153,7 @@ export default function LoginPage() {
             className="h-10 font-medium text-white bg-button-google hover:bg-button-google/90"
             disabled={isLoading}
             type="button"
+            onClick={handleGoogleSignIn}
           >
             <Google className="mr-3" />
             Continue with Google
@@ -142,7 +161,7 @@ export default function LoginPage() {
           <Button
             className="h-10 text-white bg-button-github hover:bg-button-github/90"
             disabled={isLoading}
-            onClick={() => handleGithubLogin}
+            onClick={handleGithubSignIn}
             type="button"
           >
             <GitHub className="mr-3" />

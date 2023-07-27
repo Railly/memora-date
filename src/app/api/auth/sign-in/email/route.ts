@@ -15,7 +15,7 @@ export async function POST(req: Request) {
     if (response.error) {
       return ApiResponse.serverError(response.error.message, response.error);
     }
-    return ApiResponse.success(response);
+    return ApiResponse.success(response.data);
   } catch (error) {
     return ApiResponse.serverError(
       "Something went wrong, please try again later",
