@@ -1,16 +1,12 @@
 import { SignInSchema, SignUpSchema } from "@/schemas/auth.schema";
-import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
-import { cookies } from "next/headers";
 import { AUTH_ERROR } from "../constants";
-import type { Database } from "@/types/supabase";
+import { ServerServiceApi } from "./blueprint";
 
-const supabase = createRouteHandlerClient<Database>({ cookies });
-
-class ServerAuthService {
+class ServerAuthService extends ServerServiceApi {
   async signInWithEmailAndPassword(body: SignInSchema) {
     try {
       const { email, password } = body;
-      const { error, data } = await supabase.auth.signInWithPassword({
+      const { error, data } = await this.supabase.auth.signInWithPassword({
         email,
         password,
       });
@@ -32,7 +28,7 @@ class ServerAuthService {
   async signUpWithEmailAndPassword(body: SignUpSchema) {
     try {
       const { email, password, name } = body;
-      const { error, data } = await supabase.auth.signUp({
+      const { error, data } = await this.supabase.auth.signUp({
         email,
         password,
         options: {
@@ -56,12 +52,12 @@ class ServerAuthService {
 
   async signOut() {
     try {
-      const { error, data } = await supabase.auth.getSession();
+      const { error, data } = await this.supabase.auth.getSession();
       if (error) {
         return { error, data };
       }
       if (data.session) {
-        await supabase.auth.signOut();
+        await this.supabase.auth.signOut();
       }
     } catch (error) {
       console.error(error);
@@ -78,7 +74,7 @@ class ServerAuthService {
 
   async signInWithProvider(provider: "google" | "github") {
     try {
-      const response = await supabase.auth.signInWithOAuth({
+      const response = await this.supabase.auth.signInWithOAuth({
         provider,
         options: {
           redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/callback`,

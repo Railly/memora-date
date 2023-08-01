@@ -7,7 +7,8 @@ const inputVariants = cva(" bg-background text-muted-foreground", {
   variants: {
     variant: {
       default: "bg-input border border-input-border border-opacity-50",
-      error: "bg-input border-red-500 transition ease-in-out duration-200",
+      error:
+        "bg-input border border-red-500 transition ease-in-out duration-200",
     },
   },
   defaultVariants: {

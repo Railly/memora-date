@@ -1,4 +1,5 @@
-import serverApiProvider from "@/services/api";
+import { cookies } from "next/headers";
+import ServerApiProvider from "@/services/server";
 import { ApiResponse } from "../../../utils/response.utils";
 
 export async function POST(req: Request) {
@@ -12,6 +13,7 @@ export async function POST(req: Request) {
       throw new Error("Unsupported provider");
     }
 
+    const serverApiProvider = new ServerApiProvider({ cookies });
     const response = await serverApiProvider.auth.signInWithProvider(provider);
     return ApiResponse.success(response.data);
   } catch (error) {

@@ -1,4 +1,5 @@
-import serverApiProvider from "@/services/api";
+import { cookies } from "next/headers";
+import ServerApiProvider from "@/services/server";
 import { signInSchema } from "@/schemas/auth.schema";
 import { ApiResponse } from "../../../utils/response.utils";
 import { validateBody } from "../../../utils/validation.utils";
@@ -9,6 +10,8 @@ export async function POST(req: Request) {
     if (body.error) {
       return ApiResponse.clientError("Invalid request body", body.error);
     }
+
+    const serverApiProvider = new ServerApiProvider({ cookies });
     const response = await serverApiProvider.auth.signInWithEmailAndPassword(
       body.data
     );

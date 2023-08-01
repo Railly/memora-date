@@ -7,9 +7,13 @@ export async function GET(request: NextRequest) {
   const reqUrl = new URL(request.url);
   const code = reqUrl.searchParams.get("code");
 
-  if (code) {
-    const supabase = createRouteHandlerClient<Database>({ cookies });
-    await supabase.auth.exchangeCodeForSession(code);
+  try {
+    if (code) {
+      const supabase = createRouteHandlerClient<Database>({ cookies });
+      await supabase.auth.exchangeCodeForSession(code);
+    }
+  } catch (error) {
+    console.error(error);
   }
 
   const redirectURl = reqUrl.origin + "/dashboard";
