@@ -1,5 +1,4 @@
 "use client";
-import { useState } from "react";
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -10,32 +9,44 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { CalendarIcon } from "@radix-ui/react-icons";
+import { FieldError } from "react-hook-form";
 
-export function DatePicker() {
-  const [date, setDate] = useState<Date>();
+interface IDatePickerProps {
+  selected?: Date;
+  onChange: (date: Date | undefined) => void;
+  error?: FieldError;
+  disabled?: boolean;
+}
 
+export const DatePicker: React.FC<IDatePickerProps> = ({
+  selected,
+  onChange,
+  error,
+  disabled,
+}) => {
   return (
     <Popover>
       <PopoverTrigger asChild>
         <Button
-          variant="input-default"
+          variant={error ? "input-error" : "input-default"}
+          disabled={disabled}
           className={cn(
             "w-full inline-flex justify-start text-left font-normal",
-            !date && "text-muted-foreground"
+            !selected && "text-muted-foreground"
           )}
         >
           <CalendarIcon className="w-4 h-4 mr-2" />
-          {date ? format(date, "PPP") : <span>Pick a date</span>}
+          {selected ? format(selected, "PPP") : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
         <Calendar
           mode="single"
-          selected={date}
-          onSelect={setDate}
+          selected={selected}
+          onSelect={(date) => onChange(date)}
           initialFocus
         />
       </PopoverContent>
     </Popover>
   );
-}
+};

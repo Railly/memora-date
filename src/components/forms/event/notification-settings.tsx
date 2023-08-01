@@ -1,15 +1,11 @@
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { CreateEventSchema } from "@/schemas/event.schema";
-import {
-  IconCircleNumber1,
-  IconRepeat,
-  IconSpeakerphone,
-} from "@tabler/icons-react";
-import { Control } from "react-hook-form";
+import { IconSpeakerphone } from "@tabler/icons-react";
+import { Control, FieldErrors } from "react-hook-form";
 import { Switch } from "@/components/ui/switch";
 import {
   FormControl,
+  FormErrorMessage,
   FormField,
   FormItem,
   FormLabel,
@@ -21,126 +17,189 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { TIME_UNITS } from "./constants";
+import { CreateEventSchema } from "@/schemas/create-event.schema";
 
 interface INotificationSettingsProps {
   control: Control<CreateEventSchema>;
+  errors: FieldErrors<CreateEventSchema>;
 }
 export const NotificationSettings: React.FC<INotificationSettingsProps> = ({
   control,
+  errors,
 }) => {
   return (
     <div className="space-y-2">
-      <p className="text-[#B4B4B4] text-sm">Notification Settings</p>
-      <div className="flex flex-col w-full gap-5">
-        <div className="flex justify-between w-full gap-6">
-          <div className="relative flex flex-col w-9/12 gap-2">
-            <Label htmlFor="event.email">Your email</Label>
-            <Input
-              id="event.email"
-              type="text"
-              placeholder="Your email"
-              withIcon={<IconSpeakerphone size={20} />}
-              disabled
-            />
+      <div className="flex items-center w-full gap-4">
+        <p className="text-[#B4B4B4] text-sm w-1/2">Notification Settings</p>
+        <FormErrorMessage
+          className="static w1/2"
+          name="reminder.notification_methods"
+        />
+      </div>
+      <div className="space-y-5">
+        <div className="flex flex-col w-full gap-5">
+          <div className="flex items-center w-full gap-6">
+            <div className="relative flex flex-col w-6/12 gap-2">
+              <Label htmlFor="event.email">Your email</Label>
+              <Input
+                id="event.email"
+                type="text"
+                placeholder="Your email"
+                withIcon={<IconSpeakerphone size={20} />}
+                disabled
+              />
+            </div>
+            <div className="relative flex flex-col w-3/12 gap-2">
+              <FormField
+                control={control}
+                name="reminder.notification_methods"
+                render={({ field }) => (
+                  <FormItem className="flex items-center gap-2 p-2 mt-4 space-y-0 transition duration-200 ease-in-out">
+                    <FormLabel
+                      variant={
+                        errors.reminder?.notification_methods
+                          ? "error"
+                          : "default"
+                      }
+                    >
+                      Enabled?
+                    </FormLabel>
+                    <FormControl>
+                      <Switch
+                        checked={field.value?.includes("EMAIL")}
+                        onCheckedChange={(value) => {
+                          let currentValue = Array.isArray(field.value)
+                            ? field.value
+                            : [];
+                          if (value) {
+                            if (!currentValue.includes("EMAIL")) {
+                              field.onChange([...currentValue, "EMAIL"]);
+                            }
+                          } else {
+                            field.onChange(
+                              currentValue.filter((item) => item !== "EMAIL")
+                            );
+                          }
+                        }}
+                      />
+                    </FormControl>
+                  </FormItem>
+                )}
+              />
+            </div>
           </div>
-          <div className="relative flex flex-col w-3/12 gap-2">
+          <div className="flex w-full gap-6">
+            <div className="relative flex flex-col w-6/12 gap-2">
+              <Label htmlFor="event.phone">Your phone</Label>
+              <Input
+                id="event.phone"
+                type="text"
+                placeholder="Your phone"
+                withIcon={<IconSpeakerphone size={20} />}
+                disabled
+              />
+            </div>
             <FormField
               control={control}
-              name="reminder.is_email_enabled"
+              name="reminder.notification_methods"
               render={({ field }) => (
-                <FormItem className="flex flex-col w-3/12 h-full p-2 transition duration-200 ease-in-out">
-                  <FormLabel>Enabled?</FormLabel>
+                <FormItem className="flex items-center gap-2 p-2 mt-4 space-y-0 transition duration-200 ease-in-out">
+                  <FormLabel
+                    variant={
+                      errors.reminder?.notification_methods
+                        ? "error"
+                        : "default"
+                    }
+                  >
+                    Enabled?
+                  </FormLabel>
                   <FormControl>
                     <Switch
-                      className="mr-4"
-                      checked={field.value}
-                      onCheckedChange={field.onChange}
+                      checked={field.value?.includes("SMS")}
+                      onCheckedChange={(value) => {
+                        let currentValue = Array.isArray(field.value)
+                          ? field.value
+                          : [];
+                        if (value) {
+                          if (!currentValue.includes("SMS")) {
+                            field.onChange([...currentValue, "SMS"]);
+                          }
+                        } else {
+                          field.onChange(
+                            currentValue.filter((item) => item !== "SMS")
+                          );
+                        }
+                      }}
                     />
                   </FormControl>
                 </FormItem>
               )}
             />
           </div>
-        </div>
-        <div className="flex justify-between w-full gap-6">
-          <div className="relative flex flex-col w-9/12 gap-2">
-            <Label htmlFor="event.phone">Your phone</Label>
-            <Input
-              id="event.phone"
-              type="text"
-              placeholder="Your phone"
-              withIcon={<IconSpeakerphone size={20} />}
-              disabled
-            />
-          </div>
-          <FormField
-            control={control}
-            name="reminder.is_sms_enabled"
-            render={({ field }) => (
-              <FormItem className="flex flex-col w-3/12 h-full p-2 transition duration-200 ease-in-out">
-                <FormLabel>Enabled?</FormLabel>
-                <FormControl>
-                  <Switch
-                    className="mr-4"
-                    checked={field.value}
-                    onCheckedChange={field.onChange}
-                  />
-                </FormControl>
-              </FormItem>
-            )}
-          />
-        </div>
-        <div className="flex justify-between w-full gap-6">
-          <div className="relative flex flex-col w-9/12 gap-2">
-            <Label htmlFor="reminder.notify_before_number">Notify me</Label>
-            <div className="flex items-center gap-4">
-              <FormField
-                control={control}
-                name="reminder.notify_before_number"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col w-full h-full transition duration-200 ease-in-out">
-                    <FormControl>
-                      <Input
-                        type="number"
-                        placeholder="Notify me"
-                        withIcon={<IconSpeakerphone size={20} />}
-                        value={field.value}
-                        onChange={field.onChange}
-                        min={1}
-                        max={60}
-                      />
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={control}
-                name="reminder.notify_before_time_unit"
-                render={({ field }) => (
-                  <FormItem className="flex flex-col w-full h-full transition duration-200 ease-in-out">
-                    <FormControl>
-                      <Select
-                        value={field.value}
-                        onValueChange={field.onChange}
-                      >
-                        <SelectTrigger>
-                          <SelectValue>
-                            {field.value || "Select a time unit"}
-                          </SelectValue>
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="minutes">Minutes</SelectItem>
-                          <SelectItem value="hours">Hours</SelectItem>
-                          <SelectItem value="days">Days</SelectItem>
-                          <SelectItem value="weeks">Weeks</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </FormControl>
-                  </FormItem>
-                )}
-              />
-              <p className="flex w-full">before the event</p>
+          <div className="flex justify-between w-full gap-6">
+            <div className="relative flex flex-col w-full gap-2">
+              <Label htmlFor="reminder.notify_before_number">Notify me</Label>
+              <div className="flex items-center w-full gap-4">
+                <FormField
+                  control={control}
+                  name="reminder.notify_before_number"
+                  render={({ field }) => (
+                    <FormItem className="relative flex flex-col w-full h-full transition duration-200 ease-in-out">
+                      <FormControl>
+                        <Input
+                          type="number"
+                          placeholder="Notify me"
+                          withIcon={<IconSpeakerphone size={20} />}
+                          variant={
+                            errors.reminder?.notify_before_number
+                              ? "error"
+                              : "default"
+                          }
+                          value={field.value}
+                          onChange={field.onChange}
+                        />
+                      </FormControl>
+                      <FormErrorMessage name="reminder.notify_before_number" />
+                    </FormItem>
+                  )}
+                />
+                <FormField
+                  control={control}
+                  name="reminder.notify_before_time_unit"
+                  render={({ field }) => {
+                    return (
+                      <FormItem className="flex flex-col w-full h-full transition duration-200 ease-in-out">
+                        <FormControl>
+                          <Select onValueChange={field.onChange}>
+                            <SelectTrigger
+                              variant={
+                                errors.reminder?.notify_before_time_unit
+                                  ? "error"
+                                  : "default"
+                              }
+                            >
+                              <SelectValue placeholder="Select a unit"></SelectValue>
+                            </SelectTrigger>
+                            <SelectContent>
+                              {TIME_UNITS.map((unit) => (
+                                <SelectItem
+                                  key={unit}
+                                  value={unit.toUpperCase()}
+                                >
+                                  {unit}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        </FormControl>
+                        <FormErrorMessage name={field.name} />
+                      </FormItem>
+                    );
+                  }}
+                />
+                <p className="flex w-1/2 text-xs">before the event</p>
+              </div>
             </div>
           </div>
         </div>

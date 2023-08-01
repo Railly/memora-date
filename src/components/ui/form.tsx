@@ -4,6 +4,7 @@ import { Slot } from "@radix-ui/react-slot";
 import {
   Controller,
   ControllerProps,
+  FieldError,
   FieldPath,
   FieldValues,
   FormProvider,
@@ -78,25 +79,24 @@ const FormItem = React.forwardRef<
 
   return (
     <FormItemContext.Provider value={{ id }}>
-      <div ref={ref} className={cn("space-y-2", className)} {...props} />
+      <div
+        ref={ref}
+        className={cn("relative space-y-2", className)}
+        {...props}
+      />
     </FormItemContext.Provider>
   );
 });
 FormItem.displayName = "FormItem";
 
 const FormLabel = React.forwardRef<
-  React.ElementRef<typeof LabelPrimitive.Root>,
-  React.ComponentPropsWithoutRef<typeof LabelPrimitive.Root>
+  React.ElementRef<typeof Label>,
+  React.ComponentPropsWithoutRef<typeof Label>
 >(({ className, ...props }, ref) => {
-  const { error, formItemId } = useFormField();
+  const { formItemId } = useFormField();
 
   return (
-    <Label
-      ref={ref}
-      className={cn(error && "text-destructive", className)}
-      htmlFor={formItemId}
-      {...props}
-    />
+    <Label ref={ref} className={className} htmlFor={formItemId} {...props} />
   );
 });
 FormLabel.displayName = "FormLabel";
@@ -164,6 +164,38 @@ const FormMessage = React.forwardRef<
   );
 });
 FormMessage.displayName = "FormMessage";
+
+type FormErrorMessageProps = {
+  name: keyof FieldValues;
+  className?: string;
+};
+
+export const FormErrorMessage = React.forwardRef<
+  HTMLParagraphElement,
+  FormErrorMessageProps
+>(({ name, className, ...props }, ref) => {
+  const {
+    formState: { errors },
+  } = useFormContext();
+  const error = name.split(".").reduce<FieldError | undefined>((acc, key) => {
+    const assertedKey = key as keyof FieldError;
+    return acc?.[assertedKey] as any;
+  }, errors as any) as FieldError | undefined;
+
+  if (error?.message) {
+    return (
+      <p
+        ref={ref}
+        className={cn("absolute text-xs text-red-500 -bottom-4", className)}
+        {...props}
+      >
+        {error.message}
+      </p>
+    );
+  }
+});
+
+FormErrorMessage.displayName = "FormErrorMessage";
 
 export {
   useFormField,

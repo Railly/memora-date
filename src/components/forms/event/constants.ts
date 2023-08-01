@@ -7,3 +7,5 @@ export const DAYS_OF_WEEK = [
   "Friday",
   "Saturday",
 ];
+
+export const TIME_UNITS = ["Minutes", "Hours", "Days", "Weeks", "Months"];

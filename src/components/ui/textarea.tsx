@@ -2,7 +2,7 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 
-const inputVariants = cva("bg-background text-muted-foreground", {
+const inputVariants = cva("bg-background text-foreground", {
   variants: {
     variant: {
       default: "bg-input border border-input-border border-opacity-50",

@@ -11,9 +11,22 @@ const Select = SelectPrimitive.Root;
 
 const SelectGroup = SelectPrimitive.Group;
 
-const SelectValue = SelectPrimitive.Value;
+const SelectValue = React.forwardRef<
+  React.ElementRef<typeof SelectPrimitive.Value>,
+  React.ComponentPropsWithoutRef<typeof SelectPrimitive.Value>
+>(({ className, placeholder, ...props }, ref) => {
+  return (
+    <SelectPrimitive.Value
+      ref={ref}
+      placeholder={<span className="text-muted-foreground">{placeholder}</span>}
+      {...props}
+    />
+  );
+});
 
-const inputVariants = cva(" bg-background text-muted-foreground", {
+SelectValue.displayName = SelectPrimitive.Value.displayName;
+
+const inputVariants = cva(" bg-background text-foreground", {
   variants: {
     variant: {
       default: "bg-input border border-input-border border-opacity-50",
@@ -41,7 +54,7 @@ const SelectTrigger = React.forwardRef<
   <SelectPrimitive.Trigger
     ref={ref}
     className={cn(
-      "flex h-9 !w-full items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background placeholder:text-muted-foreground focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50",
+      "flex h-9 !w-full items-center justify-between rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm ring-offset-background focus:outline-none focus:ring-1 focus:ring-ring disabled:cursor-not-allowed disabled:opacity-50 transition ease-in-out duration-200",
       inputVariants({ variant }),
       className
     )}

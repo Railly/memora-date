@@ -16,8 +16,6 @@ export default async function DashBoardPage() {
 
   const events = await rscEventService.event.getEvents();
 
-  console.log({ events });
-
   const nextEvent = events.data?.[0];
   // const reminders = await supabase.from("Reminder").select("*");
   // const contacts = await supabase.from("Contact").select("*");
