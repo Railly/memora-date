@@ -24,7 +24,7 @@ export default async function DashBoardPage() {
   /**
    * TODO: Find a better way for fetching the events and reminders
    * Just to retrieve the necessary data
-   * Example: Fetch only 5 events, then fetch the respective reminders
+   * Example: Fetch only 5 events
    */
 
   return (

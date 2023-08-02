@@ -8,26 +8,27 @@ const ACCEPTED_IMAGE_TYPES = [
   "image/webp",
 ];
 
+const phoneRegex = new RegExp(/^\+\d{1,3}\s*\d{3}\s*[- ]?\d{3}\s*[- ]?\d{3}$/);
+
 export const contactSchema = zod.object({
-  contact: zod
+  selectedContact: zod
     .string()
     .uuid({ message: "Contact selection required." })
-    .optional(),
-  full_name: zod
-    .string()
-    .min(3, { message: "Enter at least 3-character name." }),
-  phone: zod
-    .string()
-    .nullable()
-    .refine((val) => val === "" || String(val).length >= 9, {
-      message: "Minimum 9-digit phone number.",
-    }),
+    .optional()
+    .or(zod.literal("")),
+  full_name: zod.string().min(3, { message: "Enter at least 3 chars" }),
   email: zod
     .string()
-    .nullable()
-    .refine((val) => val === "" || String(val).includes("@"), {
-      message: "Enter a valid email.",
-    }),
+    .email({
+      message: "Enter a valid email",
+    })
+    .optional()
+    .or(zod.literal("")),
+  phone: zod
+    .string()
+    .regex(phoneRegex, "Invalid Number!")
+    .optional()
+    .or(zod.literal("")),
   image: zod
     .any()
     .refine((files) => {

@@ -19,15 +19,19 @@ import {
 } from "@/components/ui/select";
 import { TIME_UNITS } from "./constants";
 import { CreateEventSchema } from "@/schemas/create-event.schema";
+import { User } from "@supabase/supabase-js";
 
 interface INotificationSettingsProps {
   control: Control<CreateEventSchema>;
   errors: FieldErrors<CreateEventSchema>;
+  user?: User;
 }
 export const NotificationSettings: React.FC<INotificationSettingsProps> = ({
   control,
   errors,
+  user,
 }) => {
+  console.log({ user });
   return (
     <div className="space-y-2">
       <div className="flex items-center w-full gap-4">
@@ -46,6 +50,7 @@ export const NotificationSettings: React.FC<INotificationSettingsProps> = ({
                 id="event.email"
                 type="text"
                 placeholder="Your email"
+                value={user?.email}
                 withIcon={<IconSpeakerphone size={20} />}
                 disabled
               />
@@ -60,7 +65,9 @@ export const NotificationSettings: React.FC<INotificationSettingsProps> = ({
                       variant={
                         errors.reminder?.notification_methods
                           ? "error"
-                          : "default"
+                          : field.value?.includes("EMAIL")
+                          ? "default"
+                          : "disabled"
                       }
                     >
                       Enabled?
@@ -95,6 +102,7 @@ export const NotificationSettings: React.FC<INotificationSettingsProps> = ({
               <Input
                 id="event.phone"
                 type="text"
+                value={user?.user_metadata?.phone}
                 placeholder="Your phone"
                 withIcon={<IconSpeakerphone size={20} />}
                 disabled
@@ -109,13 +117,16 @@ export const NotificationSettings: React.FC<INotificationSettingsProps> = ({
                     variant={
                       errors.reminder?.notification_methods
                         ? "error"
-                        : "default"
+                        : user?.user_metadata?.phone
+                        ? "default"
+                        : "disabled"
                     }
                   >
                     Enabled?
                   </FormLabel>
                   <FormControl>
                     <Switch
+                      disabled={!user?.user_metadata?.phone}
                       checked={field.value?.includes("SMS")}
                       onCheckedChange={(value) => {
                         let currentValue = Array.isArray(field.value)

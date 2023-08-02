@@ -30,11 +30,12 @@ export const defaultValues: RecursivePartial<CreateEventSchema> = {
     notify_before_number: 0,
     notify_before_time_unit: undefined,
     reminder_type: "ONE_TIME",
+    notification_methods: ["EMAIL"],
     interval: "DAILY",
     day_of_week: undefined,
   },
   contact: {
-    contact: "",
+    selectedContact: "",
     full_name: "",
     phone: "",
     email: "",

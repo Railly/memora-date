@@ -1,4 +1,3 @@
-import { CreateEventSchema } from "@/schemas/event.schema";
 import { IconSpeakerphone } from "@tabler/icons-react";
 import { Control, FieldErrors } from "react-hook-form";
 import {
@@ -20,6 +19,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { DatePicker } from "@/components/ui/date-picker";
 import { Visibility } from "./visibility";
+import { CreateEventSchema } from "@/schemas/create-event.schema";
 
 interface IBasicInformationProps {
   eventTypes: EventType[];

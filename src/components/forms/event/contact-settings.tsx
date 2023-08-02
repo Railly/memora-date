@@ -1,4 +1,5 @@
-import { Control, FieldErrors } from "react-hook-form";
+"use client";
+import { Control, FieldErrors, UseFormSetValue } from "react-hook-form";
 import {
   FormControl,
   FormErrorMessage,
@@ -16,21 +17,40 @@ import {
 import { CreateEventSchema } from "@/schemas/create-event.schema";
 import { Contact } from "@/types/entities";
 import { Input } from "@/components/ui/input";
-import { IconUser, IconPhone, IconMail, IconEdit } from "@tabler/icons-react";
+import { IconUser, IconPhone, IconMail } from "@tabler/icons-react";
 import { UploadProfileImage } from "./upload-profile-image";
+import { useEffect } from "react";
+import { EMPTY_CONTACT } from "./constants";
 
 interface IContactSettingsProps {
   control: Control<CreateEventSchema>;
   contacts: Contact[];
   errors: FieldErrors<CreateEventSchema>;
-  contactFullName: string;
+  contact?: CreateEventSchema["contact"];
+  setValue: UseFormSetValue<CreateEventSchema>;
 }
 export const ContactSettings: React.FC<IContactSettingsProps> = ({
   control,
   contacts,
   errors,
-  contactFullName,
+  contact,
+  setValue,
 }) => {
+  const updateContactValues = () => {
+    const selectedContact = contacts.find(
+      (_contact) => contact?.selectedContact === _contact?.id
+    );
+    setValue("contact.full_name", selectedContact?.full_name ?? "");
+    if (selectedContact?.email)
+      setValue("contact.email", selectedContact?.email ?? "");
+    if (selectedContact?.phone)
+      setValue("contact.phone", selectedContact?.phone ?? "");
+  };
+
+  useEffect(() => {
+    updateContactValues();
+  }, [contact?.selectedContact]);
+
   return (
     <div className="space-y-2">
       <p className="text-[#B4B4B4] text-sm">Contact Settings</p>
@@ -38,7 +58,7 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
         <div className="flex items-center w-full gap-5">
           <FormField
             control={control}
-            name="contact"
+            name="contact.selectedContact"
             render={({ field }) => (
               <FormItem className="flex flex-col w-full h-full transition duration-200 ease-in-out">
                 <FormLabel>Select an existing contact</FormLabel>
@@ -48,7 +68,7 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
                       <SelectValue placeholder="Select a contact"></SelectValue>
                     </SelectTrigger>
                     <SelectContent>
-                      {contacts.map((contact) => (
+                      {contacts.concat(EMPTY_CONTACT).map((contact) => (
                         <SelectItem key={contact.id} value={contact.id}>
                           {contact.full_name}
                         </SelectItem>
@@ -78,6 +98,7 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
                     withIcon={<IconUser size={20} />}
                     variant={errors.contact?.full_name ? "error" : "default"}
                     value={field.value}
+                    disabled={Boolean(contact?.selectedContact)}
                     onChange={field.onChange}
                   />
                 </FormControl>
@@ -99,6 +120,7 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
                     withIcon={<IconPhone size={20} />}
                     variant={errors.contact?.phone ? "error" : "default"}
                     value={field.value}
+                    disabled={Boolean(contact?.selectedContact)}
                     onChange={field.onChange}
                   />
                 </FormControl>
@@ -122,6 +144,7 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
                     withIcon={<IconMail size={20} />}
                     variant={errors.contact?.email ? "error" : "default"}
                     value={field.value}
+                    disabled={Boolean(contact?.selectedContact)}
                     onChange={field.onChange}
                   />
                 </FormControl>
@@ -137,7 +160,7 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
                 <FormLabel>Image</FormLabel>
                 <FormControl>
                   <UploadProfileImage
-                    fullName={contactFullName}
+                    fullName={contact?.full_name}
                     onChange={field.onChange}
                   />
                 </FormControl>

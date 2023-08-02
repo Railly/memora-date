@@ -22,5 +22,9 @@ export interface IServiceApi<T extends ServiceType> {
     : T extends "server"
     ? ServerEventService
     : ClientEventService;
-  contact: T extends "server" ? ServerContactService : ClientContactService;
+  contact: T extends "server"
+    ? ServerContactService
+    : T extends "client"
+    ? ClientContactService
+    : null | undefined;
 }

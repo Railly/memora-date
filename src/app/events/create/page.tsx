@@ -17,21 +17,61 @@ import {
   createEventSchema,
   defaultValues,
 } from "@/schemas/create-event.schema";
-import { toast } from "@/components/ui/use-toast";
+import { useToast } from "@/components/ui/use-toast";
+import { Session } from "@supabase/supabase-js";
 
 export default function CreateEventPage() {
   const [eventTypes, setEventTypes] = useState<EventType[]>([]);
   const [contacts, setContacts] = useState<Contact[]>([]);
+  const [session, setSession] = useState<Session | null>(null);
+  const { toast } = useToast();
 
   useEffect(() => {
     (async () => {
-      const responses = await Promise.all([
-        clientApiProvider.event.getEventTypes(),
-        clientApiProvider.contact.getContacts(),
-      ]);
-      const [eventTypesResponse, contactsResponse] = responses;
-      setEventTypes(eventTypesResponse.data);
-      setContacts(contactsResponse.data);
+      try {
+        const [eventTypesResult, contactsResult, sessionResult] =
+          await Promise.allSettled([
+            clientApiProvider.event.getEventTypes(),
+            clientApiProvider.contact.getContacts(),
+            clientApiProvider.auth.getSession(),
+          ]);
+        if (eventTypesResult.status === "fulfilled") {
+          const eventTypes = eventTypesResult.value;
+          setEventTypes(eventTypes.data);
+        } else {
+          const eventTypesError = eventTypesResult.reason;
+          toast({
+            title: eventTypesError.message,
+            variant: "destructive",
+          });
+        }
+        if (contactsResult.status === "fulfilled") {
+          const contacts = contactsResult.value;
+          setContacts(contacts.data);
+        } else {
+          const contactsError = contactsResult.reason;
+          toast({
+            title: contactsError.message,
+            variant: "destructive",
+          });
+        }
+
+        if (sessionResult.status === "fulfilled") {
+          const session = sessionResult.value;
+          console.log({
+            session,
+          });
+          setSession(session.data.session);
+        }
+      } catch (error) {
+        console.log({ error });
+        if (error instanceof Error) {
+          toast({
+            title: error.message,
+            variant: "destructive",
+          });
+        }
+      }
     })();
   }, []);
 
@@ -41,14 +81,14 @@ export default function CreateEventPage() {
   });
   const isRecurring = form.watch("reminder.reminder_type") === "RECURRING";
   const isWeekly = form.watch("reminder.interval") === "WEEKLY";
-  const contactFullName = form.watch("contact.full_name");
+  const contact = form.watch("contact");
 
   const router = useRouter();
-
   const goBack = () => router.back();
 
   console.log({
     formValues: form.getValues(),
+    errors: form.formState.errors,
   });
 
   function onSubmit(data: CreateEventSchema) {
@@ -87,6 +127,7 @@ export default function CreateEventPage() {
         <NotificationSettings
           control={form.control}
           errors={form.formState.errors}
+          user={session?.user}
         />
         <ReminderSettings
           control={form.control}
@@ -98,7 +139,8 @@ export default function CreateEventPage() {
           control={form.control}
           errors={form.formState.errors}
           contacts={contacts}
-          contactFullName={contactFullName}
+          contact={contact}
+          setValue={form.setValue}
         />
         <Button type="submit" className="mt-6">
           Create Event

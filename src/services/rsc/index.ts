@@ -3,6 +3,7 @@ import RscEventService from "./event.service";
 
 class RscApiProvider implements IServiceApi<"rsc"> {
   public auth = null;
+  public contact = null;
   public event;
 
   constructor({ cookies }: { cookies: any }) {

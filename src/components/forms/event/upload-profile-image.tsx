@@ -3,7 +3,7 @@ import { IconEdit } from "@tabler/icons-react";
 import { useState } from "react";
 
 interface IUploadProfileImageProps {
-  fullName: string;
+  fullName?: string;
   onChange: (file: File) => void;
 }
 
@@ -25,7 +25,8 @@ export const UploadProfileImage: React.FC<IUploadProfileImageProps> = ({
     document.getElementById("upload")?.click();
   };
 
-  const getInitials = (name: string) => {
+  const getInitials = (name?: string) => {
+    if (!name) return "";
     return name
       .split(" ")
       .map((part) => part[0])
