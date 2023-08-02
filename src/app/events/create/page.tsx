@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { IconArrowLeft } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import { EventType } from "@/types/entities";
+import { Contact, EventType } from "@/types/entities";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import clientApiProvider from "@/services/client";
@@ -21,11 +21,17 @@ import { toast } from "@/components/ui/use-toast";
 
 export default function CreateEventPage() {
   const [eventTypes, setEventTypes] = useState<EventType[]>([]);
+  const [contacts, setContacts] = useState<Contact[]>([]);
 
   useEffect(() => {
     (async () => {
-      const response = await clientApiProvider.event.getEventTypes();
-      setEventTypes(response.data);
+      const responses = await Promise.all([
+        clientApiProvider.event.getEventTypes(),
+        clientApiProvider.contact.getContacts(),
+      ]);
+      const [eventTypesResponse, contactsResponse] = responses;
+      setEventTypes(eventTypesResponse.data);
+      setContacts(contactsResponse.data);
     })();
   }, []);
 
@@ -35,14 +41,15 @@ export default function CreateEventPage() {
   });
   const isRecurring = form.watch("reminder.reminder_type") === "RECURRING";
   const isWeekly = form.watch("reminder.interval") === "WEEKLY";
+  const contactFullName = form.watch("contact.full_name");
 
   const router = useRouter();
 
-  console.log({
-    errors: form.formState.errors,
-  });
-
   const goBack = () => router.back();
+
+  console.log({
+    formValues: form.getValues(),
+  });
 
   function onSubmit(data: CreateEventSchema) {
     toast({
@@ -54,10 +61,6 @@ export default function CreateEventPage() {
       ),
     });
   }
-
-  console.log({
-    formValues: form.getValues(),
-  });
 
   return (
     <Form {...form}>
@@ -91,7 +94,12 @@ export default function CreateEventPage() {
           isRecurring={isRecurring}
           isWeekly={isWeekly}
         />
-        <ContactSettings control={form.control} />
+        <ContactSettings
+          control={form.control}
+          errors={form.formState.errors}
+          contacts={contacts}
+          contactFullName={contactFullName}
+        />
         <Button type="submit" className="mt-6">
           Create Event
         </Button>
