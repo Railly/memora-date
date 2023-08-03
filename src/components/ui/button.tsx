@@ -18,6 +18,9 @@ const buttonVariants = cva(
           "bg-secondary text-secondary-foreground shadow-sm hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
+        sidebar: "bg-memora-gray text-white text-base hover:bg-memora-gray/90",
+        sidebarDestructive:
+          "bg-memora-pink text-white text-base hover:bg-memora-pink/90",
       },
       size: {
         default: "h-9 px-4 py-2",

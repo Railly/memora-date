@@ -7,6 +7,7 @@ import { siteConfig } from "@/config/site";
 import type { Metadata } from "next";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
+import Sidebar from "@/components/layouts/sidebar";
 
 export const fontSans = FontSans({
   weight: ["400", "500", "600", "700"],
