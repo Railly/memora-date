@@ -41,10 +41,9 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
       (_contact) => contact?.selectedContact === _contact?.id
     );
     setValue("contact.full_name", selectedContact?.full_name ?? "");
-    if (selectedContact?.email)
-      setValue("contact.email", selectedContact?.email ?? "");
-    if (selectedContact?.phone)
-      setValue("contact.phone", selectedContact?.phone ?? "");
+    setValue("contact.email", selectedContact?.email ?? "");
+    setValue("contact.phone", selectedContact?.phone ?? "");
+    setValue("contact.image", selectedContact?.image_url ?? "");
   };
 
   useEffect(() => {
@@ -61,10 +60,15 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
             name="contact.selectedContact"
             render={({ field }) => (
               <FormItem className="flex flex-col w-full h-full transition duration-200 ease-in-out">
-                <FormLabel>Select an existing contact</FormLabel>
+                <FormLabel htmlFor={field.name}>
+                  Select an existing contact
+                </FormLabel>
                 <FormControl className="flex gap-4">
                   <Select onValueChange={field.onChange}>
-                    <SelectTrigger disabled={contacts.length === 0}>
+                    <SelectTrigger
+                      id={field.name}
+                      disabled={contacts.length === 0}
+                    >
                       <SelectValue placeholder="Select a contact"></SelectValue>
                     </SelectTrigger>
                     <SelectContent>
@@ -89,10 +93,11 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
             name="contact.full_name"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Full name</FormLabel>
+                <FormLabel htmlFor={field.name}>Full name</FormLabel>
                 <FormControl>
                   <Input
-                    id="contact.full_name"
+                    id={field.name}
+                    name={field.name}
                     type="text"
                     placeholder="John Doe"
                     withIcon={<IconUser size={20} />}
@@ -111,10 +116,11 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
             name="contact.phone"
             render={({ field }) => (
               <FormItem className="w-full">
-                <FormLabel>Phone</FormLabel>
+                <FormLabel htmlFor={field.name}>Phone</FormLabel>
                 <FormControl>
                   <Input
-                    id="contact.phone"
+                    id={field.name}
+                    name={field.name}
                     type="text"
                     placeholder="+51 987 654 321"
                     withIcon={<IconPhone size={20} />}
@@ -135,10 +141,11 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
             name="contact.email"
             render={({ field }) => (
               <FormItem className="w-9/12">
-                <FormLabel>Email</FormLabel>
+                <FormLabel htmlFor={field.name}>Email</FormLabel>
                 <FormControl>
                   <Input
-                    id="contact.email"
+                    id={field.name}
+                    name={field.name}
                     type="text"
                     placeholder="exampleo@mail.com"
                     withIcon={<IconMail size={20} />}
@@ -157,7 +164,7 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
             name="contact.image"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Image</FormLabel>
+                <FormLabel htmlFor={field.name}>Image</FormLabel>
                 <FormControl>
                   <UploadProfileImage
                     fullName={contact?.full_name}

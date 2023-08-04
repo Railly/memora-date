@@ -41,10 +41,11 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
             name="event.name"
             render={({ field }) => (
               <FormItem className="relative flex flex-col w-full">
-                <FormLabel htmlFor="event.name">Name</FormLabel>
+                <FormLabel htmlFor={field.name}>Name</FormLabel>
                 <FormControl>
                   <Input
-                    id="event.name"
+                    id={field.name}
+                    name={field.name}
                     type="text"
                     placeholder="An Incredible Event"
                     withIcon={<IconSpeakerphone size={20} />}
@@ -53,7 +54,7 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
                     onChange={field.onChange}
                   />
                 </FormControl>
-                <FormErrorMessage name="event.name" />
+                <FormErrorMessage name={field.name} />
               </FormItem>
             )}
           />
@@ -62,13 +63,15 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
             name="event_type.type"
             render={({ field }) => (
               <FormItem className="relative flex flex-col w-full">
-                <FormLabel htmlFor="event_type.type">Category</FormLabel>
+                <FormLabel htmlFor={field.name}>Category</FormLabel>
                 <FormControl>
                   <Select
                     disabled={eventTypes.length === 0}
                     onValueChange={field.onChange}
                   >
                     <SelectTrigger
+                      id={field.name}
+                      name={field.name}
                       variant={errors.event_type?.type ? "error" : "default"}
                       className="w-[180px]"
                     >
@@ -83,7 +86,7 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
                     </SelectContent>
                   </Select>
                 </FormControl>
-                <FormErrorMessage name="event_type.type" />
+                <FormErrorMessage name={field.name} />
               </FormItem>
             )}
           />
@@ -93,17 +96,18 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
           name="event.description"
           render={({ field }) => (
             <FormItem className="relative flex flex-col">
-              <FormLabel htmlFor="event.description">Description</FormLabel>
+              <FormLabel htmlFor={field.name}>Description</FormLabel>
               <FormControl>
                 <Textarea
-                  id="event.description"
+                  id={field.name}
+                  name={field.name}
                   placeholder="Your detailed description"
                   variant={errors.event?.description ? "error" : "default"}
                   value={field.value}
                   onChange={field.onChange}
                 />
               </FormControl>
-              <FormErrorMessage name="event.description" />
+              <FormErrorMessage name={field.name} />
             </FormItem>
           )}
         />
@@ -113,7 +117,7 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
             name="event.date"
             render={({ field }) => (
               <FormItem className="relative flex flex-col justify-center w-1/2">
-                <FormLabel htmlFor="event.date">Date</FormLabel>
+                <FormLabel htmlFor={field.name}>Date</FormLabel>
                 <FormControl>
                   <DatePicker
                     selected={field.value ? new Date(field.value) : undefined}
@@ -121,7 +125,7 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
                     error={errors.event?.date}
                   />
                 </FormControl>
-                <FormErrorMessage name="event.date" />
+                <FormErrorMessage name={field.name} />
               </FormItem>
             )}
           />
@@ -130,7 +134,7 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
             name="event.is_public"
             render={({ field }) => (
               <FormItem className="relative flex flex-col justify-center w-1/2">
-                <FormLabel htmlFor="event.visibility">Visibility</FormLabel>
+                <FormLabel htmlFor={field.name}>Visibility</FormLabel>
                 <FormControl>
                   <Visibility
                     isPublic={field.value}

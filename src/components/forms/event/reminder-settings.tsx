@@ -41,9 +41,11 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
             name="reminder.reminder_type"
             render={({ field }) => (
               <FormItem className="flex flex-col w-full h-full transition duration-200 ease-in-out">
-                <FormLabel>Reminder type</FormLabel>
+                <FormLabel htmlFor={field.name}>Reminder type</FormLabel>
                 <FormControl className="flex gap-4">
                   <RadioGroup
+                    id={field.name}
+                    name={field.name}
                     value={field.value}
                     onValueChange={field.onChange}
                   >
@@ -75,11 +77,16 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
             name="reminder.interval"
             render={({ field }) => (
               <FormItem className="flex flex-col w-full h-full transition duration-200 ease-in-out">
-                <FormLabel variant={isRecurring ? "default" : "disabled"}>
+                <FormLabel
+                  htmlFor={field.name}
+                  variant={isRecurring ? "default" : "disabled"}
+                >
                   Interval
                 </FormLabel>
                 <FormControl className="flex gap-4">
                   <RadioGroup
+                    id={field.name}
+                    name={field.name}
                     value={field.value}
                     onValueChange={field.onChange}
                     disabled={!isRecurring}
@@ -108,7 +115,10 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
             name="reminder.end_date"
             render={({ field }) => (
               <FormItem className="relative flex flex-col w-full h-full transition duration-200 ease-in-out">
-                <FormLabel variant={isRecurring ? "default" : "disabled"}>
+                <FormLabel
+                  htmlFor={field.name}
+                  variant={isRecurring ? "default" : "disabled"}
+                >
                   End Date
                 </FormLabel>
                 <FormControl className="flex gap-5">
@@ -129,6 +139,7 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
             render={({ field }) => (
               <FormItem className="flex flex-col w-full h-full transition duration-200 ease-in-out">
                 <FormLabel
+                  htmlFor={field.name}
                   variant={isRecurring && isWeekly ? "default" : "disabled"}
                 >
                   Day of Week
@@ -136,6 +147,8 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
                 <FormControl className="flex gap-4">
                   <Select onValueChange={field.onChange}>
                     <SelectTrigger
+                      id={field.name}
+                      name={field.name}
                       disabled={!isRecurring || !isWeekly}
                       variant={
                         errors.reminder?.day_of_week ? "error" : "default"

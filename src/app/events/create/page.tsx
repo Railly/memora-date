@@ -19,12 +19,22 @@ import {
 } from "@/schemas/create-event.schema";
 import { useToast } from "@/components/ui/use-toast";
 import { Session } from "@supabase/supabase-js";
+import { getFilesInBucket, uploadFile } from "@/lib/supabase";
 
 export default function CreateEventPage() {
   const [eventTypes, setEventTypes] = useState<EventType[]>([]);
   const [contacts, setContacts] = useState<Contact[]>([]);
   const [session, setSession] = useState<Session | null>(null);
   const { toast } = useToast();
+
+  // const getAllImages = async () => {
+  //   const images = await getFilesInBucket({
+  //     supabase: clientApiProvider.supabase,
+  //     bucket: "profiles",
+  //     folder: "admin",
+  //   });
+  //   console.log({ images });
+  // };
 
   useEffect(() => {
     (async () => {
@@ -91,7 +101,7 @@ export default function CreateEventPage() {
     errors: form.formState.errors,
   });
 
-  function onSubmit(data: CreateEventSchema) {
+  const onSubmit = async (data: CreateEventSchema) => {
     toast({
       title: "You submitted the following values:",
       description: (
@@ -100,7 +110,112 @@ export default function CreateEventPage() {
         </pre>
       ),
     });
-  }
+
+    const user_id = session?.user.id;
+    if (!user_id) {
+      throw new Error("User is not logged in");
+    }
+
+    const contactResponse = await createContact({
+      contact: data.contact,
+      user_id,
+    });
+
+    const eventResponse = await createEvent({
+      event: data.event,
+      event_type_id: data.event_type.type,
+      contact_id: contactResponse.data.id,
+      user_id,
+    });
+
+    const reminderResponse = await createReminder({
+      reminder: data.reminder,
+      event_id: eventResponse.data.id,
+    });
+
+    toast({
+      title: "Event created successfully",
+      variant: "default",
+      description: (
+        <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+          <code className="text-white">
+            {JSON.stringify(
+              {
+                contactResponse,
+                eventResponse,
+                reminderResponse,
+              },
+              null,
+              2
+            )}
+          </code>
+        </pre>
+      ),
+    });
+  };
+
+  const createContact = async ({
+    contact,
+    user_id,
+  }: {
+    contact: CreateEventSchema["contact"];
+    user_id: string;
+  }) => {
+    if (!contact.selectedContact && contact.image) {
+      // const image = await clientApiProvider.storage.uploadImage({
+      //   image: contact.image,
+      //   folder: "profiles",
+      //   user_id,
+      // });
+      const image = await uploadFile({
+        supabase: clientApiProvider.supabase,
+        bucket: "profiles",
+        filepath: contact.full_name,
+        file: contact.image,
+        userId: user_id,
+      });
+      contact.image = image.path;
+    }
+    const contactResponse = await clientApiProvider.contact.createContact({
+      contact,
+      user_id,
+    });
+    return contactResponse;
+  };
+
+  const createEvent = async ({
+    event,
+    event_type_id,
+    user_id,
+    contact_id,
+  }: {
+    event: CreateEventSchema["event"];
+    user_id: string;
+    event_type_id: string;
+    contact_id: string;
+  }) => {
+    const eventResponse = await clientApiProvider.event.createEvent({
+      event,
+      user_id,
+      event_type_id,
+      contact_id,
+    });
+    return eventResponse;
+  };
+
+  const createReminder = async ({
+    reminder,
+    event_id,
+  }: {
+    reminder: CreateEventSchema["reminder"];
+    event_id: string;
+  }) => {
+    const reminderResponse = await clientApiProvider.reminder.createReminder({
+      reminder,
+      event_id,
+    });
+    return reminderResponse;
+  };
 
   return (
     <Form {...form}>

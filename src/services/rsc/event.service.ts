@@ -10,9 +10,9 @@ class RscEventService extends RscServiceApi {
       .from("event")
       .select(
         `*,
-      event_type (
-        value
-      )`
+         event_type (value),
+         contact(*)
+      `
       )
       .order("date", { ascending: true });
     return events;

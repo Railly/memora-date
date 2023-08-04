@@ -48,6 +48,7 @@ export const NotificationSettings: React.FC<INotificationSettingsProps> = ({
               <Label htmlFor="event.email">Your email</Label>
               <Input
                 id="event.email"
+                name="event.email"
                 type="text"
                 placeholder="Your email"
                 value={user?.email}
@@ -62,6 +63,7 @@ export const NotificationSettings: React.FC<INotificationSettingsProps> = ({
                 render={({ field }) => (
                   <FormItem className="flex items-center gap-2 p-2 mt-4 space-y-0 transition duration-200 ease-in-out">
                     <FormLabel
+                      htmlFor={field.name}
                       variant={
                         errors.reminder?.notification_methods
                           ? "error"
@@ -101,6 +103,7 @@ export const NotificationSettings: React.FC<INotificationSettingsProps> = ({
               <Label htmlFor="event.phone">Your phone</Label>
               <Input
                 id="event.phone"
+                name="event.phone"
                 type="text"
                 value={user?.user_metadata?.phone}
                 placeholder="Your phone"
@@ -114,6 +117,7 @@ export const NotificationSettings: React.FC<INotificationSettingsProps> = ({
               render={({ field }) => (
                 <FormItem className="flex items-center gap-2 p-2 mt-4 space-y-0 transition duration-200 ease-in-out">
                   <FormLabel
+                    htmlFor={field.name}
                     variant={
                       errors.reminder?.notification_methods
                         ? "error"
@@ -184,6 +188,8 @@ export const NotificationSettings: React.FC<INotificationSettingsProps> = ({
                         <FormControl>
                           <Select onValueChange={field.onChange}>
                             <SelectTrigger
+                              id={field.name}
+                              name={field.name}
                               variant={
                                 errors.reminder?.notify_before_time_unit
                                   ? "error"

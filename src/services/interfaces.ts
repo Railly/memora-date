@@ -8,6 +8,11 @@ import ClientEventService from "./client/event.service";
 /* Contact */
 import ServerContactService from "./server/contact.service";
 import ClientContactService from "./client/contact.service";
+/* Reminder */
+import ServerReminderService from "./server/reminder.service";
+import ClientReminderService from "./client/reminder.service";
+/* Storage */
+// import StorageService from "./client/storage.service";
 
 type ServiceType = "client" | "server" | "rsc";
 
@@ -27,4 +32,10 @@ export interface IServiceApi<T extends ServiceType> {
     : T extends "client"
     ? ClientContactService
     : null | undefined;
+  reminder: T extends "server"
+    ? ServerReminderService
+    : T extends "client"
+    ? ClientReminderService
+    : null | undefined;
+  // storage: T extends "client" ? StorageService : null | undefined;
 }

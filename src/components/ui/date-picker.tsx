@@ -32,6 +32,7 @@ export const DatePicker: React.FC<IDatePickerProps> = ({
           disabled={disabled}
           className={cn(
             "w-full inline-flex justify-start text-left font-normal",
+            "hover:border-memora-blue",
             !selected && "text-muted-foreground"
           )}
         >

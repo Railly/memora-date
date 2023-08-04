@@ -11,7 +11,9 @@ export const UploadProfileImage: React.FC<IUploadProfileImageProps> = ({
   fullName,
   onChange,
 }) => {
-  const [imageURL, setImageURL] = useState<string | undefined>();
+  const [imageURL, setImageURL] = useState<string | undefined>(
+    "https://cgkjgmtdxmqoruwpyojn.supabase.co/storage/v1/object/public/profiles/Contacto Test_3c5c18dc-baab-4134-9edf-9a40a612eb9e_1691048237034"
+  );
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
