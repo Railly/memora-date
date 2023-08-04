@@ -20,6 +20,7 @@ import {
 import { useToast } from "@/components/ui/use-toast";
 import { Session } from "@supabase/supabase-js";
 import { getFilesInBucket, uploadFile } from "@/lib/supabase";
+import { SubHeader } from "@/components/shared/molecules/sub-header";
 
 export default function CreateEventPage() {
   const [eventTypes, setEventTypes] = useState<EventType[]>([]);
@@ -223,17 +224,7 @@ export default function CreateEventPage() {
         className="flex flex-col gap-6 p-6"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <div className="flex items-center gap-2">
-          <Button
-            type="button"
-            onClick={goBack}
-            className="p-0 px-2"
-            variant="outline"
-          >
-            <IconArrowLeft size={20} />
-          </Button>
-          <h1 className="text-xl">New Event</h1>
-        </div>
+        <SubHeader title="New Event" />
         <BasicInformation
           control={form.control}
           errors={form.formState.errors}

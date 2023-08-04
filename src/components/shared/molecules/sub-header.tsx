@@ -4,17 +4,17 @@ import { Button } from "@/components/ui/button";
 import { IconArrowLeft } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 
-interface IHeaderProps {
+interface ISubHeaderProps {
   title: string;
   children?: React.ReactNode;
 }
 
-export const Header: React.FC<IHeaderProps> = ({ title, children }) => {
+export const SubHeader: React.FC<ISubHeaderProps> = ({ title, children }) => {
   const router = useRouter();
   const goBack = () => router.back();
 
   return (
-    <header className="flex w-full justify-between mt-5">
+    <section className="flex justify-between w-full">
       <div className="flex items-center gap-2">
         <Button
           type="button"
@@ -27,6 +27,6 @@ export const Header: React.FC<IHeaderProps> = ({ title, children }) => {
         <h1 className="text-xl">{title}</h1>
       </div>
       {children}
-    </header>
+    </section>
   );
 };

@@ -3,7 +3,7 @@ import {
   FloatingActionButton,
 } from "@/components/shared/FAB";
 import EventCard from "@/components/shared/molecules/event-card";
-import { Header } from "@/components/shared/molecules/header";
+import { SubHeader } from "@/components/shared/molecules/sub-header";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Database } from "@/types/supabase";
@@ -35,15 +35,15 @@ export default async function MyEventsPage() {
   console.log({ events });
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center pt-6">
       <div className="flex flex-col items-center w-9/12 gap-8">
-        <Header title="My Events">
+        <SubHeader title="My Events">
           <Badge variant="blue">
             {events?.data?.length}{" "}
             {events?.data?.length === 1 ? "event" : "events"}
           </Badge>
-        </Header>
-        <main className="flex flex-col gap-4 w-full mb-2">
+        </SubHeader>
+        <main className="flex flex-col w-full gap-4 mb-2">
           <form>
             <Input
               id="search-events"
