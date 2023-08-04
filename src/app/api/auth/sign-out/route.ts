@@ -7,6 +7,7 @@ export async function POST() {
   try {
     const serverApiProvider = new ServerApiProvider({ cookies });
     const response = await serverApiProvider.auth.signOut();
+    console.log({ response });
     if (response?.error) {
       return ApiResponse.serverError(response.error.message, response.error);
     }

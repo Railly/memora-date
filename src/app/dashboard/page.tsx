@@ -4,6 +4,10 @@ import { redirect } from "next/navigation";
 import NextEventSection from "@/components/dashboard/next-event.section";
 import UpcomingEventSection from "@/components/dashboard/upcoming-event.section";
 import RscApiProvider from "@/services/rsc";
+import {
+  ACTION_BUTTON_PATHS,
+  FloatingActionButton,
+} from "@/components/shared/FAB";
 
 export default async function DashBoardPage() {
   const rscEventService = new RscApiProvider({ cookies });
@@ -43,6 +47,7 @@ export default async function DashBoardPage() {
         {/* <pre>{JSON.stringify(events, null, 2)}</pre> */}
         <NextEventSection event={nextEvent} />
         <UpcomingEventSection events={events.data} />
+        <FloatingActionButton to={ACTION_BUTTON_PATHS.EVENT_CREATOR} />
       </div>
     </div>
   );

@@ -54,16 +54,12 @@ class ClientAuthService {
 
   async signOut() {
     try {
-      const response = await fetch("/api/auth/sign-out", {
+      await fetch("/api/auth/sign-out", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
       });
-      const data = await response.json();
-      if (!data.ok) {
-        throw new HttpError(response.status, response.statusText);
-      }
     } catch (error) {
       if (error instanceof HttpError) {
         console.error(`HTTP Error: ${error.status} - ${error.statusText}`);

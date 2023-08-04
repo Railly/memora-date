@@ -47,7 +47,7 @@ export default function LoginPage() {
         console.log({ response });
         toast({
           title: response.error.message,
-          type: "foreground",
+          variant: "success",
         });
         return;
       }
@@ -56,7 +56,7 @@ export default function LoginPage() {
       console.log({ error });
       toast({
         title: error.message,
-        variant: "destructive",
+        variant: "danger",
       });
       setIsLoading(false);
     }
