@@ -21,6 +21,7 @@ const buttonVariants = cva(
         sidebar: "bg-memora-gray text-white text-base hover:bg-memora-gray/90",
         sidebarDestructive:
           "bg-memora-pink text-white text-base hover:bg-memora-pink/90",
+        icon: "bg-transparent text-base",
       },
       size: {
         default: "h-9 px-4 py-2",

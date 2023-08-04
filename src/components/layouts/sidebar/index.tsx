@@ -16,8 +16,18 @@ import { Switch } from "@/components/ui/switch";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import clientApiProvider from "@/services/client";
+import { cn } from "@/lib/utils";
 
-const Sidebar = () => {
+type SidebarProps = {
+  isOpen: Boolean;
+  setIsOpen: React.Dispatch<React.SetStateAction<Boolean>>;
+};
+
+const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
+  const toggleSidebar = () => {
+    setIsOpen(!isOpen);
+  };
+
   const handleLogout = async () => {
     try {
       const response = await clientApiProvider.auth.signOut();
@@ -27,15 +37,35 @@ const Sidebar = () => {
     }
   };
 
+  var toggleHeaderButton = {
+    hidden: !isOpen,
+  };
+
+  var toggleSidebarButton = {
+    "translate-x-0": isOpen,
+    "translate-x-full": !isOpen,
+  };
+
   return (
-    <div className="absolute z-10 w-full h-screen bg-slate-900/60">
-      <div className="absolute right-0 flex flex-col justify-between h-screen p-3 bg-black w-60">
+    <div className="absolute top-0 w-full">
+      <div
+        className={cn(
+          "transition-all duration-500 fixed top-0 z-10 w-full h-screen bg-slate-900/60",
+          toggleHeaderButton
+        )}
+      />
+      <div
+        className={cn(
+          "border-l border-gray/10 z-20 transition top-0 ease-in-out duration-500 fixed right-0 flex flex-col justify-between h-screen p-3 bg-black w-60",
+          toggleSidebarButton
+        )}
+      >
         <div className="flex flex-col gap-3">
           <div className="relative flex items-center justify-between w-full">
             <div className="flex min-w-full gap-x-2">
               <div className="items-center w-10 h-10">
                 <Avatar>
-                  <AvatarImage src="/avatar.jpg" alt="avatar" />
+                  <AvatarImage src="" alt="avatar" />
                   <AvatarFallback>HU</AvatarFallback>
                 </Avatar>
               </div>
@@ -48,7 +78,14 @@ const Sidebar = () => {
                 </p>
               </div>
             </div>
-            <IconX color="white" className="absolute right-0" />
+            <Button
+              type="button"
+              variant="icon"
+              className="absolute right-0 p-0 hover:bg-gray-700/30"
+              onClick={toggleSidebar}
+            >
+              <IconX color="white" />
+            </Button>
           </div>
           <div className="flex flex-col gap-2">
             <h2 className="text-sm font-medium text-gray-300">Settings</h2>
