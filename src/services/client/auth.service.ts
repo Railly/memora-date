@@ -12,10 +12,11 @@ class ClientAuthService {
           "Content-Type": "application/json",
         },
       });
-      if (!response.ok) {
-        throw new HttpError(response.status, response.statusText);
+      const data = await response.json();
+      if (!data.ok) {
+        throw new HttpError(response.status, data.error.message);
       }
-      return response.json();
+      return data;
     } catch (error) {
       if (error instanceof HttpError) {
         console.error(`HTTP Error: ${error.status} - ${error.statusText}`);
@@ -36,10 +37,11 @@ class ClientAuthService {
           "Content-Type": "application/json",
         },
       });
-      if (!response.ok) {
+      const data = await response.json();
+      if (!data.ok) {
         throw new HttpError(response.status, response.statusText);
       }
-      return response.json();
+      return data;
     } catch (error) {
       if (error instanceof HttpError) {
         console.error(`HTTP Error: ${error.status} - ${error.statusText}`);
@@ -58,7 +60,8 @@ class ClientAuthService {
           "Content-Type": "application/json",
         },
       });
-      if (!response.ok) {
+      const data = await response.json();
+      if (!data.ok) {
         throw new HttpError(response.status, response.statusText);
       }
     } catch (error) {
@@ -82,10 +85,11 @@ class ClientAuthService {
           },
         }
       );
-      if (!response.ok) {
+      const data = await response.json();
+      if (!data.ok) {
         throw new HttpError(response.status, response.statusText);
       }
-      return response.json();
+      return data;
     } catch (error) {
       if (error instanceof HttpError) {
         console.error(`HTTP Error: ${error.status} - ${error.statusText}`);
