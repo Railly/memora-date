@@ -50,13 +50,13 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
     <div className="absolute top-0 w-full">
       <div
         className={cn(
-          "transition-all duration-500 fixed top-0 z-10 w-full h-screen bg-slate-900/60",
+          "transition-all duration-500 fixed top-0 z-[60] w-full h-screen bg-slate-900/60",
           toggleHeaderButton
         )}
       />
       <div
         className={cn(
-          "border-l border-gray/10 z-20 transition top-0 ease-in-out duration-500 fixed right-0 flex flex-col justify-between h-screen p-3 bg-black w-60",
+          "border-l border-gray/10 z-[70] transition top-0 ease-in-out duration-500 fixed right-0 flex flex-col justify-between h-screen p-3 bg-black w-60",
           toggleSidebarButton
         )}
       >
