@@ -37,11 +37,11 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
     }
   };
 
-  var toggleHeaderButton = {
+  const toggleHeaderButton = {
     hidden: !isOpen,
   };
 
-  var toggleSidebarButton = {
+  const toggleSidebarButton = {
     "translate-x-0": isOpen,
     "translate-x-full": !isOpen,
   };
