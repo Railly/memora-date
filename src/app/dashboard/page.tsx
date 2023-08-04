@@ -56,7 +56,7 @@ export default async function DashBoardPage() {
         {/* <pre>{JSON.stringify(events, null, 2)}</pre> */}
         <NextEventSection event={nextEvent} />
         <UpcomingEventSection events={events.data} />
-        <FloatingActionButton to={ACTION_BUTTON_PATHS.eventCreator} />
+        <FloatingActionButton to={ACTION_BUTTON_PATHS.EVENT_CREATOR} />
       </div>
     </div>
   );

@@ -1,4 +1,4 @@
 export const ACTION_BUTTON_PATHS = {
-  eventCreator: "/events/create",
-  contactCreator: "/contacts/create",
+  EVENT_CREATOR: "/events/create",
+  CONTACT_CREATOR: "/contacts/create",
 };

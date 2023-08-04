@@ -57,7 +57,7 @@ export default async function MyEventsPage() {
               <EventCard key={event.id} event={event} />
             ))}
           </div>
-          <FloatingActionButton to={ACTION_BUTTON_PATHS.eventCreator} />
+          <FloatingActionButton to={ACTION_BUTTON_PATHS.EVENT_CREATOR} />
         </main>
       </div>
     </div>
