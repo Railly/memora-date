@@ -57,11 +57,13 @@ class ServerAuthService {
   async signOut() {
     try {
       const { error, data } = await supabase.auth.getSession();
+      console.log({ error, data });
       if (error) {
         return { error, data };
       }
       if (data.session) {
-        await supabase.auth.signOut();
+        const { error } = await supabase.auth.signOut();
+        return { error, data: null };
       }
     } catch (error) {
       console.error(error);

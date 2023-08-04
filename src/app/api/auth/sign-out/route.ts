@@ -5,6 +5,7 @@ import { ApiResponse } from "../../utils/response.utils";
 export async function POST() {
   try {
     const response = await serverApiProvider.auth.signOut();
+    console.log({ response });
     if (response?.error) {
       return ApiResponse.serverError(response.error.message, response.error);
     }
