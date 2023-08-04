@@ -5,6 +5,10 @@ import { Database } from "@/types/supabase";
 import { redirect } from "next/navigation";
 import NextEventSection from "@/components/dashboard/next-event.section";
 import UpcomingEventSection from "@/components/dashboard/upcoming-event.section";
+import {
+  ACTION_BUTTON_PATHS,
+  FloatingActionButton,
+} from "@/components/shared/FAB";
 
 export default async function DashBoardPage() {
   const supabase = createServerComponentClient<Database>({ cookies });
@@ -52,6 +56,7 @@ export default async function DashBoardPage() {
         {/* <pre>{JSON.stringify(events, null, 2)}</pre> */}
         <NextEventSection event={nextEvent} />
         <UpcomingEventSection events={events.data} />
+        <FloatingActionButton to={ACTION_BUTTON_PATHS.eventCreator} />
       </div>
     </div>
   );
