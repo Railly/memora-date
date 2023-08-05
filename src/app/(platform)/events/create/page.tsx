@@ -1,7 +1,6 @@
 "use client";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { IconArrowLeft } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
 import { Contact, EventType } from "@/lib/entities.types";
 import { Button } from "@/components/ui/button";
@@ -19,8 +18,8 @@ import {
 } from "@/schemas/create-event.schema";
 import { useToast } from "@/components/ui/use-toast";
 import { Session } from "@supabase/supabase-js";
-import { getFilesInBucket, uploadFile } from "@/lib/supabase";
 import { SubHeader } from "@/components/shared/molecules/sub-header";
+import { uploadFile } from "@/lib/storage.helpers";
 
 export default function CreateEventPage() {
   const [eventTypes, setEventTypes] = useState<EventType[]>([]);
