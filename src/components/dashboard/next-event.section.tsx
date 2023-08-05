@@ -1,4 +1,4 @@
-import { EventWithType } from "@/types/entities";
+import { EventWithType } from "@/lib/entities.types";
 import TimeLeft from "./molecules/time-left";
 import { Badge } from "../ui/badge";
 import { eventTypeUtils } from "../icons/event-type";

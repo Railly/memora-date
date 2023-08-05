@@ -1,4 +1,4 @@
-import { Contact } from "@/types/entities";
+import { Contact } from "@/lib/entities.types";
 
 export const DAYS_OF_WEEK = [
   "Sunday",

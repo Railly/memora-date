@@ -8,7 +8,7 @@ import {
   differenceInMonths,
   differenceInYears,
 } from "date-fns";
-import { Event } from "@/types/entities";
+import { Event } from "@/lib/entities.types";
 import { cn } from "@/lib/utils";
 
 type Countdown = {

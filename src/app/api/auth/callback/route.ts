@@ -1,7 +1,7 @@
 import { createRouteHandlerClient } from "@supabase/auth-helpers-nextjs";
 import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
-import type { Database } from "@/types/supabase";
+import type { Database } from "@/lib/database.types";
 
 export async function GET(request: NextRequest) {
   const reqUrl = new URL(request.url);

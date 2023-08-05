@@ -1,4 +1,4 @@
-import { EventWithType } from "@/types/entities";
+import { EventWithType } from "@/lib/entities.types";
 import { IconBrandTinder } from "@tabler/icons-react";
 import EventCard from "../shared/molecules/event-card";
 import { Badge } from "../ui/badge";

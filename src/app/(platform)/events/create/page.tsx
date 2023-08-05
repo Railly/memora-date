@@ -3,7 +3,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { IconArrowLeft } from "@tabler/icons-react";
 import { useEffect, useState } from "react";
-import { Contact, EventType } from "@/types/entities";
+import { Contact, EventType } from "@/lib/entities.types";
 import { Button } from "@/components/ui/button";
 import { useRouter } from "next/navigation";
 import clientApiProvider from "@/services/client";
