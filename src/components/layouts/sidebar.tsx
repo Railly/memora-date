@@ -17,6 +17,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import Link from "next/link";
 import clientApiProvider from "@/services/client";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { useToast } from "../ui/use-toast";
 
 type SidebarProps = {
   isOpen: Boolean;
@@ -24,6 +26,8 @@ type SidebarProps = {
 };
 
 const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
+  const { toast } = useToast();
+  const router = useRouter();
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
@@ -32,6 +36,15 @@ const Sidebar: React.FC<SidebarProps> = ({ isOpen, setIsOpen }) => {
     try {
       const response = await clientApiProvider.auth.signOut();
       console.log({ response });
+      const redirectTo = response.data.redirectTo;
+      if (redirectTo) {
+        toast({
+          title: "Logout",
+          description: "You have been logged out",
+          variant: "success",
+        });
+        router.push(redirectTo);
+      }
     } catch (error) {
       console.log({ error });
     }

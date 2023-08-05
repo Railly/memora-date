@@ -15,7 +15,8 @@ export async function GET(request: NextRequest) {
   } catch (error) {
     console.error(error);
   }
-
-  const redirectURl = reqUrl.origin + "/dashboard";
-  return NextResponse.redirect(redirectURl);
+  const lastLogoutFrom = reqUrl.searchParams.get("lastLogoutFrom");
+  const redirectTargetPath = lastLogoutFrom || "/dashboard";
+  const redirectUrl = new URL(redirectTargetPath, request.url);
+  return NextResponse.redirect(redirectUrl);
 }

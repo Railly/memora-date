@@ -1,7 +1,7 @@
 "use client";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -22,6 +22,7 @@ import { useToast } from "@/components/ui/use-toast";
 export default function LoginPage() {
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
+  const searchParams = useSearchParams();
   const { toast } = useToast();
 
   const {
@@ -51,7 +52,8 @@ export default function LoginPage() {
         });
         return;
       }
-      router.push("/dashboard");
+      const redirectTo = searchParams.get("redirectTo") || "/dashboard";
+      router.push(redirectTo);
     } catch (error: any) {
       console.log({ error });
       toast({
@@ -65,7 +67,8 @@ export default function LoginPage() {
   const handleGoogleSignIn = async () => {
     try {
       const response = await clientApiProvider.auth.signInWithProvider(
-        "google"
+        "google",
+        searchParams.get("redirectTo") || "/dashboard"
       );
       if (response.ok) {
         console.log({ response });
@@ -79,7 +82,8 @@ export default function LoginPage() {
   const handleGithubSignIn = async () => {
     try {
       const response = await clientApiProvider.auth.signInWithProvider(
-        "github"
+        "github",
+        searchParams.get("redirectTo") || "/dashboard"
       );
       if (response.ok) {
         console.log({ response });
