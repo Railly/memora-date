@@ -15,7 +15,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CreateEventSchema } from "@/schemas/create-event.schema";
-import { Contact } from "@/types/entities";
+import { Contact } from "@/lib/entities.types";
 import { Input } from "@/components/ui/input";
 import { IconUser, IconPhone, IconMail } from "@tabler/icons-react";
 import { UploadProfileImage } from "./upload-profile-image";

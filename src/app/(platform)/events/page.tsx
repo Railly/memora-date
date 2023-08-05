@@ -6,7 +6,7 @@ import EventCard from "@/components/shared/molecules/event-card";
 import { SubHeader } from "@/components/shared/molecules/sub-header";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Database } from "@/types/supabase";
+import { Database } from "@/lib/database.types";
 import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
 import { IconSearch } from "@tabler/icons-react";
 import { cookies } from "next/headers";

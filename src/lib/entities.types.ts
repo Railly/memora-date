@@ -1,4 +1,4 @@
-import { Database } from "./supabase";
+import { Database } from "./database.types";
 
 export type Event = Database["public"]["Tables"]["event"]["Row"];
 export type Contact = Database["public"]["Tables"]["contact"]["Row"];

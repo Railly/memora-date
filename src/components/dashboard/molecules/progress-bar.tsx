@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import { differenceInDays } from "date-fns";
-import { Event } from "@/types/entities";
+import { Event } from "@/lib/entities.types";
 
 interface ProgressBarProps {
   event: Event | null | undefined;

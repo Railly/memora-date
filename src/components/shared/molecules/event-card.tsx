@@ -1,6 +1,6 @@
 import { eventTypeUtils } from "@/components/icons/event-type";
 import { Badge } from "@/components/ui/badge";
-import { EventWithType } from "@/types/entities";
+import { EventWithType } from "@/lib/entities.types";
 import TimeLeft from "./time-left";
 
 interface IEventCardProps {
