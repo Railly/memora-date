@@ -57,7 +57,11 @@ class ServerAuthService extends ServerServiceApi {
         return { error, data };
       }
       if (data.session) {
-        await this.supabase.auth.signOut();
+        const response = await this.supabase.auth.signOut();
+        return {
+          error: response.error,
+          data: null,
+        };
       }
     } catch (error) {
       console.error(error);
@@ -72,12 +76,20 @@ class ServerAuthService extends ServerServiceApi {
     }
   }
 
-  async signInWithProvider(provider: "google" | "github") {
+  async signInWithProvider(
+    provider: "google" | "github",
+    lastLogoutFrom: string
+  ) {
     try {
+      const redirectTo = new URL(
+        "/api/auth/callback",
+        process.env.NEXT_PUBLIC_BASE_URL
+      );
+      redirectTo.searchParams.set("lastLogoutFrom", lastLogoutFrom);
       const response = await this.supabase.auth.signInWithOAuth({
         provider,
         options: {
-          redirectTo: `${process.env.NEXT_PUBLIC_BASE_URL}/api/auth/callback`,
+          redirectTo: redirectTo.toString(),
         },
       });
 

@@ -54,12 +54,17 @@ class ClientAuthService {
 
   async signOut() {
     try {
-      await fetch("/api/auth/sign-out", {
+      const response = await fetch("/api/auth/sign-out", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
       });
+      const data = await response.json();
+      if (!data.ok) {
+        throw new HttpError(response.status, response.statusText);
+      }
+      return data;
     } catch (error) {
       if (error instanceof HttpError) {
         console.error(`HTTP Error: ${error.status} - ${error.statusText}`);
@@ -70,10 +75,10 @@ class ClientAuthService {
     }
   }
 
-  async signInWithProvider(provider: "google" | "github") {
+  async signInWithProvider(provider: "google" | "github", redirectTo = "") {
     try {
       const response = await fetch(
-        `/api/auth/sign-in/oauth?provider=${provider}`,
+        `/api/auth/sign-in/oauth?provider=${provider}&redirectTo=${redirectTo}`,
         {
           method: "POST",
           headers: {

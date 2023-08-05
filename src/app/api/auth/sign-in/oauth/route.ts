@@ -14,7 +14,12 @@ export async function POST(req: Request) {
     }
 
     const serverApiProvider = new ServerApiProvider({ cookies });
-    const response = await serverApiProvider.auth.signInWithProvider(provider);
+    const redirectTo = searchParams.get("redirectTo") || "";
+    console.log({ redirectTo, allSearchParams: searchParams.toString() });
+    const response = await serverApiProvider.auth.signInWithProvider(
+      provider,
+      redirectTo
+    );
     return ApiResponse.success(response.data);
   } catch (error) {
     return ApiResponse.serverError(
