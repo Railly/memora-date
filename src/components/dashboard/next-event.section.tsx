@@ -8,10 +8,12 @@ import TimeLeft from "../shared/molecules/time-left";
 
 interface NextEventSectionProps {
   event: EventWithType | null | undefined;
+  isSkeleton?: boolean;
 }
 
 export default async function NextEventSection({
   event,
+  isSkeleton,
 }: NextEventSectionProps) {
   return (
     <section className="flex flex-col w-full gap-4">
@@ -31,7 +33,13 @@ export default async function NextEventSection({
           {event?.event_type?.value}
         </Badge>
       </header>
-      <h1 className="inline-block w-full text-2xl font-bold">{event?.name}</h1>
+      {isSkeleton ? (
+        <span className="w-20 h-6 my-1 text-2xl font-bold bg-gray-400 animate-pulse" />
+      ) : (
+        <h1 className="inline-block w-full text-2xl font-bold">
+          {event?.name}
+        </h1>
+      )}
       <main>
         <Countdown event={event} />
       </main>

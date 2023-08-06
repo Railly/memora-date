@@ -9,7 +9,7 @@ export default function DashboardLoading() {
   return (
     <div className="flex justify-center w-full">
       <div className="flex flex-col items-center w-full gap-6">
-        <NextEventSection event={null} />
+        <NextEventSection event={null} isSkeleton />
         <UpcomingEventSection events={null} count={0} isSkeleton />
         <FloatingActionButton to={ACTION_BUTTON_PATHS.EVENT_CREATOR} />
       </div>
