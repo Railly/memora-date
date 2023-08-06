@@ -20,8 +20,8 @@ export default async function MyEventsPage() {
   const events = await rscApiProvider.event.getEvents();
 
   return (
-    <div className="flex justify-center pt-6">
-      <div className="flex flex-col items-center w-9/12 gap-8">
+    <div className="flex justify-center">
+      <div className="flex flex-col w-full gap-6">
         <SubHeader title="My Events">
           <Badge variant="blue">
             {events?.data?.length}{" "}

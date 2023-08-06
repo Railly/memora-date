@@ -48,8 +48,6 @@ const TimeLeft: React.FC<TimeLeftProps> = ({ date }) => {
           }
         }
 
-        setTimeLeft(`${value} ${unit}`);
-
         switch (unit) {
           case "seconds":
           case "minutes":
@@ -87,6 +85,9 @@ const TimeLeft: React.FC<TimeLeftProps> = ({ date }) => {
             nextUpdateInSeconds = 60;
             break;
         }
+
+        const unitPlural = value > 1 ? unit : unit.slice(0, -1);
+        setTimeLeft(`${value} ${unitPlural}`);
 
         timeout = setTimeout(calculateTimeLeft, nextUpdateInSeconds * 1000);
       }

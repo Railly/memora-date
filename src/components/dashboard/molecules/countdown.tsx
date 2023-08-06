@@ -60,8 +60,8 @@ const Countdown: React.FC<CountdownProps> = ({ event }) => {
   return (
     <>
       <div className="flex flex-col justify-between bg-[#191919] px-10 py-2 text-center border rounded-lg min-w-max border-primary">
-        <div className="flex flex-col items-center justify-center gap-2">
-          <div className="flex gap-12">
+        <div className="flex flex-col items-center justify-center gap-2 md:gap-4">
+          <div className="flex gap-8 md:gap-12">
             <CountDownUnit
               value={countdown?.years}
               label="years"
@@ -78,7 +78,7 @@ const Countdown: React.FC<CountdownProps> = ({ event }) => {
               upperValue={countdown?.months}
             />
           </div>
-          <div className="flex gap-12">
+          <div className="flex gap-8 md:gap-12">
             <CountDownUnit
               value={countdown?.hours}
               label="hours"
@@ -114,12 +114,12 @@ function CountDownUnit({
 
   return (
     <div
-      className={cn("w-12", {
+      className={cn("w-10 sm:w-12", {
         "text-[#595959]":
           strValue === "00" && (upperValue === null || upperValue === 0),
       })}
     >
-      <span className="block text-5xl font-bold">{strValue}</span>
+      <span className="block text-4xl font-bold sm:text-5xl">{strValue}</span>
       <span className="block text-sm">{label}</span>
     </div>
   );

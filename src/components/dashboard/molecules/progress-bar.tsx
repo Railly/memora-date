@@ -8,7 +8,6 @@ interface ProgressBarProps {
 }
 const ProgressBar: React.FC<ProgressBarProps> = ({ event }) => {
   const [progress, setProgress] = useState(0);
-  // const isRecurring = true;
 
   useEffect(() => {
     if (event?.date) {
@@ -27,15 +26,13 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ event }) => {
   }, [event]);
 
   return (
-    <div className="relative w-full h-8 bg-[#191919] border-2 border-gray-200 rounded-lg">
+    <div className="relative w-full h-8 bg-[#191919] border border-primary rounded-lg overflow-hidden">
       <div
-        className={
-          "absolute border-2 border-[#191919] top-0 h-full bg-memora-green rounded-md"
-        }
+        className={"absolute h-full bg-memora-green"}
         style={{ width: `${progress}%` }}
       />
       <div
-        className="absolute w-full overflow-hidden leading-relaxed text-center"
+        className="absolute w-full leading-relaxed text-center"
         style={{
           color: "#191919",
           lineHeight: "2rem",

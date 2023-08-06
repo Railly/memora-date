@@ -1,5 +1,10 @@
 "use client";
-import { Control, FieldErrors, UseFormSetValue } from "react-hook-form";
+import {
+  Control,
+  FieldErrors,
+  UseFormSetValue,
+  UseFormWatch,
+} from "react-hook-form";
 import {
   FormControl,
   FormErrorMessage,
@@ -28,16 +33,17 @@ interface IContactSettingsProps {
   control: Control<CreateEventSchema>;
   contacts: Contact[] | null;
   errors: FieldErrors<CreateEventSchema>;
-  contact?: CreateEventSchema["contact"];
   setValue: UseFormSetValue<CreateEventSchema>;
+  watch: UseFormWatch<CreateEventSchema>;
 }
 export const ContactSettings: React.FC<IContactSettingsProps> = ({
   control,
   contacts,
   errors,
-  contact,
   setValue,
+  watch,
 }) => {
+  const contact = watch("contact");
   const [isNewContact, setIsNewContact] = useState(false);
   const isInputDisabled = Boolean(contact?.selectedContact) || !isNewContact;
   const hasContacts = Boolean(contacts?.length);

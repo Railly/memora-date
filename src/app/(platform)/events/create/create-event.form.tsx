@@ -36,16 +36,9 @@ const CreateEventForm: React.FC<ICreateEventFormProps> = ({
     resolver: zodResolver(createEventSchema),
     defaultValues: defaultValues as CreateEventSchema,
   });
-  const isRecurring = form.watch("reminder.reminder_type") === "RECURRING";
-  const isWeekly = form.watch("reminder.interval") === "WEEKLY";
-  const contact = form.watch("contact");
   const { toast } = useToast();
   const router = useRouter();
   const goBack = () => router.back();
-
-  console.log({
-    formValues: form.getValues(),
-  });
 
   const onSubmit = async (data: CreateEventSchema) => {
     debugFormValues({ data, toast });
@@ -84,9 +77,9 @@ const CreateEventForm: React.FC<ICreateEventFormProps> = ({
 
   return (
     <Form {...form}>
-      <SubHeader className="px-3 pt-3" title="New Event" />
+      <SubHeader className="mb-3" title="New Event" />
       <form
-        className="flex flex-col gap-6 p-3"
+        className="flex flex-col gap-6"
         onSubmit={form.handleSubmit(onSubmit)}
       >
         <BasicInformation
@@ -102,16 +95,15 @@ const CreateEventForm: React.FC<ICreateEventFormProps> = ({
         <ReminderSettings
           control={form.control}
           errors={form.formState.errors}
-          isRecurring={isRecurring}
-          isWeekly={isWeekly}
+          watch={form.watch}
           setValue={form.setValue}
         />
         <ContactSettings
           control={form.control}
           errors={form.formState.errors}
-          contacts={contacts}
-          contact={contact}
+          watch={form.watch}
           setValue={form.setValue}
+          contacts={contacts}
         />
         <div className="flex w-full gap-4">
           <Button

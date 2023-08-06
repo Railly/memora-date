@@ -1,5 +1,10 @@
 import { IconCircleNumber1, IconRepeat } from "@tabler/icons-react";
-import { Control, FieldErrors, UseFormSetValue } from "react-hook-form";
+import {
+  Control,
+  FieldErrors,
+  UseFormSetValue,
+  UseFormWatch,
+} from "react-hook-form";
 import {
   FormControl,
   FormErrorMessage,
@@ -24,17 +29,18 @@ import { useEffect } from "react";
 interface IReminderSettingsProps {
   control: Control<CreateEventSchema>;
   errors: FieldErrors<CreateEventSchema>;
-  isRecurring: boolean;
-  isWeekly: boolean;
   setValue: UseFormSetValue<CreateEventSchema>;
+  watch: UseFormWatch<CreateEventSchema>;
 }
 export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
   control,
   errors,
-  isRecurring,
-  isWeekly,
+  watch,
   setValue,
 }) => {
+  const isRecurring = watch("reminder.reminder_type") === "RECURRING";
+  const isWeekly = watch("reminder.interval") === "WEEKLY";
+
   useEffect(() => {
     if (!isRecurring) {
       setValue("reminder.interval", "DAILY");

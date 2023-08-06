@@ -14,7 +14,7 @@ export default async function NextEventSection({
   event,
 }: NextEventSectionProps) {
   return (
-    <section className="flex flex-col w-full gap-4 mt-10">
+    <section className="flex flex-col w-full gap-4">
       <header className="flex justify-between">
         <div className="flex gap-1.5 items-center">
           <i className="p-0.5 rounded-full bg-memora-yellow">
@@ -31,6 +31,7 @@ export default async function NextEventSection({
           {event?.event_type?.value}
         </Badge>
       </header>
+      <h1 className="inline-block w-full text-2xl font-bold">{event?.name}</h1>
       <main>
         <Countdown event={event} />
       </main>

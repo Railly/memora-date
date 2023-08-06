@@ -15,14 +15,11 @@ export default async function DashBoardPage() {
     redirect("/sign-in");
   }
   const events = await rscApiProvider.event.getEvents();
-  const nextEvent = events.data?.[0];
-  console.log({
-    events,
-  });
+  const nextEvent = events.data?.shift();
 
   return (
     <div className="flex justify-center w-full">
-      <div className="flex flex-col items-center w-9/12 gap-8">
+      <div className="flex flex-col w-full gap-6">
         <NextEventSection event={nextEvent} />
         <UpcomingEventSection events={events.data} count={events.count} />
         <FloatingActionButton to={ACTION_BUTTON_PATHS.EVENT_CREATOR} />
