@@ -16,6 +16,9 @@ export default async function DashBoardPage() {
   }
   const events = await rscApiProvider.event.getEvents();
   const nextEvent = events.data?.[0];
+  console.log({
+    events,
+  });
 
   return (
     <div className="flex justify-center w-full">

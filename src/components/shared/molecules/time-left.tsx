@@ -5,16 +5,18 @@ import { cn } from "@/lib/utils";
 
 interface TimeLeftProps {
   date: string | undefined;
-  // isRecurring: boolean;
 }
 
 const TimeLeft: React.FC<TimeLeftProps> = ({ date }) => {
   const isRecurring = true;
   const [timeLeft, setTimeLeft] = useState<string | null>(null);
+  const [colorClass, setColorClass] = useState<string | null>(null);
 
   useEffect(() => {
-    if (date) {
-      const interval = setInterval(() => {
+    let timeout: NodeJS.Timeout;
+
+    function calculateTimeLeft() {
+      if (date) {
         const now = new Date();
         let nextEventDate = new Date(date);
         if (isRecurring && now > nextEventDate) {
@@ -22,63 +24,80 @@ const TimeLeft: React.FC<TimeLeftProps> = ({ date }) => {
         }
 
         const totalSeconds = differenceInSeconds(nextEventDate, now);
-        if (totalSeconds < 60) {
-          setTimeLeft(`${totalSeconds} seconds`);
-          return;
+        let unit = "seconds";
+        let value = totalSeconds;
+
+        if (totalSeconds >= 60) {
+          value = Math.floor(totalSeconds / 60);
+          unit = "minutes";
+          if (value >= 60) {
+            value = Math.floor(value / 60);
+            unit = "hours";
+            if (value >= 24) {
+              value = Math.floor(value / 24);
+              unit = "days";
+              if (value >= 30) {
+                value = Math.floor(value / 30);
+                unit = "months";
+                if (value >= 12) {
+                  value = Math.floor(value / 12);
+                  unit = "years";
+                }
+              }
+            }
+          }
         }
 
-        const totalMinutes = Math.floor(totalSeconds / 60);
-        if (totalMinutes < 60) {
-          setTimeLeft(`${totalMinutes} minutes`);
-          return;
+        setTimeLeft(`${value} ${unit}`);
+
+        switch (unit) {
+          case "seconds":
+          case "minutes":
+            setColorClass("text-memora-pink");
+            break;
+          case "hours":
+          case "days":
+            setColorClass("text-memora-orange");
+            break;
+          case "months":
+            setColorClass("text-memora-green");
+            break;
+          case "years":
+            setColorClass("text-memora-blue");
+            break;
+          default:
+            setColorClass("");
         }
 
-        const totalHours = Math.floor(totalMinutes / 60);
-        if (totalHours < 24) {
-          setTimeLeft(`${totalHours} hours`);
-          return;
+        let nextUpdateInSeconds = 1;
+        switch (unit) {
+          case "years":
+            nextUpdateInSeconds = 60 * 60 * 24 * 365;
+            break;
+          case "months":
+            nextUpdateInSeconds = 60 * 60 * 24 * 30;
+            break;
+          case "days":
+            nextUpdateInSeconds = 60 * 60 * 24;
+            break;
+          case "hours":
+            nextUpdateInSeconds = 60 * 60;
+            break;
+          case "minutes":
+            nextUpdateInSeconds = 60;
+            break;
         }
 
-        const totalDays = Math.floor(totalHours / 24);
-        if (totalDays < 30) {
-          setTimeLeft(`${totalDays} days`);
-          return;
-        }
-
-        const totalMonths = Math.floor(totalDays / 30);
-        if (totalMonths < 12) {
-          setTimeLeft(`${totalMonths} months`);
-          return;
-        }
-
-        const totalYears = Math.floor(totalMonths / 12);
-        setTimeLeft(`${totalYears} years`);
-      }, 1000);
-
-      return () => clearInterval(interval);
+        timeout = setTimeout(calculateTimeLeft, nextUpdateInSeconds * 1000);
+      }
     }
+
+    calculateTimeLeft();
+
+    return () => clearTimeout(timeout);
   }, [date, isRecurring]);
 
-  return (
-    <span
-      className={cn({
-        "text-memora-pink":
-          timeLeft &&
-          (timeLeft.includes("seconds") || timeLeft.includes("minutes")),
-        "text-memora-yellow":
-          timeLeft && (timeLeft.includes("hours") || timeLeft.includes("days")),
-        "text-memora-blue":
-          timeLeft && timeLeft.includes("days") && !timeLeft.includes("months"),
-        "text-memora-green":
-          timeLeft &&
-          timeLeft.includes("months") &&
-          !timeLeft.includes("years"),
-        "text-memora-orange": timeLeft && timeLeft.includes("years"),
-      })}
-    >
-      {timeLeft} left
-    </span>
-  );
+  return <span className={cn(colorClass)}>{timeLeft || "0 seconds"} left</span>;
 };
 
 export default TimeLeft;

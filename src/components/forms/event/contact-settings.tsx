@@ -39,6 +39,10 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
   setValue,
 }) => {
   const [isNewContact, setIsNewContact] = useState(false);
+  const isInputDisabled = Boolean(contact?.selectedContact) || !isNewContact;
+  const hasContacts = Boolean(contacts?.length);
+  const shouldDisableContactSelection = isNewContact || !hasContacts;
+  const labelVariant = isNewContact && hasContacts ? "default" : "disabled";
 
   const updateContactValues = () => {
     const selectedContact = contacts?.find(
@@ -76,19 +80,11 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
           name="contact"
           render={() => (
             <FormItem className="flex items-center gap-2 space-y-0 transition duration-200 ease-in-out">
-              <FormLabel
-                htmlFor="isNewContact"
-                variant={
-                  isNewContact && Boolean(contacts?.length)
-                    ? "default"
-                    : "disabled"
-                }
-              >
+              <FormLabel htmlFor="isNewContact" variant={labelVariant}>
                 Create new contact?
               </FormLabel>
               <FormControl>
                 <Switch
-                  // disabled={!Boolean(contacts?.length)}
                   checked={isNewContact}
                   onCheckedChange={setIsNewContact}
                 />
@@ -105,21 +101,14 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
             name="contact.selectedContact"
             render={({ field }) => (
               <FormItem className="flex flex-col w-full h-full mt-1 transition duration-200 ease-in-out">
-                <FormLabel
-                  htmlFor={field.name}
-                  variant={
-                    isNewContact || !Boolean(contacts?.length)
-                      ? "disabled"
-                      : "default"
-                  }
-                >
+                <FormLabel htmlFor={field.name} variant={labelVariant}>
                   Select an existing contact
                 </FormLabel>
                 <FormControl className="flex gap-4">
                   <Select onValueChange={field.onChange}>
                     <SelectTrigger
                       id={field.name}
-                      disabled={isNewContact || !Boolean(contacts?.length)}
+                      disabled={shouldDisableContactSelection}
                     >
                       <SelectValue placeholder="Select a contact"></SelectValue>
                     </SelectTrigger>
@@ -153,9 +142,7 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
                     withIcon={<IconUser size={20} />}
                     variant={errors.contact?.full_name ? "error" : "default"}
                     value={field.value}
-                    disabled={
-                      Boolean(contact?.selectedContact) || !isNewContact
-                    }
+                    disabled={isInputDisabled}
                     onChange={field.onChange}
                   />
                 </FormControl>
@@ -178,9 +165,7 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
                     withIcon={<IconPhone size={20} />}
                     variant={errors.contact?.phone ? "error" : "default"}
                     value={field.value}
-                    disabled={
-                      Boolean(contact?.selectedContact) || !isNewContact
-                    }
+                    disabled={isInputDisabled}
                     onChange={field.onChange}
                   />
                 </FormControl>
@@ -205,9 +190,7 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
                     withIcon={<IconMail size={20} />}
                     variant={errors.contact?.email ? "error" : "default"}
                     value={field.value}
-                    disabled={
-                      Boolean(contact?.selectedContact) || !isNewContact
-                    }
+                    disabled={isInputDisabled}
                     onChange={field.onChange}
                   />
                 </FormControl>
@@ -225,9 +208,7 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
                   <UploadProfileImage
                     fullName={contact?.full_name}
                     onChange={field.onChange}
-                    disabled={
-                      Boolean(contact?.selectedContact) || !isNewContact
-                    }
+                    disabled={isInputDisabled}
                   />
                 </FormControl>
                 <FormErrorMessage name={field.name} />

@@ -1,10 +1,10 @@
 import { EventWithType } from "@/lib/entities.types";
-import TimeLeft from "./molecules/time-left";
 import { Badge } from "../ui/badge";
 import { eventTypeUtils } from "../icons/event-type";
 import { IconSpeakerphone } from "@tabler/icons-react";
 import Countdown from "./molecules/countdown";
 import ProgressBar from "./molecules/progress-bar";
+import TimeLeft from "../shared/molecules/time-left";
 
 interface NextEventSectionProps {
   event: EventWithType | null | undefined;
