@@ -1,6 +1,7 @@
 /* Auth */
 import ServerAuthService from "./server/auth.service";
 import ClientAuthService from "./client/auth.service";
+import RscAuthService from "./rsc/auth.service";
 /* Event */
 import RscEventService from "./rsc/event.service";
 import ServerEventService from "./server/event.service";
@@ -8,6 +9,7 @@ import ClientEventService from "./client/event.service";
 /* Contact */
 import ServerContactService from "./server/contact.service";
 import ClientContactService from "./client/contact.service";
+import RscContactService from "./rsc/contact.service";
 /* Reminder */
 import ServerReminderService from "./server/reminder.service";
 import ClientReminderService from "./client/reminder.service";
@@ -21,7 +23,7 @@ export interface IServiceApi<T extends ServiceType> {
     ? ServerAuthService
     : T extends "client"
     ? ClientAuthService
-    : null | undefined;
+    : RscAuthService;
   event: T extends "rsc"
     ? RscEventService
     : T extends "server"
@@ -31,7 +33,7 @@ export interface IServiceApi<T extends ServiceType> {
     ? ServerContactService
     : T extends "client"
     ? ClientContactService
-    : null | undefined;
+    : RscContactService;
   reminder: T extends "server"
     ? ServerReminderService
     : T extends "client"

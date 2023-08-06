@@ -18,6 +18,7 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { DatePicker } from "@/components/ui/date-picker";
 import { DAYS_OF_WEEK } from "./constants";
 import { CreateEventSchema } from "@/schemas/create-event.schema";
+import { Separator } from "@/components/ui/separator";
 
 interface IReminderSettingsProps {
   control: Control<CreateEventSchema>;
@@ -32,8 +33,9 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
   isWeekly,
 }) => {
   return (
-    <div className="space-y-2">
-      <p className="text-[#B4B4B4] text-sm">Reminder Settings</p>
+    <div className="p-4 space-y-2 border rounded-sm border-opacity-20 bg-muted/40 border-input-border">
+      <p className="text-[#B4B4B4] text-md">Reminder Settings</p>
+      <Separator />
       <div className="space-y-5">
         <div className="flex flex-col w-full gap-5">
           <FormField
@@ -154,7 +156,7 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
                         errors.reminder?.day_of_week ? "error" : "default"
                       }
                     >
-                      <SelectValue placeholder="Select a day of week"></SelectValue>
+                      <SelectValue placeholder="Select a day"></SelectValue>
                     </SelectTrigger>
                     <SelectContent>
                       {DAYS_OF_WEEK.map((day) => (

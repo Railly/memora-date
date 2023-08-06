@@ -5,10 +5,12 @@ import { Badge } from "../ui/badge";
 
 interface UpcomingEventSectionProps {
   events: EventWithType[] | null | undefined;
+  count: number | null;
 }
 
 export default async function UpcomingEventSection({
   events,
+  count,
 }: UpcomingEventSectionProps) {
   return (
     <section className="flex flex-col w-full">
@@ -20,7 +22,7 @@ export default async function UpcomingEventSection({
           <span>Upcoming Events</span>
         </div>
         <Badge variant="blue">
-          {events?.length} {events?.length === 1 ? "event" : "events"}
+          {count} {count === 1 ? "event" : "events"}
         </Badge>
       </header>
       <main className="w-full">

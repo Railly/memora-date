@@ -21,10 +21,11 @@ import { IconUser, IconPhone, IconMail } from "@tabler/icons-react";
 import { UploadProfileImage } from "./upload-profile-image";
 import { useEffect } from "react";
 import { EMPTY_CONTACT } from "./constants";
+import { Separator } from "@/components/ui/separator";
 
 interface IContactSettingsProps {
   control: Control<CreateEventSchema>;
-  contacts: Contact[];
+  contacts: Contact[] | null;
   errors: FieldErrors<CreateEventSchema>;
   contact?: CreateEventSchema["contact"];
   setValue: UseFormSetValue<CreateEventSchema>;
@@ -37,7 +38,7 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
   setValue,
 }) => {
   const updateContactValues = () => {
-    const selectedContact = contacts.find(
+    const selectedContact = contacts?.find(
       (_contact) => contact?.selectedContact === _contact?.id
     );
     setValue("contact.full_name", selectedContact?.full_name ?? "");
@@ -51,8 +52,9 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
   }, [contact?.selectedContact]);
 
   return (
-    <div className="space-y-2">
-      <p className="text-[#B4B4B4] text-sm">Contact Settings</p>
+    <div className="p-4 space-y-2 border rounded-sm border-opacity-20 bg-muted/40 border-input-border">
+      <p className="text-[#B4B4B4] text-md">Contact Settings</p>
+      <Separator />
       <div className="space-y-5">
         <div className="flex items-center w-full gap-5">
           <FormField
@@ -67,16 +69,17 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
                   <Select onValueChange={field.onChange}>
                     <SelectTrigger
                       id={field.name}
-                      disabled={contacts.length === 0}
+                      disabled={contacts?.length === 0}
                     >
                       <SelectValue placeholder="Select a contact"></SelectValue>
                     </SelectTrigger>
                     <SelectContent>
-                      {contacts.concat(EMPTY_CONTACT).map((contact) => (
-                        <SelectItem key={contact.id} value={contact.id}>
-                          {contact.full_name}
-                        </SelectItem>
-                      ))}
+                      {contacts &&
+                        contacts.concat(EMPTY_CONTACT).map((contact) => (
+                          <SelectItem key={contact.id} value={contact.id}>
+                            {contact.full_name}
+                          </SelectItem>
+                        ))}
                     </SelectContent>
                   </Select>
                 </FormControl>

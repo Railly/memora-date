@@ -1,38 +1,23 @@
 import {
   ACTION_BUTTON_PATHS,
   FloatingActionButton,
-} from "@/components/shared/FAB";
+} from "@/components/shared/atoms/FAB";
 import EventCard from "@/components/shared/molecules/event-card";
 import { SubHeader } from "@/components/shared/molecules/sub-header";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-import { Database } from "@/lib/database.types";
-import { createServerComponentClient } from "@supabase/auth-helpers-nextjs";
+import RscApiProvider from "@/services/rsc";
 import { IconSearch } from "@tabler/icons-react";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export default async function MyEventsPage() {
-  const supabase = createServerComponentClient<Database>({ cookies });
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
+  const rscApiProvider = new RscApiProvider({ cookies });
+  const session = await rscApiProvider.auth.getSession();
   if (!session) {
     redirect("/sign-in");
   }
-
-  const events = await supabase
-    .from("event")
-    .select(
-      `*,
-        event_type (
-          value
-        )`
-    )
-    .order("date", { ascending: true });
-
-  console.log({ events });
+  const events = await rscApiProvider.event.getEvents();
 
   return (
     <div className="flex justify-center pt-6">

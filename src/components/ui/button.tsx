@@ -5,7 +5,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
 
 const buttonVariants = cva(
-  "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50",
+  "inline-flex items-center justify-center rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-40",
   {
     variants: {
       variant: {
@@ -23,7 +23,7 @@ const buttonVariants = cva(
           "bg-memora-pink text-white text-base hover:bg-memora-pink/90",
         icon: "bg-transparent text-base",
         "input-default":
-          "bg-input border border-input-border border-opacity-50",
+          "bg-input border border-input-border border-opacity-40",
         "input-error":
           "bg-input border border-red-500 transition ease-in-out duration-200",
         "input-green":

@@ -11,9 +11,8 @@ export const UploadProfileImage: React.FC<IUploadProfileImageProps> = ({
   fullName,
   onChange,
 }) => {
-  const [imageURL, setImageURL] = useState<string | undefined>(
-    "https://cgkjgmtdxmqoruwpyojn.supabase.co/storage/v1/object/public/profiles/Contacto Test_3c5c18dc-baab-4134-9edf-9a40a612eb9e_1691048237034"
-  );
+  const [imageURL, setImageURL] = useState<string | undefined>();
+  // "https://cgkjgmtdxmqoruwpyojn.supabase.co/storage/v1/object/public/profiles/Contacto Test_3c5c18dc-baab-4134-9edf-9a40a612eb9e_1691048237034"
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {
@@ -36,10 +35,7 @@ export const UploadProfileImage: React.FC<IUploadProfileImageProps> = ({
   };
 
   return (
-    <div
-      onClick={handleClick}
-      className="relative cursor-pointer hover:opacity-50"
-    >
+    <div onClick={handleClick} className="relative cursor-pointer group">
       <input
         type="file"
         accept="image/*"
@@ -47,13 +43,16 @@ export const UploadProfileImage: React.FC<IUploadProfileImageProps> = ({
         className="hidden"
         id="upload"
       />
-      <IconEdit className="absolute opacity-0 hover:opacity-100" />
-      <Avatar>
+      <Avatar className="transition-opacity group-hover:opacity-40">
         <AvatarImage src={imageURL} />
         <AvatarFallback className="select-none">
           {getInitials(fullName)}
         </AvatarFallback>
       </Avatar>
+      <IconEdit
+        size={20}
+        className="absolute transition-opacity opacity-0 inset-1/4 group-hover:opacity-100"
+      />
     </div>
   );
 };
