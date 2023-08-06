@@ -5,11 +5,13 @@ import { useState } from "react";
 interface IUploadProfileImageProps {
   fullName?: string;
   onChange: (file: File) => void;
+  disabled?: boolean;
 }
 
 export const UploadProfileImage: React.FC<IUploadProfileImageProps> = ({
   fullName,
   onChange,
+  disabled,
 }) => {
   const [imageURL, setImageURL] = useState<string | undefined>();
   // "https://cgkjgmtdxmqoruwpyojn.supabase.co/storage/v1/object/public/profiles/Contacto Test_3c5c18dc-baab-4134-9edf-9a40a612eb9e_1691048237034"
@@ -23,6 +25,7 @@ export const UploadProfileImage: React.FC<IUploadProfileImageProps> = ({
   };
 
   const handleClick = () => {
+    if (disabled) return;
     document.getElementById("upload")?.click();
   };
 
@@ -42,6 +45,7 @@ export const UploadProfileImage: React.FC<IUploadProfileImageProps> = ({
         onChange={handleFileChange}
         className="hidden"
         id="upload"
+        disabled={disabled}
       />
       <Avatar className="transition-opacity group-hover:opacity-40">
         <AvatarImage src={imageURL} />

@@ -19,6 +19,7 @@ import { User } from "@supabase/supabase-js";
 import { SubHeader } from "@/components/shared/molecules/sub-header";
 import { debugFormValues } from "@/lib/utils";
 import { IconCalendar, IconX } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 
 interface ICreateEventFormProps {
   eventTypes: EventType[] | null;
@@ -39,6 +40,12 @@ const CreateEventForm: React.FC<ICreateEventFormProps> = ({
   const isWeekly = form.watch("reminder.interval") === "WEEKLY";
   const contact = form.watch("contact");
   const { toast } = useToast();
+  const router = useRouter();
+  const goBack = () => router.back();
+
+  console.log({
+    formValues: form.getValues(),
+  });
 
   const onSubmit = async (data: CreateEventSchema) => {
     debugFormValues({ data, toast });
@@ -69,6 +76,10 @@ const CreateEventForm: React.FC<ICreateEventFormProps> = ({
       },
       toast,
     });
+
+    // TODO: Redirect to event page
+    // router.push(`/events/${eventResponse.data.id}`);
+    router.push("/events");
   };
 
   return (
@@ -93,6 +104,7 @@ const CreateEventForm: React.FC<ICreateEventFormProps> = ({
           errors={form.formState.errors}
           isRecurring={isRecurring}
           isWeekly={isWeekly}
+          setValue={form.setValue}
         />
         <ContactSettings
           control={form.control}
@@ -101,11 +113,12 @@ const CreateEventForm: React.FC<ICreateEventFormProps> = ({
           contact={contact}
           setValue={form.setValue}
         />
-        <div className="flex w-full gap-4 mt-6">
+        <div className="flex w-full gap-4">
           <Button
             variant="secondary"
             type="submit"
             className="flex w-full gap-1"
+            onClick={goBack}
           >
             <IconX size={20} />
             <span>Cancel</span>

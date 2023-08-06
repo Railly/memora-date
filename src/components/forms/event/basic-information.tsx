@@ -37,7 +37,7 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
       <p className="text-[#B4B4B4] text-md">Basic information</p>
       <Separator />
       <div className="flex flex-col gap-5">
-        <div className="grid grid-cols-2 gap-4 place-items-center place-content-center">
+        <div className="grid grid-cols-2 gap-4 mt-1 place-items-center place-content-center">
           <FormField
             control={control}
             name="event.name"

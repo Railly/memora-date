@@ -14,7 +14,6 @@ class RscEventService extends RscServiceApi {
       `,
         {
           count: "exact",
-          head: true,
         }
       )
       .order("date", { ascending: true });

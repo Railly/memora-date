@@ -32,7 +32,6 @@ export const NotificationSettings: React.FC<INotificationSettingsProps> = ({
   errors,
   user,
 }) => {
-  console.log({ user });
   return (
     <div className="p-4 space-y-2 border rounded-sm border-opacity-20 bg-muted/40 border-input-border">
       <div className="flex items-center w-full gap-4">
@@ -44,7 +43,7 @@ export const NotificationSettings: React.FC<INotificationSettingsProps> = ({
       </div>
       <Separator />
       <div className="space-y-5">
-        <div className="flex flex-col w-full gap-5">
+        <div className="flex flex-col w-full gap-5 mt-3">
           <div className="flex items-center w-full gap-6">
             <div className="relative flex flex-col w-6/12 gap-2">
               <Label htmlFor="event.email">Your email</Label>
@@ -175,6 +174,7 @@ export const NotificationSettings: React.FC<INotificationSettingsProps> = ({
                           }
                           value={field.value}
                           onChange={field.onChange}
+                          min={0}
                         />
                       </FormControl>
                       <FormErrorMessage name="reminder.notify_before_number" />

@@ -19,9 +19,10 @@ import { Contact } from "@/lib/entities.types";
 import { Input } from "@/components/ui/input";
 import { IconUser, IconPhone, IconMail } from "@tabler/icons-react";
 import { UploadProfileImage } from "./upload-profile-image";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { EMPTY_CONTACT } from "./constants";
 import { Separator } from "@/components/ui/separator";
+import { Switch } from "@/components/ui/switch";
 
 interface IContactSettingsProps {
   control: Control<CreateEventSchema>;
@@ -37,6 +38,8 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
   contact,
   setValue,
 }) => {
+  const [isNewContact, setIsNewContact] = useState(false);
+
   const updateContactValues = () => {
     const selectedContact = contacts?.find(
       (_contact) => contact?.selectedContact === _contact?.id
@@ -49,11 +52,51 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
 
   useEffect(() => {
     updateContactValues();
-  }, [contact?.selectedContact]);
+  }, [contact?.selectedContact, isNewContact]);
+
+  useEffect(() => {
+    if (!Boolean(contacts?.length)) {
+      setIsNewContact(true);
+    }
+  }, [contacts]);
+
+  useEffect(() => {
+    if (isNewContact) {
+      setValue("contact.selectedContact", "");
+      setValue("contact.full_name", "");
+    }
+  }, [isNewContact]);
 
   return (
     <div className="p-4 space-y-2 border rounded-sm border-opacity-20 bg-muted/40 border-input-border">
-      <p className="text-[#B4B4B4] text-md">Contact Settings</p>
+      <div className="flex items-center justify-between w-full gap-4">
+        <p className="text-[#B4B4B4] text-md">Contact Settings</p>
+        <FormField
+          control={control}
+          name="contact"
+          render={() => (
+            <FormItem className="flex items-center gap-2 space-y-0 transition duration-200 ease-in-out">
+              <FormLabel
+                htmlFor="isNewContact"
+                variant={
+                  isNewContact && Boolean(contacts?.length)
+                    ? "default"
+                    : "disabled"
+                }
+              >
+                Create new contact?
+              </FormLabel>
+              <FormControl>
+                <Switch
+                  // disabled={!Boolean(contacts?.length)}
+                  checked={isNewContact}
+                  onCheckedChange={setIsNewContact}
+                />
+              </FormControl>
+            </FormItem>
+          )}
+        />
+      </div>
       <Separator />
       <div className="space-y-5">
         <div className="flex items-center w-full gap-5">
@@ -61,15 +104,22 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
             control={control}
             name="contact.selectedContact"
             render={({ field }) => (
-              <FormItem className="flex flex-col w-full h-full transition duration-200 ease-in-out">
-                <FormLabel htmlFor={field.name}>
+              <FormItem className="flex flex-col w-full h-full mt-1 transition duration-200 ease-in-out">
+                <FormLabel
+                  htmlFor={field.name}
+                  variant={
+                    isNewContact || !Boolean(contacts?.length)
+                      ? "disabled"
+                      : "default"
+                  }
+                >
                   Select an existing contact
                 </FormLabel>
                 <FormControl className="flex gap-4">
                   <Select onValueChange={field.onChange}>
                     <SelectTrigger
                       id={field.name}
-                      disabled={contacts?.length === 0}
+                      disabled={isNewContact || !Boolean(contacts?.length)}
                     >
                       <SelectValue placeholder="Select a contact"></SelectValue>
                     </SelectTrigger>
@@ -86,9 +136,6 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
               </FormItem>
             )}
           />
-          <p className="flex w-full mt-5 text-xs">
-            or insert it manually below
-          </p>
         </div>
         <div className="flex gap-5">
           <FormField
@@ -106,7 +153,9 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
                     withIcon={<IconUser size={20} />}
                     variant={errors.contact?.full_name ? "error" : "default"}
                     value={field.value}
-                    disabled={Boolean(contact?.selectedContact)}
+                    disabled={
+                      Boolean(contact?.selectedContact) || !isNewContact
+                    }
                     onChange={field.onChange}
                   />
                 </FormControl>
@@ -129,7 +178,9 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
                     withIcon={<IconPhone size={20} />}
                     variant={errors.contact?.phone ? "error" : "default"}
                     value={field.value}
-                    disabled={Boolean(contact?.selectedContact)}
+                    disabled={
+                      Boolean(contact?.selectedContact) || !isNewContact
+                    }
                     onChange={field.onChange}
                   />
                 </FormControl>
@@ -154,7 +205,9 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
                     withIcon={<IconMail size={20} />}
                     variant={errors.contact?.email ? "error" : "default"}
                     value={field.value}
-                    disabled={Boolean(contact?.selectedContact)}
+                    disabled={
+                      Boolean(contact?.selectedContact) || !isNewContact
+                    }
                     onChange={field.onChange}
                   />
                 </FormControl>
@@ -172,6 +225,9 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
                   <UploadProfileImage
                     fullName={contact?.full_name}
                     onChange={field.onChange}
+                    disabled={
+                      Boolean(contact?.selectedContact) || !isNewContact
+                    }
                   />
                 </FormControl>
                 <FormErrorMessage name={field.name} />

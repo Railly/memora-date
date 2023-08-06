@@ -13,7 +13,7 @@ export const FloatingActionButton: React.FC<IFloatingActionButtonProps> = ({
   const goTo = () => router.push(to);
   return (
     <i
-      className="fixed z-50 p-2 rounded-full bg-memora-yellow bottom-6 right-6 hover:cursor-pointer"
+      className="fixed z-50 p-2 transition-opacity duration-300 rounded-full bg-memora-yellow bottom-6 right-6 hover:cursor-pointer hover:opacity-60"
       onClick={goTo}
     >
       <IconPlus size={35} className="stroke-black" />
