@@ -6,7 +6,7 @@ import { cva, type VariantProps } from "class-variance-authority";
 const inputVariants = cva("bg-background text-foreground", {
   variants: {
     variant: {
-      default: "bg-input border border-input-border border-opacity-50",
+      default: "bg-input border border-input-border border-opacity-40",
       error:
         "bg-input border border-red-500 transition ease-in-out duration-200",
     },
@@ -39,7 +39,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
         <input
           type={type}
           className={cn(
-            "flex h-9 w-full rounded-md border border-input bg-background py-1 text-sm shadow-sm transition-colors file:border-0 file:text-primary file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
+            "flex h-9 w-full rounded-md border border-input bg-background py-1 text-sm shadow-sm transition-colors file:border-0 file:text-primary file:bg-transparent file:text-sm file:font-medium placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-40",
             "hover:border-memora-blue",
             "focus:outline-none focus:bg-transparent focus:ring-2 focus:ring-memora-blue/50",
             className,

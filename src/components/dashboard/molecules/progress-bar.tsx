@@ -2,13 +2,13 @@
 import { useEffect, useState } from "react";
 import { differenceInDays } from "date-fns";
 import { Event } from "@/lib/entities.types";
+import { cn } from "@/lib/utils";
 
 interface ProgressBarProps {
   event: Event | null | undefined;
 }
 const ProgressBar: React.FC<ProgressBarProps> = ({ event }) => {
   const [progress, setProgress] = useState(0);
-  // const isRecurring = true;
 
   useEffect(() => {
     if (event?.date) {
@@ -27,19 +27,29 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ event }) => {
   }, [event]);
 
   return (
-    <div className="relative w-full h-8 bg-[#191919] border-2 border-gray-200 rounded-lg">
+    <div className="relative w-full h-8 bg-[#191919] border border-primary rounded-lg overflow-hidden">
       <div
-        className={
-          "absolute border-2 border-[#191919] top-0 h-full bg-memora-green rounded-md"
-        }
-        style={{ width: `${progress}%` }}
+        style={{
+          width: progress === 0 ? "100%" : `${progress}%`,
+        }}
+        className={cn(
+          "absolute h-full transition-all duration-500 ease-in-out",
+          {
+            "bg-[#191919]": progress === 0,
+            "bg-memora-green": progress < 50 && progress > 0,
+            "bg-memora-orange": progress >= 50 && progress < 75,
+            "bg-memora-pink": progress >= 75 && progress < 100,
+            "bg-memora-blue": progress === 100,
+          }
+        )}
       />
       <div
-        className="absolute w-full overflow-hidden leading-relaxed text-center"
+        className={cn("absolute w-full text-center text-background", {
+          "text-foreground": progress === 0,
+        })}
         style={{
-          color: "#191919",
-          lineHeight: "2rem",
-          width: `${progress}%`,
+          lineHeight: "1.8rem",
+          width: progress === 0 ? "100%" : `${progress}%`,
         }}
       >
         {`${Math.round(progress)}%`}

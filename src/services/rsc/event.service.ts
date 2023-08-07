@@ -10,12 +10,19 @@ class RscEventService extends RscServiceApi {
       .from("event")
       .select(
         `*,
-         event_type (value),
-         contact(*)
-      `
+         event_type (value)
+      `,
+        {
+          count: "exact",
+        }
       )
       .order("date", { ascending: true });
     return events;
+  }
+
+  async getEventTypes() {
+    const eventTypes = await this.supabase.from("event_type").select("*");
+    return eventTypes;
   }
 }
 

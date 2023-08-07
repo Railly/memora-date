@@ -1,5 +1,10 @@
 import { IconCircleNumber1, IconRepeat } from "@tabler/icons-react";
-import { Control, FieldErrors } from "react-hook-form";
+import {
+  Control,
+  FieldErrors,
+  UseFormSetValue,
+  UseFormWatch,
+} from "react-hook-form";
 import {
   FormControl,
   FormErrorMessage,
@@ -18,24 +23,42 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { DatePicker } from "@/components/ui/date-picker";
 import { DAYS_OF_WEEK } from "./constants";
 import { CreateEventSchema } from "@/schemas/create-event.schema";
+import { Separator } from "@/components/ui/separator";
+import { useEffect } from "react";
 
 interface IReminderSettingsProps {
   control: Control<CreateEventSchema>;
   errors: FieldErrors<CreateEventSchema>;
-  isRecurring: boolean;
-  isWeekly: boolean;
+  setValue: UseFormSetValue<CreateEventSchema>;
+  watch: UseFormWatch<CreateEventSchema>;
 }
 export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
   control,
   errors,
-  isRecurring,
-  isWeekly,
+  watch,
+  setValue,
 }) => {
+  const isRecurring = watch("reminder.reminder_type") === "RECURRING";
+  const isWeekly = watch("reminder.interval") === "WEEKLY";
+
+  useEffect(() => {
+    if (!isRecurring) {
+      setValue("reminder.interval", "DAILY");
+      setValue("reminder.end_date", undefined);
+      setValue("reminder.day_of_week", undefined);
+      return;
+    }
+    if (!isWeekly) {
+      setValue("reminder.day_of_week", undefined);
+    }
+  }, [isWeekly, isRecurring]);
+
   return (
-    <div className="space-y-2">
-      <p className="text-[#B4B4B4] text-sm">Reminder Settings</p>
+    <div className="p-4 space-y-2 border rounded-sm border-opacity-20 bg-muted/40 border-input-border">
+      <p className="text-[#B4B4B4] text-md">Reminder Settings</p>
+      <Separator />
       <div className="space-y-5">
-        <div className="flex flex-col w-full gap-5">
+        <div className="flex flex-col w-full gap-5 mt-3">
           <FormField
             control={control}
             name="reminder.reminder_type"
@@ -154,7 +177,7 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
                         errors.reminder?.day_of_week ? "error" : "default"
                       }
                     >
-                      <SelectValue placeholder="Select a day of week"></SelectValue>
+                      <SelectValue placeholder="Select a day"></SelectValue>
                     </SelectTrigger>
                     <SelectContent>
                       {DAYS_OF_WEEK.map((day) => (

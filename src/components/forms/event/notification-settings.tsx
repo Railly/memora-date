@@ -20,6 +20,7 @@ import {
 import { TIME_UNITS } from "./constants";
 import { CreateEventSchema } from "@/schemas/create-event.schema";
 import { User } from "@supabase/supabase-js";
+import { Separator } from "@/components/ui/separator";
 
 interface INotificationSettingsProps {
   control: Control<CreateEventSchema>;
@@ -31,18 +32,18 @@ export const NotificationSettings: React.FC<INotificationSettingsProps> = ({
   errors,
   user,
 }) => {
-  console.log({ user });
   return (
-    <div className="space-y-2">
+    <div className="p-4 space-y-2 border rounded-sm border-opacity-20 bg-muted/40 border-input-border">
       <div className="flex items-center w-full gap-4">
-        <p className="text-[#B4B4B4] text-sm w-1/2">Notification Settings</p>
+        <p className="text-[#B4B4B4] text-md">Notification Settings</p>
         <FormErrorMessage
           className="static w1/2"
           name="reminder.notification_methods"
         />
       </div>
+      <Separator />
       <div className="space-y-5">
-        <div className="flex flex-col w-full gap-5">
+        <div className="flex flex-col w-full gap-5 mt-3">
           <div className="flex items-center w-full gap-6">
             <div className="relative flex flex-col w-6/12 gap-2">
               <Label htmlFor="event.email">Your email</Label>
@@ -173,6 +174,7 @@ export const NotificationSettings: React.FC<INotificationSettingsProps> = ({
                           }
                           value={field.value}
                           onChange={field.onChange}
+                          min={0}
                         />
                       </FormControl>
                       <FormErrorMessage name="reminder.notify_before_number" />

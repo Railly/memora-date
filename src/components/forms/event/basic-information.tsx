@@ -20,9 +20,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { DatePicker } from "@/components/ui/date-picker";
 import { Visibility } from "./visibility";
 import { CreateEventSchema } from "@/schemas/create-event.schema";
+import { Separator } from "@/components/ui/separator";
 
 interface IBasicInformationProps {
-  eventTypes: EventType[];
+  eventTypes: EventType[] | null;
   control: Control<CreateEventSchema>;
   errors: FieldErrors<CreateEventSchema>;
 }
@@ -32,10 +33,11 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
   errors,
 }) => {
   return (
-    <div className="space-y-2">
-      <p className="text-[#B4B4B4] text-sm">Basic information</p>
+    <div className="p-4 space-y-2 border rounded-sm border-opacity-20 bg-muted/40 border-input-border">
+      <p className="text-[#B4B4B4] text-md">Basic information</p>
+      <Separator />
       <div className="flex flex-col gap-5">
-        <div className="grid grid-cols-2 gap-4 place-items-center place-content-center">
+        <div className="grid grid-cols-2 gap-4 mt-1 place-items-center place-content-center">
           <FormField
             control={control}
             name="event.name"
@@ -66,7 +68,7 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
                 <FormLabel htmlFor={field.name}>Category</FormLabel>
                 <FormControl>
                   <Select
-                    disabled={eventTypes.length === 0}
+                    disabled={eventTypes?.length === 0}
                     onValueChange={field.onChange}
                   >
                     <SelectTrigger
@@ -78,11 +80,12 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
                       <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
                     <SelectContent>
-                      {eventTypes.map((eventType) => (
-                        <SelectItem key={eventType.id} value={eventType.id}>
-                          {eventType.value}
-                        </SelectItem>
-                      ))}
+                      {eventTypes &&
+                        eventTypes.map((eventType) => (
+                          <SelectItem key={eventType.id} value={eventType.id}>
+                            {eventType.value}
+                          </SelectItem>
+                        ))}
                     </SelectContent>
                   </Select>
                 </FormControl>

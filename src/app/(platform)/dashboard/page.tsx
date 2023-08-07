@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import NextEventSection from "@/components/dashboard/next-event.section";
@@ -7,46 +6,22 @@ import RscApiProvider from "@/services/rsc";
 import {
   ACTION_BUTTON_PATHS,
   FloatingActionButton,
-} from "@/components/shared/FAB";
+} from "@/components/shared/atoms/FAB";
 
 export default async function DashBoardPage() {
-  const rscEventService = new RscApiProvider({ cookies });
-
-  const session = await rscEventService.event.getSession();
-
+  const rscApiProvider = new RscApiProvider({ cookies });
+  const session = await rscApiProvider.auth.getSession();
   if (!session) {
     redirect("/sign-in");
   }
-
-  const events = await rscEventService.event.getEvents();
-  console.log({
-    events,
-  });
-
-  const nextEvent = events.data?.[0];
-  // const reminders = await supabase.from("Reminder").select("*");
-  // const contacts = await supabase.from("Contact").select("*");
-  // const eventTypes = await supabase.from("EventType").select("*");
-
-  /**
-   * TODO: Find a better way for fetching the events and reminders
-   * Just to retrieve the necessary data
-   * Example: Fetch only 5 events
-   */
+  const events = await rscApiProvider.event.getEvents();
+  const nextEvent = events.data?.shift();
 
   return (
     <div className="flex justify-center w-full">
-      <div className="flex flex-col items-center w-9/12 gap-8">
-        {/* <TestComponent
-        session={session}
-        contacts={contacts}
-        events={events}
-        reminders={reminders}
-        eventTypes={eventTypes}
-      /> */}
-        {/* <pre>{JSON.stringify(events, null, 2)}</pre> */}
+      <div className="flex flex-col w-full gap-6">
         <NextEventSection event={nextEvent} />
-        <UpcomingEventSection events={events.data} />
+        <UpcomingEventSection events={events.data} count={events.count} />
         <FloatingActionButton to={ACTION_BUTTON_PATHS.EVENT_CREATOR} />
       </div>
     </div>

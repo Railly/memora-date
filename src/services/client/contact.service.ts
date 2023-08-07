@@ -1,6 +1,8 @@
 import { CreateEventSchema } from "@/schemas/create-event.schema";
 import { HttpError } from "../errors";
 import { ClientServiceApi } from "./blueprint";
+import { uploadFile } from "@/lib/storage.helpers";
+import { CreateContactParams } from "@/lib/form.types";
 
 class ClientContactService extends ClientServiceApi {
   async getContacts() {
@@ -25,14 +27,18 @@ class ClientContactService extends ClientServiceApi {
     }
   }
 
-  async createContact({
-    contact,
-    user_id,
-  }: {
-    contact: CreateEventSchema["contact"];
-    user_id: string;
-  }) {
+  async createContact({ contact, user_id }: CreateContactParams) {
     try {
+      if (!contact.selectedContact && contact.image) {
+        const image = await uploadFile({
+          supabase: this.supabase,
+          bucket: "profiles",
+          filepath: contact.full_name,
+          file: contact.image,
+          userId: user_id,
+        });
+        contact.image = image.path;
+      }
       const response = await fetch("/api/contacts", {
         method: "POST",
         headers: {

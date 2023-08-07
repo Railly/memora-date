@@ -1,20 +1,26 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { IconArrowLeft } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 
 interface ISubHeaderProps {
   title: string;
   children?: React.ReactNode;
+  className?: string;
 }
 
-export const SubHeader: React.FC<ISubHeaderProps> = ({ title, children }) => {
+export const SubHeader: React.FC<ISubHeaderProps> = ({
+  title,
+  children,
+  className,
+}) => {
   const router = useRouter();
   const goBack = () => router.back();
 
   return (
-    <section className="flex justify-between w-full">
+    <section className={cn("flex justify-between w-full", className)}>
       <div className="flex items-center gap-2">
         <Button
           type="button"

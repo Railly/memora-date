@@ -1,15 +1,10 @@
 import { CreateEventSchema } from "@/schemas/create-event.schema";
 import { HttpError } from "../errors";
 import { ClientServiceApi } from "./blueprint";
+import { CreateReminderParams } from "@/lib/form.types";
 
 class ClientReminderService extends ClientServiceApi {
-  async createReminder({
-    reminder,
-    event_id,
-  }: {
-    reminder: CreateEventSchema["reminder"];
-    event_id: string;
-  }) {
+  async createReminder({ reminder, event_id }: CreateReminderParams) {
     try {
       const response = await fetch("/api/reminders", {
         method: "POST",

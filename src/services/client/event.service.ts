@@ -1,6 +1,7 @@
 import { CreateEventSchema } from "@/schemas/create-event.schema";
 import { HttpError } from "../errors";
 import { ClientServiceApi } from "./blueprint";
+import { CreateEventParams } from "@/lib/form.types";
 
 class ClientEventService extends ClientServiceApi {
   async getEventTypes() {
@@ -30,12 +31,7 @@ class ClientEventService extends ClientServiceApi {
     event_type_id,
     user_id,
     contact_id,
-  }: {
-    event: CreateEventSchema["event"];
-    user_id: string;
-    event_type_id: string;
-    contact_id: string;
-  }) {
+  }: CreateEventParams) {
     try {
       const response = await fetch("/api/events/create", {
         method: "POST",

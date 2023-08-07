@@ -33,6 +33,7 @@ export const defaultValues: RecursivePartial<CreateEventSchema> = {
     notification_methods: ["EMAIL"],
     interval: "DAILY",
     day_of_week: undefined,
+    end_date: undefined,
   },
   contact: {
     selectedContact: "",
