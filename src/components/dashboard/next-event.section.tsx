@@ -37,7 +37,7 @@ export default async function NextEventSection({
         <span className="w-20 h-6 my-1 text-2xl font-bold bg-gray-400 animate-pulse" />
       ) : (
         <h1 className="inline-block w-full text-2xl font-bold">
-          {event?.name}
+          {event?.name || "No upcoming event..."}
         </h1>
       )}
       <main>

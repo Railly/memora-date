@@ -1,7 +1,8 @@
 import { EventWithType } from "@/lib/entities.types";
-import { IconBrandTinder } from "@tabler/icons-react";
+import { IconBrandTinder, IconNewsOff } from "@tabler/icons-react";
 import EventCard, { EventCardSkeleton } from "../shared/molecules/event-card";
 import { Badge } from "../ui/badge";
+import EventsEmptyState from "../shared/molecules/events-empty-state";
 
 interface UpcomingEventSectionProps {
   events: EventWithType[] | null | undefined;
@@ -31,13 +32,18 @@ export default function UpcomingEventSection({
       </header>
       <main className="w-full">
         <div className="flex flex-col w-full gap-4 mt-4">
-          {isSkeleton
-            ? Array.from({ length: 3 }, (_, index) => (
-                <EventCardSkeleton key={index} />
-              ))
-            : events?.map((event) => (
+          {isSkeleton ? (
+            Array.from({ length: 3 }, (_, index) => (
+              <EventCardSkeleton key={index} />
+            ))
+          ) : (
+            <>
+              {count === 0 && <EventsEmptyState />}
+              {events?.map((event) => (
                 <EventCard key={event.id} event={event} />
               ))}
+            </>
+          )}
         </div>
       </main>
     </section>

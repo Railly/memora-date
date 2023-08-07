@@ -3,6 +3,7 @@ import {
   FloatingActionButton,
 } from "@/components/shared/atoms/FAB";
 import EventCard from "@/components/shared/molecules/event-card";
+import EventsEmptyState from "@/components/shared/molecules/events-empty-state";
 import { SubHeader } from "@/components/shared/molecules/sub-header";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -41,6 +42,7 @@ export default async function MyEventsPage() {
             {events?.data?.map((event) => (
               <EventCard key={event.id} event={event} />
             ))}
+            {events.count === 0 && <EventsEmptyState />}
           </div>
           <FloatingActionButton to={ACTION_BUTTON_PATHS.EVENT_CREATOR} />
         </main>
