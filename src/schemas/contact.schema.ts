@@ -41,3 +41,5 @@ export const contactSchema = zod.object({
     }, "Only .jpg, .jpeg, .png and .webp files.")
     .optional(),
 });
+
+export type ContactSchema = zod.infer<typeof contactSchema>;

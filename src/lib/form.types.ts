@@ -5,6 +5,11 @@ export type CreateContactParams = {
   user_id: string;
 };
 
+export type UpdateContactParams = {
+  contact: CreateEventSchema["contact"] & { contact_id: string };
+  user_id: string;
+};
+
 export type CreateEventParams = {
   event: CreateEventSchema["event"];
   user_id: string;

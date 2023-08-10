@@ -65,7 +65,7 @@ export default function SignUpPage() {
               id="name"
               type="text"
               placeholder="Your Full Name"
-              withIcon={<User />}
+              leftIcon={<User />}
               {...register("name", { required: true })}
               variant={errors.name ? "error" : "default"}
               className="mt-1"
@@ -82,7 +82,7 @@ export default function SignUpPage() {
               id="email"
               type="email"
               placeholder="Your Email Address"
-              withIcon={<At />}
+              leftIcon={<At />}
               {...register("email", { required: true })}
               variant={errors.email ? "error" : "default"}
               className="mt-1"
@@ -99,7 +99,7 @@ export default function SignUpPage() {
               id="password"
               type="password"
               placeholder="Your Password"
-              withIcon={<Lock />}
+              leftIcon={<Lock />}
               {...register("password", { required: true })}
               variant={errors.password ? "error" : "default"}
               className="mt-1"

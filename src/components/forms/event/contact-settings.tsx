@@ -145,7 +145,7 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
                     name={field.name}
                     type="text"
                     placeholder="John Doe"
-                    withIcon={<IconUser size={20} />}
+                    leftIcon={<IconUser size={20} />}
                     variant={errors.contact?.full_name ? "error" : "default"}
                     value={field.value}
                     disabled={isInputDisabled}
@@ -168,7 +168,7 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
                     name={field.name}
                     type="text"
                     placeholder="+51 987 654 321"
-                    withIcon={<IconPhone size={20} />}
+                    leftIcon={<IconPhone size={20} />}
                     variant={errors.contact?.phone ? "error" : "default"}
                     value={field.value}
                     disabled={isInputDisabled}
@@ -193,7 +193,7 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
                     name={field.name}
                     type="text"
                     placeholder="exampleo@mail.com"
-                    withIcon={<IconMail size={20} />}
+                    leftIcon={<IconMail size={20} />}
                     variant={errors.contact?.email ? "error" : "default"}
                     value={field.value}
                     disabled={isInputDisabled}

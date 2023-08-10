@@ -34,7 +34,7 @@ export default async function MyEventsPage() {
             <Input
               id="search-events"
               placeholder="Search events"
-              withIcon={<IconSearch size={20} />}
+              leftIcon={<IconSearch size={20} />}
               variant={"default"}
             />
           </form>
