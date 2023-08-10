@@ -19,7 +19,7 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         sidebar: "bg-memora-gray text-white text-base hover:bg-memora-gray/90",
-        sidebarDestructive:
+        "sidebar-destructive":
           "bg-memora-pink text-white text-base hover:bg-memora-pink/90",
         icon: "bg-transparent text-base",
         "input-default":
