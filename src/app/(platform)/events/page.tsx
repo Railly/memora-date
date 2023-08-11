@@ -10,14 +10,9 @@ import { Input } from "@/components/ui/input";
 import RscApiProvider from "@/services/rsc";
 import { IconSearch } from "@tabler/icons-react";
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 export default async function MyEventsPage() {
   const rscApiProvider = new RscApiProvider({ cookies });
-  const session = await rscApiProvider.auth.getSession();
-  if (!session) {
-    redirect("/sign-in");
-  }
   const events = await rscApiProvider.event.getEvents();
 
   return (
