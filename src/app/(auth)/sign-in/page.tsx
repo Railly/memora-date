@@ -18,7 +18,7 @@ import { IconLoader2, IconLock, IconAt } from "@tabler/icons-react";
 import { useToast } from "@/components/ui/use-toast";
 
 export default function LoginPage() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
@@ -63,6 +63,7 @@ export default function LoginPage() {
   };
 
   const handleGoogleSignIn = async () => {
+    setIsLoading(true);
     try {
       const response = await clientApiProvider.auth.signInWithProvider(
         "google",
@@ -74,10 +75,12 @@ export default function LoginPage() {
       }
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
     }
   };
 
   const handleGithubSignIn = async () => {
+    setIsLoading(true);
     try {
       const response = await clientApiProvider.auth.signInWithProvider(
         "github",
@@ -89,6 +92,7 @@ export default function LoginPage() {
       }
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
     }
   };
 
@@ -152,7 +156,7 @@ export default function LoginPage() {
         </div>
         <div className="flex flex-col w-full gap-3">
           <Button
-            className="h-10 font-medium text-white bg-button-google hover:bg-button-google/90"
+            className="h-10 font-medium text-white bg-google hover:bg-google/90"
             disabled={isLoading}
             type="button"
             onClick={handleGoogleSignIn}
@@ -161,7 +165,7 @@ export default function LoginPage() {
             Continue with Google
           </Button>
           <Button
-            className="h-10 text-white bg-button-github hover:bg-button-github/90"
+            className="h-10 text-white bg-github hover:bg-github/90"
             disabled={isLoading}
             onClick={handleGithubSignIn}
             type="button"

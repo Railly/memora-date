@@ -33,7 +33,7 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
   errors,
 }) => {
   return (
-    <div className="p-4 space-y-2 border rounded-sm border-opacity-20 bg-muted/40 border-input-border">
+    <div className="p-4 space-y-2 border rounded-sm border-form-stroke/20 bg-muted/40">
       <p className="text-[#B4B4B4] text-md">Basic information</p>
       <Separator />
       <div className="flex flex-col gap-5">

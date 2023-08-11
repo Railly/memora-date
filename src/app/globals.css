@@ -41,7 +41,11 @@
     --memora-yellow: 46 100% 50%;
     --memora-pink: 346 78% 62%;
     --memora-orange: 12 99% 81%;
-    --memora-gray: 0 3% 15%;
+    --memora-gray: 0 0% 15%;
+
+    --google: 0 0% 19%;
+    --github: 224 50% 30%;
+    --form-stroke: 0 0% 99%;
   }
 
   .dark {
@@ -80,6 +84,11 @@
     --memora-yellow: 46 100% 50%;
     --memora-pink: 346 78% 62%;
     --memora-orange: 12 99% 81%;
+    --memora-gray: 0 0% 15%;
+
+    --google: 0 0% 19%;
+    --github: 224 50% 30%;
+    --form-stroke: 0 0% 99%;
   }
 }
 
