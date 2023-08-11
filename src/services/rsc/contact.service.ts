@@ -8,7 +8,7 @@ class RscContactService extends RscServiceApi {
   async getContacts() {
     const contacts = await this.supabase
       .from("contact")
-      .select("*")
+      .select("*", { count: "exact" })
       .order("full_name", { ascending: true });
     return contacts;
   }
