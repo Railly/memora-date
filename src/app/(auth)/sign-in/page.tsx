@@ -9,14 +9,12 @@ import { Label } from "@/components/ui/label";
 import { SignInSchema, signInSchema } from "@/schemas/auth.schema";
 import clientApiProvider from "@/services/client";
 import LogoMemora from "@/components/icons/logo-memora";
-import At from "@/components/icons/at";
-import Lock from "@/components/icons/lock";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import Google from "@/components/icons/google";
 import GitHub from "@/components/icons/github";
 import { useState } from "react";
-import Loader from "@/components/icons/loader";
+import { IconLoader2, IconLock, IconAt } from "@tabler/icons-react";
 import { useToast } from "@/components/ui/use-toast";
 
 export default function LoginPage() {
@@ -112,7 +110,7 @@ export default function LoginPage() {
               id="email"
               type="email"
               placeholder="Your Email Address"
-              withIcon={<At />}
+              withIcon={<IconAt />}
               {...register("email", { required: true })}
               variant={errors.email ? "error" : "default"}
               className="mt-1"
@@ -129,7 +127,7 @@ export default function LoginPage() {
               id="password"
               type="password"
               placeholder="Your Password"
-              withIcon={<Lock />}
+              withIcon={<IconLock />}
               {...register("password", { required: true })}
               variant={errors.password ? "error" : "default"}
               className="mt-1"
@@ -142,7 +140,7 @@ export default function LoginPage() {
           </div>
           <Button type="submit" disabled={isLoading} className="relative mt-3">
             {isLoading && (
-              <Loader className="absolute w-4 h-4 mr-2 transition ease-in-out animate-spin inset-x-32" />
+              <IconLoader2 className="absolute w-4 h-4 mr-2 transition ease-in-out animate-spin inset-x-32" />
             )}
             Login
           </Button>

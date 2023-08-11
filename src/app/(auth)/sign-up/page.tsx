@@ -4,16 +4,13 @@ import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
-import User from "@/components/icons/user";
-import At from "@/components/icons/at";
-import Lock from "@/components/icons/lock";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { SignUpSchema, signUpSchema } from "@/schemas/auth.schema";
 import { useForm } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import clientApiProvider from "@/services/client";
 import { useToast } from "@/components/ui/use-toast";
-import Loader from "@/components/icons/loader";
+import { IconLoader2, IconLock, IconAt, IconUser } from "@tabler/icons-react";
 import { useState } from "react";
 
 export default function SignUpPage() {
@@ -65,7 +62,7 @@ export default function SignUpPage() {
               id="name"
               type="text"
               placeholder="Your Full Name"
-              withIcon={<User />}
+              withIcon={<IconUser />}
               {...register("name", { required: true })}
               variant={errors.name ? "error" : "default"}
               className="mt-1"
@@ -82,7 +79,7 @@ export default function SignUpPage() {
               id="email"
               type="email"
               placeholder="Your Email Address"
-              withIcon={<At />}
+              withIcon={<IconAt />}
               {...register("email", { required: true })}
               variant={errors.email ? "error" : "default"}
               className="mt-1"
@@ -99,7 +96,7 @@ export default function SignUpPage() {
               id="password"
               type="password"
               placeholder="Your Password"
-              withIcon={<Lock />}
+              withIcon={<IconLock />}
               {...register("password", { required: true })}
               variant={errors.password ? "error" : "default"}
               className="mt-1"
@@ -112,7 +109,7 @@ export default function SignUpPage() {
           </div>
           <Button type="submit" className="mt-3" disabled={isLoading}>
             {isLoading && (
-              <Loader className="absolute w-4 h-4 mr-2 transition ease-in-out animate-spin inset-x-32" />
+              <IconLoader2 className="absolute w-4 h-4 mr-2 transition ease-in-out animate-spin inset-x-32" />
             )}
             Register
           </Button>
