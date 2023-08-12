@@ -9,7 +9,8 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-button text-black text-base shadow hover:bg-button/90",
+        default:
+          "bg-memora-green text-black text-base shadow hover:bg-button/90",
         destructive:
           "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
         outline:
@@ -19,11 +20,10 @@ const buttonVariants = cva(
         ghost: "hover:bg-accent hover:text-accent-foreground",
         link: "text-primary underline-offset-4 hover:underline",
         sidebar: "bg-memora-gray text-white text-base hover:bg-memora-gray/90",
-        sidebarDestructive:
+        "sidebar-destructive":
           "bg-memora-pink text-white text-base hover:bg-memora-pink/90",
         icon: "bg-transparent text-base",
-        "input-default":
-          "bg-input border border-input-border border-opacity-40",
+        "input-default": "bg-input border border-form-stroke/40",
         "input-error":
           "bg-input border border-red-500 transition ease-in-out duration-200",
         "input-green":

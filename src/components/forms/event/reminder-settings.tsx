@@ -54,7 +54,7 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
   }, [isWeekly, isRecurring]);
 
   return (
-    <div className="p-4 space-y-2 border rounded-sm border-opacity-20 bg-muted/40 border-input-border">
+    <div className="p-4 space-y-2 border rounded-sm bg-muted/40 border-form-stroke/20">
       <p className="text-[#B4B4B4] text-md">Reminder Settings</p>
       <Separator />
       <div className="space-y-5">

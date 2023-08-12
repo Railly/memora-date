@@ -9,18 +9,16 @@ import { Label } from "@/components/ui/label";
 import { SignInSchema, signInSchema } from "@/schemas/auth.schema";
 import clientApiProvider from "@/services/client";
 import LogoMemora from "@/components/icons/logo-memora";
-import At from "@/components/icons/at";
-import Lock from "@/components/icons/lock";
 import Link from "next/link";
 import { Separator } from "@/components/ui/separator";
 import Google from "@/components/icons/google";
 import GitHub from "@/components/icons/github";
 import { useState } from "react";
-import Loader from "@/components/icons/loader";
+import { IconLoader2, IconLock, IconAt } from "@tabler/icons-react";
 import { useToast } from "@/components/ui/use-toast";
 
 export default function LoginPage() {
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const router = useRouter();
   const searchParams = useSearchParams();
   const { toast } = useToast();
@@ -65,6 +63,7 @@ export default function LoginPage() {
   };
 
   const handleGoogleSignIn = async () => {
+    setIsLoading(true);
     try {
       const response = await clientApiProvider.auth.signInWithProvider(
         "google",
@@ -76,10 +75,12 @@ export default function LoginPage() {
       }
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
     }
   };
 
   const handleGithubSignIn = async () => {
+    setIsLoading(true);
     try {
       const response = await clientApiProvider.auth.signInWithProvider(
         "github",
@@ -91,6 +92,7 @@ export default function LoginPage() {
       }
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
     }
   };
 
@@ -112,7 +114,7 @@ export default function LoginPage() {
               id="email"
               type="email"
               placeholder="Your Email Address"
-              withIcon={<At />}
+              withIcon={<IconAt />}
               {...register("email", { required: true })}
               variant={errors.email ? "error" : "default"}
               className="mt-1"
@@ -129,7 +131,7 @@ export default function LoginPage() {
               id="password"
               type="password"
               placeholder="Your Password"
-              withIcon={<Lock />}
+              withIcon={<IconLock />}
               {...register("password", { required: true })}
               variant={errors.password ? "error" : "default"}
               className="mt-1"
@@ -142,7 +144,7 @@ export default function LoginPage() {
           </div>
           <Button type="submit" disabled={isLoading} className="relative mt-3">
             {isLoading && (
-              <Loader className="absolute w-4 h-4 mr-2 transition ease-in-out animate-spin inset-x-32" />
+              <IconLoader2 className="absolute w-4 h-4 mr-2 transition ease-in-out animate-spin inset-x-32" />
             )}
             Login
           </Button>
@@ -154,7 +156,7 @@ export default function LoginPage() {
         </div>
         <div className="flex flex-col w-full gap-3">
           <Button
-            className="h-10 font-medium text-white bg-button-google hover:bg-button-google/90"
+            className="h-10 font-medium text-white bg-google hover:bg-google/90"
             disabled={isLoading}
             type="button"
             onClick={handleGoogleSignIn}
@@ -163,7 +165,7 @@ export default function LoginPage() {
             Continue with Google
           </Button>
           <Button
-            className="h-10 text-white bg-button-github hover:bg-button-github/90"
+            className="h-10 text-white bg-github hover:bg-github/90"
             disabled={isLoading}
             onClick={handleGithubSignIn}
             type="button"

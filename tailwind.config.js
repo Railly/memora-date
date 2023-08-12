@@ -26,6 +26,9 @@ module.exports = {
         "memora-pink": "hsl(var(--memora-pink))",
         "memora-orange": "hsl(var(--memora-orange))",
         "memora-gray": "hsl(var(--memora-gray))",
+        "form-stroke": "hsl(var(--form-stroke))",
+        google: "hsl(var(--google))",
+        github: "hsl(var(--github))",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -58,28 +61,6 @@ module.exports = {
         card: {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
-        },
-        input: {
-          DEFAULT: "#252525",
-          light: "hsl(var(--bginput-light))",
-          dark: "#252525",
-          border: {
-            DEFAULT: "#FFFFFF",
-            light: "hsl(var(--input-border-light))",
-            dark: "#FFFFFF",
-          },
-        },
-        button: {
-          DEFAULT: "#C5DC96",
-          google: "#303030",
-          github: "#263B73",
-          light: "hsl(var(--button-light))",
-          dark: "#C5DC96",
-          border: {
-            DEFAULT: "hsl(var(--button-border))",
-            light: "hsl(var(--button-border-light))",
-            dark: "hsl(var(--button-border-dark))",
-          },
         },
       },
       borderRadius: {

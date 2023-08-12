@@ -29,7 +29,7 @@ SelectValue.displayName = SelectPrimitive.Value.displayName;
 const inputVariants = cva(" bg-background text-foreground", {
   variants: {
     variant: {
-      default: "bg-input border border-input-border border-opacity-40",
+      default: "bg-input border border-form-stroke/40",
       error:
         "bg-input border border-red-500 transition ease-in-out duration-200",
     },

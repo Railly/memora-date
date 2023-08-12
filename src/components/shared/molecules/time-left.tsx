@@ -5,9 +5,10 @@ import { cn } from "@/lib/utils";
 
 interface TimeLeftProps {
   date: string | undefined;
+  isShort?: boolean;
 }
 
-const TimeLeft: React.FC<TimeLeftProps> = ({ date }) => {
+const TimeLeft: React.FC<TimeLeftProps> = ({ date, isShort }) => {
   const isRecurring = true;
   const [timeLeft, setTimeLeft] = useState<string | null>(null);
   const [colorClass, setColorClass] = useState<string | null>(null);
@@ -85,9 +86,13 @@ const TimeLeft: React.FC<TimeLeftProps> = ({ date }) => {
             nextUpdateInSeconds = 60;
             break;
         }
-
-        const unitPlural = value > 1 ? unit : unit.slice(0, -1);
-        setTimeLeft(`${value} ${unitPlural}`);
+        if (isShort) {
+          const unitAbbrevation = unit === "minutes" ? "min" : unit[0];
+          setTimeLeft(`${value}${unitAbbrevation}`);
+        } else {
+          const unitPlural = value > 1 ? unit : unit.slice(0, -1);
+          setTimeLeft(`${value} ${unitPlural}`);
+        }
 
         timeout = setTimeout(calculateTimeLeft, nextUpdateInSeconds * 1000);
       }
@@ -97,6 +102,10 @@ const TimeLeft: React.FC<TimeLeftProps> = ({ date }) => {
 
     return () => clearTimeout(timeout);
   }, [date, isRecurring]);
+
+  if (isShort) {
+    return <span className="text-black">{timeLeft || "0s"}</span>;
+  }
 
   return <span className={cn(colorClass)}>{timeLeft || "0 seconds"} left</span>;
 };
