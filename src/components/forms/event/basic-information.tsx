@@ -50,7 +50,7 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
                     name={field.name}
                     type="text"
                     placeholder="An Incredible Event"
-                    withIcon={<IconSpeakerphone size={20} />}
+                    leftIcon={<IconSpeakerphone size={20} />}
                     variant={errors.event?.name ? "error" : "default"}
                     value={field.value}
                     onChange={field.onChange}

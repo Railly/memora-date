@@ -19,6 +19,7 @@ export interface Database {
           image_url: string | null
           phone: string | null
           user_id: string
+          name_email_phone: string | null
         }
         Insert: {
           address?: string | null
@@ -60,6 +61,7 @@ export interface Database {
           is_public: boolean
           name: string
           user_id: string
+          title_description: string | null
         }
         Insert: {
           contact_id?: string | null
@@ -176,7 +178,18 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      name_email_phone: {
+        Args: {
+          "": unknown
+        }
+        Returns: string
+      }
+      title_description: {
+        Args: {
+          "": unknown
+        }
+        Returns: string
+      }
     }
     Enums: {
       [_ in never]: never

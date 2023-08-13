@@ -19,22 +19,32 @@ const inputVariants = cva("bg-background text-foreground", {
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement>,
     VariantProps<typeof inputVariants> {
-  withIcon?: JSX.Element;
+  leftIcon?: JSX.Element;
+  rightIcon?: JSX.Element;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, variant, withIcon, ...props }, ref) => {
-    var inputPadding = {
-      "pl-9 pr-3": withIcon,
-      "px-3": !withIcon,
+  ({ className, type, variant, leftIcon, rightIcon, ...props }, ref) => {
+    const leftIconPadding = {
+      "pl-9 pr-3": leftIcon && !rightIcon,
+      "px-3": !leftIcon && !rightIcon,
+    };
+
+    const rightIconPadding = {
+      "pr-9 pl-3": rightIcon && !leftIcon,
+      "px-3": !rightIcon && !leftIcon,
+    };
+
+    const bothIconsPadding = {
+      "pl-9 pr-9": leftIcon && rightIcon,
     };
 
     return (
       <div className="relative w-full">
-        {withIcon && (
-          <div className="absolute inset-y-0 flex items-center left-2">
-            {withIcon}
-          </div>
+        {leftIcon && (
+          <i className="absolute inset-y-0 flex items-center left-2">
+            {leftIcon}
+          </i>
         )}
         <input
           type={type}
@@ -44,11 +54,18 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             "focus:outline-none focus:bg-transparent focus:ring-2 focus:ring-memora-blue/50",
             className,
             inputVariants({ variant }),
-            inputPadding
+            leftIconPadding,
+            rightIconPadding,
+            bothIconsPadding
           )}
           ref={ref}
           {...props}
         />
+        {rightIcon && (
+          <i className="absolute inset-y-0 flex items-center right-2">
+            {rightIcon}
+          </i>
+        )}
       </div>
     );
   }
