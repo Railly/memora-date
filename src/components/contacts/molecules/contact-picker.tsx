@@ -5,6 +5,7 @@ import { IconFileImport } from "@tabler/icons-react";
 import { useCallback, useEffect, useState } from "react";
 
 import { Contact } from "@/lib/entities.types";
+import { ContactSchema } from "@/schemas/contact.schema";
 import clientApiProvider from "@/services/client";
 import { ContactInfo, ContactProperty } from "@/types/types";
 
@@ -22,6 +23,7 @@ const ContactPicker: React.FC<IContactPickerProps> = ({
   const [isContactsSupported, setIsContactsSupported] = useState(false);
 
   const handlePick = useCallback(async () => {
+    let contactResponse;
     try {
       const contacts = await navigator.contacts.select(
         [
@@ -48,19 +50,20 @@ const ContactPicker: React.FC<IContactPickerProps> = ({
       }
 
       for (const filteredContact of filteredContacts) {
-        const contactResponse = await clientApiProvider.contact.createContact({
-          contact: adaptContactInfo(filteredContact) as any,
+        contactResponse = await clientApiProvider.contact.createContact({
+          contact: adaptContactInfoParam(filteredContact),
           user_id: user.id,
         });
         if (!contactResponse.ok) {
           throw new Error("Error creating contact:", contactResponse.error);
         }
-      }
+        const newContact: Contact = contactResponse.data;
 
-      setCurrentContacts((currentContacts) => [
-        ...(currentContacts ?? []),
-        ...filteredContacts.map(adaptContactInfo),
-      ]);
+        setCurrentContacts((currentContacts) => [
+          ...(currentContacts ?? []),
+          newContact,
+        ]);
+      }
     } catch (error) {
       console.error("Error selecting contact:", error);
     }
@@ -98,31 +101,12 @@ const ContactPicker: React.FC<IContactPickerProps> = ({
 
 export default ContactPicker;
 
-const adaptContactInfo = (contactInfo: ContactInfo): Contact => {
-  const contact: Contact = {
-    address:
-      contactInfo.address && contactInfo.address.length > 0
-        ? contactInfo.address[0].toString()
-        : null,
-    created_at: null, // You may set this value if needed
-    email:
-      contactInfo.email && contactInfo.email.length > 0
-        ? contactInfo.email[0]
-        : null,
-    full_name:
-      contactInfo.name && contactInfo.name.length > 0
-        ? contactInfo.name[0]
-        : "",
-    id: "",
-    image_url:
-      contactInfo.icon && contactInfo.icon.length > 0
-        ? URL.createObjectURL(contactInfo.icon[0])
-        : null,
-    phone:
-      contactInfo.tel && contactInfo.tel.length > 0 ? contactInfo.tel[0] : null,
-    user_id: "",
-    name_email_phone: "",
+const adaptContactInfoParam = (contactInfo: ContactInfo): ContactSchema => {
+  const contact: ContactSchema = {
+    full_name: contactInfo.name?.[0] ?? "",
+    email: contactInfo.email?.[0] ?? "",
+    phone: contactInfo.tel?.[0] ?? "",
+    image: contactInfo.icon?.[0] ?? "",
   };
-
   return contact;
 };

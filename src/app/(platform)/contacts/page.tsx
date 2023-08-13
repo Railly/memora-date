@@ -2,10 +2,6 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import { ContactsSection } from "@/components/contacts/contacts-section";
-import {
-  ACTION_BUTTON_PATHS,
-  FloatingActionButton,
-} from "@/components/shared/atoms/FAB";
 
 import { SubHeader } from "@/components/shared/molecules/sub-header";
 import { Badge } from "@/components/ui/badge";
@@ -36,7 +32,6 @@ export default async function MyContactsPage() {
             initialContacts={contacts.data}
             user={session?.user}
           />
-          <FloatingActionButton to={ACTION_BUTTON_PATHS.CONTACT_CREATOR} />
         </main>
       </div>
     </div>

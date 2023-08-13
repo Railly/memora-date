@@ -6,8 +6,16 @@ export type CreateContactParams = {
 };
 
 export type UpdateContactParams = {
-  contact: CreateEventSchema["contact"] & { contact_id: string };
+  contact: CreateEventSchema["contact"] & {
+    contact_id: string;
+    oldPath?: string | null;
+  };
   user_id: string;
+};
+
+export type DeleteContactParams = {
+  contact_id: string;
+  image_url: string | null;
 };
 
 export type CreateEventParams = {

@@ -3,12 +3,11 @@
 import {
   IconCheck,
   IconMail,
-  IconPencil,
   IconPhone,
   IconUser,
   IconX,
 } from "@tabler/icons-react";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
 
 import { UploadProfileImage } from "@/components/forms/event/upload-profile-image";
@@ -36,17 +35,29 @@ import { ContactSchema, contactSchema } from "@/schemas/contact.schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 
 interface IContactCardProps {
-  contact: Contact;
-  onUpdatedContact: (submit: ContactSchema, contact_id: string) => void;
+  contact?: Contact;
+  onUpdatedContact?: (submit: ContactSchema, contact_id: string) => void;
+  onCreatedContact?: (submit: ContactSchema) => void;
+  children?: React.ReactNode;
+  triggerClassName?: string;
 }
 
 export const ContactDialog: React.FC<IContactCardProps> = ({
   contact,
   onUpdatedContact,
+  onCreatedContact,
+  children,
+  triggerClassName,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const form = useForm<ContactSchema>({
     resolver: zodResolver(contactSchema),
+    defaultValues: {
+      full_name: contact?.full_name ?? "",
+      email: contact?.email ?? "",
+      phone: contact?.phone ?? "",
+      image: contact?.image_url ?? "",
+    },
   });
 
   const {
@@ -55,35 +66,32 @@ export const ContactDialog: React.FC<IContactCardProps> = ({
     reset,
   } = form;
 
-  const updateContactValues = () => {
-    const { full_name, email, phone, image_url } = contact;
-    setValue("full_name", full_name ?? "");
-    setValue("email", email ?? "");
-    setValue("phone", phone ?? "");
-    setValue("image", image_url ?? "");
+  const clearForm = () => {
+    reset();
+    setValue("image", "");
   };
 
   const onSubmit = async (submit: ContactSchema) => {
-    onUpdatedContact(submit, contact.id);
+    if (onUpdatedContact && contact) {
+      onUpdatedContact(submit, contact.id);
+    }
+    if (onCreatedContact) {
+      onCreatedContact(submit);
+      setTimeout(() => {
+        clearForm();
+      }, 100);
+    }
     setIsOpen(false);
-    reset();
   };
 
-  useEffect(() => {
-    updateContactValues();
-  }, []);
-
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger
-        aria-controls="dialog"
-        className="p-0.5 rounded-sm bg-white"
-      >
-        <IconPencil size={24} className="stroke-black" />
+    <Dialog open={isOpen} onOpenChange={setIsOpen} modal={true}>
+      <DialogTrigger aria-controls="modal" className={triggerClassName}>
+        {children}
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Update Contact</DialogTitle>
+          <DialogTitle>{contact ? "Update" : "Create"} Contact</DialogTitle>
         </DialogHeader>
         <Separator />
         <Form {...form}>
@@ -168,6 +176,7 @@ export const ContactDialog: React.FC<IContactCardProps> = ({
                     <FormLabel htmlFor={field.name}>Image</FormLabel>
                     <FormControl>
                       <UploadProfileImage
+                        image={contact?.image_url ?? ""}
                         fullName={contact?.full_name}
                         onChange={field.onChange}
                       />
@@ -183,17 +192,14 @@ export const ContactDialog: React.FC<IContactCardProps> = ({
                   variant="secondary"
                   className="flex w-full gap-1"
                   type="button"
-                  onClick={() => {
-                    form.reset();
-                    setIsOpen(false);
-                  }}
+                  onClick={() => setIsOpen(false)}
                 >
                   <IconX size={20} />
                   <span>Cancel</span>
                 </Button>
                 <Button type="submit" className="flex w-full gap-1">
                   <IconCheck size={20} />
-                  <span>Save Changes</span>
+                  <span>{contact ? "Save Changes" : "Create Contact"}</span>
                 </Button>
               </div>
             </DialogFooter>

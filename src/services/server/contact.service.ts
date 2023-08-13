@@ -1,24 +1,17 @@
-import { CreateEventSchema } from "@/schemas/create-event.schema";
-import { CONTACT_ERROR } from "../constants";
-import { ServerServiceApi } from "./blueprint";
 import { ContactColumns } from "@/lib/entities.types";
 import { UpdateContactParams } from "@/lib/form.types";
+import { CreateEventSchema } from "@/schemas/create-event.schema";
+import { contactServerError } from "../utils";
+import { ServerServiceApi } from "./blueprint";
 
 class ServerContactService extends ServerServiceApi {
   async getContacts() {
     try {
       const { error, data } = await this.supabase.from("contact").select("*");
+
       return { error, data };
     } catch (error) {
-      console.error(error);
-      return {
-        data: null,
-        error: {
-          name: CONTACT_ERROR,
-          message: "Something went wrong, please try again later",
-          status: 500,
-        },
-      };
+      return contactServerError(error);
     }
   }
 
@@ -46,15 +39,7 @@ class ServerContactService extends ServerServiceApi {
 
       return { error, data: data?.[0] };
     } catch (error) {
-      console.error(error);
-      return {
-        data: null,
-        error: {
-          name: CONTACT_ERROR,
-          message: "Something went wrong, please try again later",
-          status: 500,
-        },
-      };
+      return contactServerError(error);
     }
   }
 
@@ -70,17 +55,10 @@ class ServerContactService extends ServerServiceApi {
         .from("contact")
         .select(`*`)
         .textSearch(`${column}`, `${searchTerm}`);
+
       return { data, error };
     } catch (error) {
-      console.error(error);
-      return {
-        data: null,
-        error: {
-          name: CONTACT_ERROR,
-          message: "Something went wrong, please try again later",
-          status: 500,
-        },
-      };
+      return contactServerError(error);
     }
   }
 
@@ -98,18 +76,10 @@ class ServerContactService extends ServerServiceApi {
         .eq("id", contact_id)
         .eq("user_id", user_id)
         .select();
-      console.log({ data, error });
+
       return { data, error };
     } catch (error) {
-      console.error(error);
-      return {
-        data: null,
-        error: {
-          name: CONTACT_ERROR,
-          message: "Something went wrong, please try again later",
-          status: 500,
-        },
-      };
+      return contactServerError(error);
     }
   }
 
@@ -120,17 +90,10 @@ class ServerContactService extends ServerServiceApi {
         .delete()
         .eq("id", contact_id)
         .select();
+
       return { data, error };
     } catch (error) {
-      console.error(error);
-      return {
-        data: null,
-        error: {
-          name: CONTACT_ERROR,
-          message: "Something went wrong, please try again later",
-          status: 500,
-        },
-      };
+      return contactServerError(error);
     }
   }
 }
