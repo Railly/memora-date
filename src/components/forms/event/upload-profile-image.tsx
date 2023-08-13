@@ -4,17 +4,24 @@ import { useState } from "react";
 
 interface IUploadProfileImageProps {
   fullName?: string;
+  image?: string;
   onChange: (file: File) => void;
   disabled?: boolean;
 }
 
 export const UploadProfileImage: React.FC<IUploadProfileImageProps> = ({
   fullName,
+  image,
   onChange,
   disabled,
 }) => {
-  const [imageURL, setImageURL] = useState<string | undefined>();
-  // "https://cgkjgmtdxmqoruwpyojn.supabase.co/storage/v1/object/public/profiles/Contacto Test_3c5c18dc-baab-4134-9edf-9a40a612eb9e_1691048237034"
+  const [imageURL, setImageURL] = useState<string | undefined>(
+    image
+      ? `${encodeURI(
+          `https://cgkjgmtdxmqoruwpyojn.supabase.co/storage/v1/object/public/profiles/${image}`
+        )}`
+      : undefined
+  );
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files && e.target.files[0]) {

@@ -1,17 +1,19 @@
 "use client";
-import LogoMemora from "@/components/icons/logo-memora";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import Link from "next/link";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { SignUpSchema, signUpSchema } from "@/schemas/auth.schema";
-import { useForm } from "react-hook-form";
-import { useRouter } from "next/navigation";
-import clientApiProvider from "@/services/client";
-import { useToast } from "@/components/ui/use-toast";
-import { IconLoader2, IconLock, IconAt, IconUser } from "@tabler/icons-react";
+
 import { useState } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useForm } from "react-hook-form";
+import { IconAt, IconLoader2, IconLock, IconUser } from "@tabler/icons-react";
+
+import LogoMemora from "@/components/icons/logo-memora";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { useToast } from "@/components/ui/use-toast";
+import { SignUpSchema, signUpSchema } from "@/schemas/auth.schema";
+import clientApiProvider from "@/services/client";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function SignUpPage() {
   const router = useRouter();
@@ -62,7 +64,7 @@ export default function SignUpPage() {
               id="name"
               type="text"
               placeholder="Your Full Name"
-              withIcon={<IconUser />}
+              leftIcon={<IconUser />}
               {...register("name", { required: true })}
               variant={errors.name ? "error" : "default"}
               className="mt-1"
@@ -79,7 +81,7 @@ export default function SignUpPage() {
               id="email"
               type="email"
               placeholder="Your Email Address"
-              withIcon={<IconAt />}
+              leftIcon={<IconAt />}
               {...register("email", { required: true })}
               variant={errors.email ? "error" : "default"}
               className="mt-1"
@@ -96,7 +98,7 @@ export default function SignUpPage() {
               id="password"
               type="password"
               placeholder="Your Password"
-              withIcon={<IconLock />}
+              leftIcon={<IconLock />}
               {...register("password", { required: true })}
               variant={errors.password ? "error" : "default"}
               className="mt-1"

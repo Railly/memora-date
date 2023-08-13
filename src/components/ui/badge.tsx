@@ -16,7 +16,7 @@ export const rawVariants = {
     "border-transparent bg-memora-green text-black shadow hover:bg-memora-green/80",
   blue: "border-transparent bg-memora-blue text-black shadow hover:bg-memora-blue/80",
   yellow:
-    "border-transparent bg-memora-yellow text-lack shadow hover:bg-memora-yellow/80",
+    "border-transparent bg-memora-yellow text-black shadow hover:bg-memora-yellow/80",
   pink: "border-transparent bg-memora-pink text-memora-pink-foreground shadow hover:bg-memora-pink/80",
   orange:
     "border-transparent bg-memora-orange text-black shadow hover:bg-memora-orange/80",

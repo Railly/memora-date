@@ -114,7 +114,7 @@ export default function LoginPage() {
               id="email"
               type="email"
               placeholder="Your Email Address"
-              withIcon={<IconAt />}
+              leftIcon={<IconAt />}
               {...register("email", { required: true })}
               variant={errors.email ? "error" : "default"}
               className="mt-1"
@@ -131,7 +131,7 @@ export default function LoginPage() {
               id="password"
               type="password"
               placeholder="Your Password"
-              withIcon={<IconLock />}
+              leftIcon={<IconLock />}
               {...register("password", { required: true })}
               variant={errors.password ? "error" : "default"}
               className="mt-1"

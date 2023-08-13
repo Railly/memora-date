@@ -1,5 +1,6 @@
+import { EventColumns } from "@/lib/entities.types";
 import { CreateEventSchema } from "@/schemas/create-event.schema";
-import { EVENT_TYPE_ERROR } from "../constants";
+import { eventServiceError } from "../utils";
 import { ServerServiceApi } from "./blueprint";
 import { EventColumns } from "@/lib/entities.types";
 
@@ -9,17 +10,10 @@ class ServerEventService extends ServerServiceApi {
       const { error, data } = await this.supabase
         .from("event_type")
         .select("*");
+
       return { error, data };
     } catch (error) {
-      console.error(error);
-      return {
-        data: null,
-        error: {
-          name: EVENT_TYPE_ERROR,
-          message: "Something went wrong, please try again later",
-          status: 500,
-        },
-      };
+      return eventServiceError(error);
     }
   }
 
@@ -54,15 +48,27 @@ class ServerEventService extends ServerServiceApi {
 
       return { error, data: data?.[0] };
     } catch (error) {
-      console.error(error);
-      return {
-        data: null,
-        error: {
-          name: EVENT_TYPE_ERROR,
-          message: "Something went wrong, please try again later",
-          status: 500,
-        },
-      };
+      return eventServiceError(error);
+    }
+  }
+
+  async searchTermInColumn({
+    column,
+    searchTerm,
+  }: {
+    column: EventColumns;
+    searchTerm: string;
+  }) {
+    try {
+      const { data, error } = await this.supabase
+        .from("event")
+        .select(`*, event_type ( value )`)
+        .textSearch(`${column}`, `${searchTerm}`)
+        .order("date", { ascending: true });
+
+      return { data, error };
+    } catch (error) {
+      return eventServiceError(error);
     }
   }
 

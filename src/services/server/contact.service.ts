@@ -1,22 +1,17 @@
+import { ContactColumns } from "@/lib/entities.types";
+import { UpdateContactParams } from "@/lib/form.types";
 import { CreateEventSchema } from "@/schemas/create-event.schema";
-import { CONTACT_ERROR } from "../constants";
+import { contactServerError } from "../utils";
 import { ServerServiceApi } from "./blueprint";
 
 class ServerContactService extends ServerServiceApi {
   async getContacts() {
     try {
       const { error, data } = await this.supabase.from("contact").select("*");
+
       return { error, data };
     } catch (error) {
-      console.error(error);
-      return {
-        data: null,
-        error: {
-          name: CONTACT_ERROR,
-          message: "Something went wrong, please try again later",
-          status: 500,
-        },
-      };
+      return contactServerError(error);
     }
   }
 
@@ -44,15 +39,61 @@ class ServerContactService extends ServerServiceApi {
 
       return { error, data: data?.[0] };
     } catch (error) {
-      console.error(error);
-      return {
-        data: null,
-        error: {
-          name: CONTACT_ERROR,
-          message: "Something went wrong, please try again later",
-          status: 500,
-        },
-      };
+      return contactServerError(error);
+    }
+  }
+
+  async searchTermInColumn({
+    column,
+    searchTerm,
+  }: {
+    column: ContactColumns;
+    searchTerm: string;
+  }) {
+    try {
+      const { data, error } = await this.supabase
+        .from("contact")
+        .select(`*`)
+        .textSearch(`${column}`, `${searchTerm}`);
+
+      return { data, error };
+    } catch (error) {
+      return contactServerError(error);
+    }
+  }
+
+  async updateContact({ contact, user_id }: UpdateContactParams) {
+    try {
+      const { contact_id, full_name, email, phone, image } = contact;
+      const { data, error } = await this.supabase
+        .from("contact")
+        .update({
+          full_name,
+          email,
+          phone,
+          image_url: image,
+        })
+        .eq("id", contact_id)
+        .eq("user_id", user_id)
+        .select();
+
+      return { data, error };
+    } catch (error) {
+      return contactServerError(error);
+    }
+  }
+
+  async deleteContact({ contact_id }: { contact_id: string }) {
+    try {
+      const { data, error } = await this.supabase
+        .from("contact")
+        .delete()
+        .eq("id", contact_id)
+        .select();
+
+      return { data, error };
+    } catch (error) {
+      return contactServerError(error);
     }
   }
 }

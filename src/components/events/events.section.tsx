@@ -1,12 +1,14 @@
 "use client";
 
-import { IconSearch } from "@tabler/icons-react";
-import { useRef, useState } from "react";
+import { useState } from "react";
+import { IconSearch, IconX } from "@tabler/icons-react";
 
+import { useSearch } from "@/hooks/useSearch";
 import { EventWithType } from "@/lib/entities.types";
 import clientApiProvider from "@/services/client";
 import EventCard from "../shared/molecules/event-card";
 import { Input } from "../ui/input";
+import EventsEmptyState from "../shared/molecules/events-empty-state";
 
 interface IEventsSectionProps {
   initialEvents: EventWithType[] | null;
@@ -15,31 +17,15 @@ interface IEventsSectionProps {
 export const EventsSection: React.FC<IEventsSectionProps> = ({
   initialEvents,
 }) => {
-  const [search, setSearch] = useState("");
   const [events, setEvents] = useState<EventWithType[] | null>(initialEvents);
 
-  const previousSearch = useRef(search);
+  const { search, setSearch, handleSupabaseSearch } = useSearch();
 
   const onSearch = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    // Split search by spaces
-    const splittedSearch = search.split(" ");
-    // Remove empty strings
-    const filteredSearch = splittedSearch.filter((search) => search !== "");
-    // Join by &
-    const parsedSearch = filteredSearch.join("&");
-    // Trim
-    const trimmedSearch = parsedSearch.trim();
-    // If empty, return
-    if (trimmedSearch.length === 0) return;
+    const parsedSearch = handleSupabaseSearch();
 
-    // If same as previous, return
-    const currentParsedSearch = trimmedSearch.toLowerCase();
-    const previousSearchParsed = previousSearch.current.toLowerCase();
-    if (currentParsedSearch === previousSearchParsed) return;
-
-    // Update previous search
-    previousSearch.current = parsedSearch;
+    if (!parsedSearch) return;
 
     // Search
     const { data, error } = await clientApiProvider.event.searchEvents({
@@ -51,13 +37,31 @@ export const EventsSection: React.FC<IEventsSectionProps> = ({
 
     console.log({ data, error });
   };
+
+  const clearSearch = () => {
+    setSearch("");
+    setEvents(initialEvents);
+  };
+
   return (
     <section className="flex flex-col items-center w-full gap-6">
       <form onSubmit={onSearch} className="flex w-full">
         <Input
           id="search-events"
+          aria-controls="search-events"
           placeholder="Search for events"
-          withIcon={<IconSearch size={20} />}
+          leftIcon={<IconSearch size={20} />}
+          rightIcon={
+            <>
+              {search.length > 0 && (
+                <IconX
+                  size={20}
+                  className="cursor-pointer"
+                  onClick={clearSearch}
+                />
+              )}
+            </>
+          }
           onChange={(e) => setSearch(e.target.value)}
           value={search}
           variant={"default"}
@@ -66,6 +70,7 @@ export const EventsSection: React.FC<IEventsSectionProps> = ({
       {events?.map((event) => {
         return <EventCard key={event.id} event={event} />;
       })}
+      {events?.length === 0 && <EventsEmptyState />}
     </section>
   );
 };

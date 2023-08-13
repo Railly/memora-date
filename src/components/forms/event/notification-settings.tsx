@@ -53,7 +53,7 @@ export const NotificationSettings: React.FC<INotificationSettingsProps> = ({
                 type="text"
                 placeholder="Your email"
                 value={user?.email}
-                withIcon={<IconSpeakerphone size={20} />}
+                leftIcon={<IconSpeakerphone size={20} />}
                 disabled
               />
             </div>
@@ -108,7 +108,7 @@ export const NotificationSettings: React.FC<INotificationSettingsProps> = ({
                 type="text"
                 value={user?.user_metadata?.phone}
                 placeholder="Your phone"
-                withIcon={<IconSpeakerphone size={20} />}
+                leftIcon={<IconSpeakerphone size={20} />}
                 disabled
               />
             </div>
@@ -166,7 +166,7 @@ export const NotificationSettings: React.FC<INotificationSettingsProps> = ({
                         <Input
                           type="number"
                           placeholder="Notify me"
-                          withIcon={<IconSpeakerphone size={20} />}
+                          leftIcon={<IconSpeakerphone size={20} />}
                           variant={
                             errors.reminder?.notify_before_number
                               ? "error"
