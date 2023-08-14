@@ -1,7 +1,6 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import {
-  IconX,
   IconUserCircle,
   IconSpeakerphone,
   IconAddressBook,
@@ -21,8 +20,13 @@ import { useToast } from "../ui/use-toast";
 import { SheetClose, SheetContent } from "../ui/sheet";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
+import { Session } from "@supabase/supabase-js";
 
-const Sidebar = () => {
+interface SidebarProps {
+  session: Session;
+}
+
+const Sidebar: React.FC<SidebarProps> = ({ session }) => {
   const { toast } = useToast();
   const router = useRouter();
   const path = usePathname();
@@ -44,12 +48,8 @@ const Sidebar = () => {
     }
   };
 
-  const handleIsHighlight = (pathname: string) => {
-    return pathname === path;
-  };
-
-  const highlightVariant = (route: string) => ({
-    "bg-zinc-500 hover:bg-zinc-500/90": handleIsHighlight(route),
+  const getHighlightStyles = (targetRoute: string) => ({
+    "bg-zinc-500 hover:bg-zinc-500/90": path === targetRoute,
   });
 
   return (
@@ -60,16 +60,19 @@ const Sidebar = () => {
             <div className="flex min-w-full gap-x-2">
               <div className="items-center w-10 h-10">
                 <Avatar>
-                  <AvatarImage src="" alt="avatar" />
+                  <AvatarImage
+                    src={session?.user.user_metadata.avatar_url}
+                    alt="avatar"
+                  />
                   <AvatarFallback>HU</AvatarFallback>
                 </Avatar>
               </div>
-              <div className="w-[16ch] flex flex-col justify-center">
+              <div className="w-[22ch] flex flex-col justify-center">
                 <p className="overflow-hidden text-lg font-bold leading-tight overflow-ellipsis whitespace-nowrap">
-                  Railly Hugo
+                  {session?.user.user_metadata.full_name}
                 </p>
                 <p className="overflow-hidden text-xs font-medium leading-tight text-gray-400 overflow-ellipsis whitespace-nowrap">
-                  railly.hugo@unmsm.edu.pe
+                  {session?.user.user_metadata.email}
                 </p>
               </div>
             </div>
@@ -81,7 +84,7 @@ const Sidebar = () => {
                 variant="sidebar"
                 className={cn(
                   "justify-start h-12",
-                  highlightVariant("/profile")
+                  getHighlightStyles("/profile")
                 )}
                 asChild
               >
@@ -98,7 +101,7 @@ const Sidebar = () => {
                 variant="sidebar"
                 className={cn(
                   "justify-start h-12",
-                  highlightVariant("/events")
+                  getHighlightStyles("/events")
                 )}
                 asChild
               >
@@ -114,7 +117,7 @@ const Sidebar = () => {
                 variant="sidebar"
                 className={cn(
                   "justify-start h-12",
-                  highlightVariant("/contacts")
+                  getHighlightStyles("/contacts")
                 )}
                 asChild
               >

@@ -1,4 +1,6 @@
 import Header from "@/components/layouts/header";
+import Sidebar from "@/components/layouts/sidebar";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
 import RscApiProvider from "@/services/rsc";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
@@ -15,7 +17,10 @@ export default async function PlatformLayout({
   }
   return (
     <>
-      <Header />
+      <Sheet>
+        <Header />
+        <Sidebar session={session} />
+      </Sheet>
       <main className="p-3">{children}</main>
     </>
   );
