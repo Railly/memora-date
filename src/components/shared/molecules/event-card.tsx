@@ -10,7 +10,7 @@ interface IEventCardProps {
 
 const EventCard: React.FC<IEventCardProps> = ({ event }) => {
   return (
-    <div className="flex flex-col bg-[#191919] p-4 text-left border rounded-lg min-w-full border-primary">
+    <div className="flex flex-col bg-[#191919] p-4 text-left border rounded-lg w-full border-primary">
       <div className="flex justify-between">
         <Badge
           icon={eventTypeUtils[event.event_type?.value || "default"].icon}
@@ -32,7 +32,7 @@ const EventCard: React.FC<IEventCardProps> = ({ event }) => {
 
 export const EventCardSkeleton: React.FC = () => {
   return (
-    <div className="flex flex-col bg-[#191919] p-4 text-left border rounded-lg min-w-full border-primary">
+    <div className="flex flex-col bg-[#191919] p-4 text-left border rounded-lg w-full border-primary">
       <div className="flex justify-between">
         <Badge
           icon={<IconSpeakerphone size={16} className="stroke-black" />}

@@ -6,16 +6,18 @@ import { IconSearch, IconX } from "@tabler/icons-react";
 import { useSearch } from "@/hooks/useSearch";
 import { EventWithType } from "@/lib/entities.types";
 import clientApiProvider from "@/services/client";
-import EventCard from "../shared/molecules/event-card";
+import EventCard, { EventCardSkeleton } from "../shared/molecules/event-card";
 import { Input } from "../ui/input";
 import EventsEmptyState from "../shared/molecules/events-empty-state";
 
 interface IEventsSectionProps {
   initialEvents: EventWithType[] | null;
+  isSkeleton?: boolean;
 }
 
 export const EventsSection: React.FC<IEventsSectionProps> = ({
   initialEvents,
+  isSkeleton,
 }) => {
   const [events, setEvents] = useState<EventWithType[] | null>(initialEvents);
 
@@ -67,9 +69,11 @@ export const EventsSection: React.FC<IEventsSectionProps> = ({
           variant={"default"}
         />
       </form>
-      {events?.map((event) => {
-        return <EventCard key={event.id} event={event} />;
-      })}
+      {isSkeleton
+        ? Array.from({ length: 3 }, (_, index) => (
+            <EventCardSkeleton key={index} />
+          ))
+        : events?.map((event) => <EventCard key={event.id} event={event} />)}
       {events?.length === 0 && <EventsEmptyState />}
     </section>
   );
