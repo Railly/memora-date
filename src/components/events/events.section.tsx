@@ -9,6 +9,8 @@ import clientApiProvider from "@/services/client";
 import EventCard, { EventCardSkeleton } from "../shared/molecules/event-card";
 import { Input } from "../ui/input";
 import EventsEmptyState from "../shared/molecules/events-empty-state";
+import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
 
 interface IEventsSectionProps {
   initialEvents: EventWithType[] | null;
@@ -68,6 +70,28 @@ export const EventsSection: React.FC<IEventsSectionProps> = ({
           value={search}
           variant={"default"}
         />
+        <Button
+          type="submit"
+          variant="secondary"
+          className={cn("ml-2", {
+            "opacity-50 cursor-not-allowed": search.length === 0,
+          })}
+          disabled={search.length === 0}
+        >
+          <IconSearch
+            size={20}
+            className={cn("mr-2", {
+              "text-gray-400": search.length === 0,
+            })}
+          />
+          <span
+            className={cn("text-sm font-semibold", {
+              "text-gray-400": search.length === 0,
+            })}
+          >
+            Search
+          </span>
+        </Button>
       </form>
       {isSkeleton
         ? Array.from({ length: 3 }, (_, index) => (

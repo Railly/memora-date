@@ -106,9 +106,9 @@ export default ContactPicker;
 const adaptContactInfoParam = (contactInfo: ContactInfo): ContactSchema => {
   const contact: ContactSchema = {
     full_name: contactInfo.name?.[0] ?? "",
-    email: contactInfo.email?.[0] ?? "",
-    phone: contactInfo.tel?.[0] ?? "",
-    image: contactInfo.icon?.[0] ?? "",
+    email: contactInfo.email?.[0] ?? undefined,
+    phone: contactInfo.tel?.[0] ?? undefined,
+    image: contactInfo.icon?.[0] ?? null,
   };
   return contact;
 };
