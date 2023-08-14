@@ -10,7 +10,7 @@ export const signInSchema = zod.object({
 });
 
 export const signUpSchema = zod.object({
-  name: zod
+  full_name: zod
     .string()
     .min(3, { message: "Name must be at least 3 characters long" }),
   email: zod.string().email({
