@@ -83,4 +83,22 @@ const ContactCard: React.FC<IContactCardProps> = ({
   );
 };
 
+export const ContactCardSkeleton: React.FC = () => {
+  return (
+    <div className="flex justify-center items-center bg-[#191919] p-3 border border-primary rounded-xl min-w-full">
+      <Avatar className="flex justify-center items-center w-14 h-14">
+        <AvatarFallback className="text-3l font-bold text-white">
+          <div className="scale-50 pt-1">
+            <Spinner />
+          </div>
+        </AvatarFallback>
+      </Avatar>
+      <div className="flex flex-col w-full gap-2 p-2">
+        <span className="w-20 h-6 text-2xl font-bold bg-gray-400 animate-pulse" />
+        <span className="w-full h-6 overflow-hidden bg-gray-400 overflow-ellipsis whitespace-nowrap animate-pulse" />
+      </div>
+    </div>
+  );
+};
+
 export default ContactCard;

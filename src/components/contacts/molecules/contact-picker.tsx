@@ -85,17 +85,19 @@ const ContactPicker: React.FC<IContactPickerProps> = ({
   }, []);
 
   return (
-    <section className="w-full">
+    <>
       {isContactsSupported && (
-        <button
-          onClick={handlePick}
-          className="min-w-full h-24 bg-transparent border-2 border-dashed border-white  p-4 min-min-w-full flex justify-center items-center rounded-lg cursor-pointer"
-        >
-          <IconFileImport size={24} />
-          <span className="text-2xl ml-1">Import from phone</span>
-        </button>
+        <section className="w-full">
+          <button
+            onClick={handlePick}
+            className="min-w-full h-24 bg-transparent border-2 border-dashed border-white  p-4 min-min-w-full flex justify-center items-center rounded-lg cursor-pointer"
+          >
+            <IconFileImport size={24} />
+            <span className="text-2xl ml-1">Import from phone</span>
+          </button>
+        </section>
       )}
-    </section>
+    </>
   );
 };
 

@@ -1,32 +1,34 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 import { User } from "@supabase/supabase-js";
 import { IconSearch, IconX } from "@tabler/icons-react";
+import { useRouter } from "next/navigation";
 
 import { useSearch } from "@/hooks/useSearch";
 import { Contact } from "@/lib/entities.types";
-import { debugFormValues } from "@/lib/utils";
 import { ContactSchema } from "@/schemas/contact.schema";
 import clientApiProvider from "@/services/client";
 import { FloatingActionButton } from "../shared/atoms/FAB";
 import ContactsEmptyState from "../shared/molecules/contacts-empty-state";
 import { Input } from "../ui/input";
 import { useToast } from "../ui/use-toast";
-import ContactCard from "./molecules/contact-card";
+import ContactCard, { ContactCardSkeleton } from "./molecules/contact-card";
 import { ContactDialog } from "./molecules/contact-dialog";
 import ContactPicker from "./molecules/contact-picker";
 
 interface IContactsSectionProps {
   initialContacts: Contact[] | null;
   user: User;
+  isSkeleton?: boolean;
 }
 
 export const ContactsSection: React.FC<IContactsSectionProps> = ({
   initialContacts,
+  isSkeleton,
   user,
 }) => {
+  console.log({ isSkeleton });
   const [contacts, setContacts] = useState<Contact[] | null>(initialContacts);
 
   const router = useRouter();
@@ -59,18 +61,45 @@ export const ContactsSection: React.FC<IContactsSectionProps> = ({
   };
 
   const onCreateContact = async (data: ContactSchema) => {
-    const contact = {
-      ...data,
-      user_id: user.id,
-    };
-    const response = await clientApiProvider.contact.createContact({
-      contact: contact,
-      user_id: user.id,
-    });
+    // Validate if contact already exists with the same email or phone
+    const matchingContact = contacts?.find(
+      (contact) => contact.email === data.email || contact.phone === data.phone
+    );
 
-    setContacts((prevContacts) => [...(prevContacts ?? []), response.data]);
+    if (matchingContact) {
+      toast({
+        title: "Contact already exists",
+        description: "Check your contacts list",
+        variant: "danger",
+      });
+      return;
+    }
 
-    router.refresh();
+    try {
+      const response = await clientApiProvider.contact.createContact({
+        contact: data,
+        user_id: user.id,
+      });
+
+      if (response.ok) {
+        toast({
+          title: "Contact created",
+          description: "Contact created successfully",
+          variant: "success",
+        });
+      }
+
+      setContacts((prevContacts) => [...(prevContacts ?? []), response.data]);
+
+      router.refresh();
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Error creating contact",
+        description: "Please try again later",
+        variant: "danger",
+      });
+    }
   };
 
   const onUpdatedContact = async (data: ContactSchema, contact_id: string) => {
@@ -85,22 +114,33 @@ export const ContactsSection: React.FC<IContactsSectionProps> = ({
       oldPath,
     };
 
-    const response = await clientApiProvider.contact.updateContact({
-      contact: contact,
-      user_id: user.id,
-    });
+    try {
+      const response = await clientApiProvider.contact.updateContact({
+        contact: contact,
+        user_id: user.id,
+      });
 
-    setContacts(
-      contacts?.map((contact) =>
-        contact.id === contact_id ? response.data[0] : contact
-      ) ?? []
-    );
+      if (response.ok) {
+        toast({
+          title: "Contact updated",
+          description: "Contact updated successfully",
+          variant: "success",
+        });
+      }
 
-    debugFormValues({
-      title: "Contact updated successfully",
-      data: response.data,
-      toast,
-    });
+      setContacts(
+        contacts?.map((contact) =>
+          contact.id === contact_id ? response.data[0] : contact
+        ) ?? []
+      );
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Error updating contact",
+        description: "Please try again later",
+        variant: "danger",
+      });
+    }
   };
 
   const onDeleteContact = async (
@@ -145,14 +185,19 @@ export const ContactsSection: React.FC<IContactsSectionProps> = ({
         setCurrentContacts={setContacts}
         user={user}
       />
-      {contacts?.map((contact) => (
-        <ContactCard
-          key={contact.id}
-          contact={contact}
-          onUpdateContact={onUpdatedContact}
-          onDeleteContact={onDeleteContact}
-        />
-      ))}
+
+      {isSkeleton
+        ? Array.from({ length: 3 }, (_, index) => (
+            <ContactCardSkeleton key={index} />
+          ))
+        : contacts?.map((contact) => (
+            <ContactCard
+              key={contact.id}
+              contact={contact}
+              onUpdateContact={onUpdatedContact}
+              onDeleteContact={onDeleteContact}
+            />
+          ))}
       {contacts?.length === 0 && (
         <ContactsEmptyState onCreatedContact={onCreateContact} />
       )}

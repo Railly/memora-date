@@ -8,6 +8,8 @@ interface AvatarSectionProps {
 
 const AvatarSection: React.FC<AvatarSectionProps> = ({ session }) => {
   const firstTwoLetters = (name: string) => {
+    const haveOnlyName = name.split(" ").length === 1;
+    if (haveOnlyName) return name.slice(0, 2).toLocaleUpperCase();
     const [first, second] = name.split(" ");
     return `${first[0]}${second[0]}`;
   };
@@ -21,7 +23,10 @@ const AvatarSection: React.FC<AvatarSectionProps> = ({ session }) => {
             alt={`${session?.user.user_metadata.full_name}'s avatar image.`}
           />
           <AvatarFallback className="text-6xl">
-            {firstTwoLetters(session?.user.user_metadata.full_name)}
+            {firstTwoLetters(
+              session?.user.user_metadata.full_name ??
+                session?.user.user_metadata.name
+            )}
           </AvatarFallback>
         </Avatar>
       </div>
