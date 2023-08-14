@@ -10,7 +10,7 @@ import clientApiProvider from "@/services/client";
 import { ContactInfo, ContactProperty } from "@/types/types";
 
 interface IContactPickerProps {
-  user: User;
+  user: User | null;
   currentContacts: Contact[] | null;
   setCurrentContacts: React.Dispatch<React.SetStateAction<Contact[] | null>>;
 }
@@ -52,7 +52,7 @@ const ContactPicker: React.FC<IContactPickerProps> = ({
       for (const filteredContact of filteredContacts) {
         contactResponse = await clientApiProvider.contact.createContact({
           contact: adaptContactInfoParam(filteredContact),
-          user_id: user.id,
+          user_id: user?.id ?? "",
         });
         if (!contactResponse.ok) {
           throw new Error("Error creating contact:", contactResponse.error);

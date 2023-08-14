@@ -12,10 +12,6 @@ export default async function MyContactsPage() {
 
   const session = await rscApiProvider.auth.getSession();
 
-  if (!session) {
-    redirect("/sign-in");
-  }
-
   const contacts = await rscApiProvider.contact.getContacts();
 
   return (
@@ -30,7 +26,7 @@ export default async function MyContactsPage() {
         <main className="flex flex-col w-full gap-4 mb-2">
           <ContactsSection
             initialContacts={contacts.data}
-            user={session?.user}
+            user={session?.user || null}
           />
         </main>
       </div>

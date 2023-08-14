@@ -19,7 +19,7 @@ import ContactPicker from "./molecules/contact-picker";
 
 interface IContactsSectionProps {
   initialContacts: Contact[] | null;
-  user: User;
+  user: User | null;
   isSkeleton?: boolean;
 }
 
@@ -28,7 +28,6 @@ export const ContactsSection: React.FC<IContactsSectionProps> = ({
   isSkeleton,
   user,
 }) => {
-  console.log({ isSkeleton });
   const [contacts, setContacts] = useState<Contact[] | null>(initialContacts);
 
   const router = useRouter();
@@ -61,6 +60,7 @@ export const ContactsSection: React.FC<IContactsSectionProps> = ({
   };
 
   const onCreateContact = async (data: ContactSchema) => {
+    if (!user) return;
     // Validate if contact already exists with the same email or phone
     const matchingContact = contacts?.find(
       (contact) => contact.email === data.email || contact.phone === data.phone
@@ -103,6 +103,7 @@ export const ContactsSection: React.FC<IContactsSectionProps> = ({
   };
 
   const onUpdatedContact = async (data: ContactSchema, contact_id: string) => {
+    if (!user) return;
     const oldPath =
       contacts?.find(
         (contact) => contact.id === contact_id && contact.image_url !== null
