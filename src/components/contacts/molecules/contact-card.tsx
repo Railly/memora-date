@@ -46,7 +46,7 @@ const ContactCard: React.FC<IContactCardProps> = ({
           }`}
           alt="avatar"
         />
-        <AvatarFallback className="text-3l font-bold text-white">
+        <AvatarFallback className="text-3xl font-bold text-white">
           {contact?.image_url !== null ? (
             <div className="scale-50 pt-1">
               <Spinner />

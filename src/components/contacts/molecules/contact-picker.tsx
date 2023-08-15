@@ -8,6 +8,7 @@ import { Contact } from "@/lib/entities.types";
 import { ContactSchema } from "@/schemas/contact.schema";
 import clientApiProvider from "@/services/client";
 import { ContactInfo, ContactProperty } from "@/types/types";
+import { useToast } from "@/components/ui/use-toast";
 
 interface IContactPickerProps {
   user: User | null;
@@ -22,8 +23,9 @@ const ContactPicker: React.FC<IContactPickerProps> = ({
 }) => {
   const [isContactsSupported, setIsContactsSupported] = useState(false);
 
+  const { toast } = useToast();
+
   const handlePick = useCallback(async () => {
-    let contactResponse;
     try {
       const contacts = await navigator.contacts.select(
         [
@@ -35,39 +37,69 @@ const ContactPicker: React.FC<IContactPickerProps> = ({
         { multiple: true }
       );
 
-      // Filter contacts that are already in the list
-      const filteredContacts = contacts.filter(
-        (contact) =>
-          !currentContacts?.find(
-            (currentContact) =>
-              currentContact.email === contact.email?.[0] ||
-              currentContact.phone === contact.tel?.[0]
-          )
-      );
-
-      if (filteredContacts.length === 0) {
+      if (contacts.length === 0) {
         return;
       }
 
-      for (const filteredContact of filteredContacts) {
-        contactResponse = await clientApiProvider.contact.createContact({
-          contact: adaptContactInfoParam(filteredContact),
-          user_id: user?.id ?? "",
+      // Get existing emails and phones
+      const existingEmails =
+        currentContacts?.map((contact) => contact.email) || [];
+
+      const existingPhones =
+        currentContacts?.map((contact) => contact.phone) || [];
+
+      // Filter contacts that already exist
+      const filteredContacts = contacts.filter((contact) => {
+        const hasExistingEmail = existingEmails.includes(
+          contact.email?.[0] ?? "no-email"
+        );
+        const hasExistingPhone = existingPhones.includes(
+          contact.tel?.[0] ?? "no-phone"
+        );
+        return !hasExistingEmail && !hasExistingPhone;
+      });
+
+      // If all contacts already exist, show error
+      if (filteredContacts.length === 0) {
+        toast({
+          title: "All Contacts selected already exist",
+          description: "Check your contacts list",
+          variant: "danger",
         });
+        return;
+      }
+
+      // If some contacts already exist, show error
+      if (filteredContacts.length !== contacts.length) {
+        toast({
+          title: "Some contacts selected already exist",
+          description: "Check your contacts list",
+          variant: "danger",
+        });
+      }
+
+      // Create contacts
+      for (const filteredContact of filteredContacts) {
+        const contactResponse = await clientApiProvider.contact.createContact({
+          contact: adaptContactInfoParam(filteredContact),
+          user_id: user?.id || "",
+        });
+
         if (!contactResponse.ok) {
-          throw new Error("Error creating contact:", contactResponse.error);
+          throw new Error("Error creating contact: " + contactResponse.error);
         }
+
         const newContact: Contact = contactResponse.data;
 
         setCurrentContacts((currentContacts) => [
-          ...(currentContacts ?? []),
+          ...(currentContacts || []),
           newContact,
         ]);
       }
     } catch (error) {
       console.error("Error selecting contact:", error);
     }
-  }, [currentContacts]);
+  }, [currentContacts, toast, user]);
 
   useEffect(() => {
     try {
@@ -106,9 +138,9 @@ export default ContactPicker;
 const adaptContactInfoParam = (contactInfo: ContactInfo): ContactSchema => {
   const contact: ContactSchema = {
     full_name: contactInfo.name?.[0] ?? "",
-    email: contactInfo.email?.[0] ?? undefined,
-    phone: contactInfo.tel?.[0] ?? undefined,
-    image: contactInfo.icon?.[0] ?? null,
+    email: contactInfo.email?.[0],
+    phone: contactInfo.tel?.[0],
+    image: contactInfo.icon?.[0],
   };
   return contact;
 };

@@ -1,8 +1,6 @@
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 import { ContactsSection } from "@/components/contacts/contacts-section";
-
 import { SubHeader } from "@/components/shared/molecules/sub-header";
 import { Badge } from "@/components/ui/badge";
 import RscApiProvider from "@/services/rsc";
