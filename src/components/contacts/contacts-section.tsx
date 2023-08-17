@@ -124,16 +124,22 @@ export const ContactsSection: React.FC<IContactsSectionProps> = ({
 
   const onUpdatedContact = async (data: ContactSchema, contact_id: string) => {
     if (!user) return;
-
+    const { email, phone, ...rest } = data;
+    // use this object to avoid sending empty strings to the database (because default values are empty strings)
+    const formattedData = {
+      email: email || undefined,
+      phone: phone || undefined,
+      ...rest,
+    };
     const oldPath =
       contacts?.find(
         (contact) => contact.id === contact_id && contact.image_url !== null
       )?.image_url ?? null;
 
     const contact = {
-      ...data,
-      contact_id: contact_id,
+      contact_id,
       oldPath,
+      ...formattedData,
     };
 
     try {
