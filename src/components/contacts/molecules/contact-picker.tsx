@@ -1,8 +1,9 @@
 "use client";
 
+import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { User } from "@supabase/supabase-js";
 import { IconFileImport } from "@tabler/icons-react";
-import { useCallback, useEffect, useState } from "react";
 
 import { Contact } from "@/lib/entities.types";
 import { ContactSchema } from "@/schemas/contact.schema";
@@ -13,15 +14,15 @@ import { useToast } from "@/components/ui/use-toast";
 interface IContactPickerProps {
   user: User | null;
   currentContacts: Contact[] | null;
-  setCurrentContacts: React.Dispatch<React.SetStateAction<Contact[] | null>>;
 }
 
 const ContactPicker: React.FC<IContactPickerProps> = ({
   currentContacts,
-  setCurrentContacts,
   user,
 }) => {
   const [isContactsSupported, setIsContactsSupported] = useState(false);
+
+  const router = useRouter();
 
   const { toast } = useToast();
 
@@ -50,12 +51,10 @@ const ContactPicker: React.FC<IContactPickerProps> = ({
 
       // Filter contacts that already exist
       const filteredContacts = contacts.filter((contact) => {
-        const hasExistingEmail = existingEmails.includes(
-          contact.email?.[0] ?? "no-email"
-        );
-        const hasExistingPhone = existingPhones.includes(
-          contact.tel?.[0] ?? "no-phone"
-        );
+        const hasExistingEmail =
+          contact.email?.[0] && existingEmails.includes(contact.email?.[0]);
+        const hasExistingPhone =
+          contact.tel?.[0] && existingPhones.includes(contact.tel?.[0]);
         return !hasExistingEmail && !hasExistingPhone;
       });
 
@@ -89,12 +88,13 @@ const ContactPicker: React.FC<IContactPickerProps> = ({
           throw new Error("Error creating contact: " + contactResponse.error);
         }
 
-        const newContact: Contact = contactResponse.data;
+        toast({
+          title: "Contact imported",
+          description: "Contact imported successfully",
+          variant: "success",
+        });
 
-        setCurrentContacts((currentContacts) => [
-          ...(currentContacts || []),
-          newContact,
-        ]);
+        router.refresh();
       }
     } catch (error) {
       console.error("Error selecting contact:", error);
