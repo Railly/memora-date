@@ -2,7 +2,6 @@ import { EventColumns } from "@/lib/entities.types";
 import { CreateEventSchema } from "@/schemas/create-event.schema";
 import { eventServiceError } from "../utils";
 import { ServerServiceApi } from "./blueprint";
-import { EventColumns } from "@/lib/entities.types";
 
 class ServerEventService extends ServerServiceApi {
   async getEventTypes() {
@@ -69,33 +68,6 @@ class ServerEventService extends ServerServiceApi {
       return { data, error };
     } catch (error) {
       return eventServiceError(error);
-    }
-  }
-
-  async searchTermInColumn({
-    column,
-    searchTerm,
-  }: {
-    column: EventColumns;
-    searchTerm: string;
-  }) {
-    try {
-      const { data, error } = await this.supabase
-        .from("event")
-        .select(`*, event_type ( value )`)
-        .textSearch(`${column}`, `${searchTerm}`)
-        .order("date", { ascending: true });
-      return { data, error };
-    } catch (error) {
-      console.error(error);
-      return {
-        data: null,
-        error: {
-          name: EVENT_TYPE_ERROR,
-          message: "Something went wrong, please try again later",
-          status: 500,
-        },
-      };
     }
   }
 }

@@ -23,7 +23,7 @@ export default async function MyEventsPage() {
           </Badge>
         </SubHeader>
         <main className="flex flex-col w-full gap-4 mb-2">
-          <EventsSection initialEvents={events?.data} />
+          <EventsSection events={events?.data} />
           <FloatingActionButton to={ACTION_BUTTON_PATHS.EVENT_CREATOR} />
         </main>
       </div>

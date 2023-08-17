@@ -15,8 +15,8 @@ export const useSearch = () => {
     const splittedSearch = trimmedSearch.split(" ");
     // Remove empty strings
     const filteredSearch = splittedSearch.filter((search) => search !== "");
-    // Join by &
-    const parsedSearch = filteredSearch.join("&");
+    // Surround each search term with single quotes and join with ' & '
+    const parsedSearch = filteredSearch.map((term) => `'${term}'`).join(" & ");
 
     // If same as previous, return
     const currentParsedSearch = parsedSearch.toLowerCase();
@@ -29,5 +29,10 @@ export const useSearch = () => {
     return parsedSearch;
   };
 
-  return { search, setSearch, handleSupabaseSearch };
+  const onClearSearch = () => {
+    setSearch("");
+    previousSearch.current = "";
+  };
+
+  return { search, setSearch, handleSupabaseSearch, onClearSearch };
 };

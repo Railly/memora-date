@@ -1,29 +1,32 @@
 "use client";
 
+import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { User } from "@supabase/supabase-js";
 import { IconFileImport } from "@tabler/icons-react";
-import { useCallback, useEffect, useState } from "react";
 
 import { Contact } from "@/lib/entities.types";
 import { ContactSchema } from "@/schemas/contact.schema";
 import clientApiProvider from "@/services/client";
 import { ContactInfo, ContactProperty } from "@/types/types";
+import { useToast } from "@/components/ui/use-toast";
 
 interface IContactPickerProps {
   user: User | null;
   currentContacts: Contact[] | null;
-  setCurrentContacts: React.Dispatch<React.SetStateAction<Contact[] | null>>;
 }
 
 const ContactPicker: React.FC<IContactPickerProps> = ({
   currentContacts,
-  setCurrentContacts,
   user,
 }) => {
   const [isContactsSupported, setIsContactsSupported] = useState(false);
 
+  const router = useRouter();
+
+  const { toast } = useToast();
+
   const handlePick = useCallback(async () => {
-    let contactResponse;
     try {
       const contacts = await navigator.contacts.select(
         [
@@ -35,39 +38,68 @@ const ContactPicker: React.FC<IContactPickerProps> = ({
         { multiple: true }
       );
 
-      // Filter contacts that are already in the list
-      const filteredContacts = contacts.filter(
-        (contact) =>
-          !currentContacts?.find(
-            (currentContact) =>
-              currentContact.email === contact.email?.[0] ||
-              currentContact.phone === contact.tel?.[0]
-          )
-      );
-
-      if (filteredContacts.length === 0) {
+      if (contacts.length === 0) {
         return;
       }
 
-      for (const filteredContact of filteredContacts) {
-        contactResponse = await clientApiProvider.contact.createContact({
-          contact: adaptContactInfoParam(filteredContact),
-          user_id: user?.id ?? "",
-        });
-        if (!contactResponse.ok) {
-          throw new Error("Error creating contact:", contactResponse.error);
-        }
-        const newContact: Contact = contactResponse.data;
+      // Get existing emails and phones
+      const existingEmails =
+        currentContacts?.map((contact) => contact.email) || [];
 
-        setCurrentContacts((currentContacts) => [
-          ...(currentContacts ?? []),
-          newContact,
-        ]);
+      const existingPhones =
+        currentContacts?.map((contact) => contact.phone) || [];
+
+      // Filter contacts that already exist
+      const filteredContacts = contacts.filter((contact) => {
+        const hasExistingEmail =
+          contact.email?.[0] && existingEmails.includes(contact.email?.[0]);
+        const hasExistingPhone =
+          contact.tel?.[0] && existingPhones.includes(contact.tel?.[0]);
+        return !hasExistingEmail && !hasExistingPhone;
+      });
+
+      // If all contacts already exist, show error
+      if (filteredContacts.length === 0) {
+        toast({
+          title: "All Contacts selected already exist",
+          description: "Check your contacts list",
+          variant: "danger",
+        });
+        return;
+      }
+
+      // If some contacts already exist, show error
+      if (filteredContacts.length !== contacts.length) {
+        toast({
+          title: "Some contacts selected already exist",
+          description: "Check your contacts list",
+          variant: "danger",
+        });
+      }
+
+      // Create contacts
+      for (const filteredContact of filteredContacts) {
+        const contactResponse = await clientApiProvider.contact.createContact({
+          contact: adaptContactInfoParam(filteredContact),
+          user_id: user?.id || "",
+        });
+
+        if (!contactResponse.ok) {
+          throw new Error("Error creating contact: " + contactResponse.error);
+        }
+
+        toast({
+          title: "Contact imported",
+          description: "Contact imported successfully",
+          variant: "success",
+        });
+
+        router.refresh();
       }
     } catch (error) {
       console.error("Error selecting contact:", error);
     }
-  }, [currentContacts]);
+  }, [currentContacts, toast, user]);
 
   useEffect(() => {
     try {
@@ -106,9 +138,9 @@ export default ContactPicker;
 const adaptContactInfoParam = (contactInfo: ContactInfo): ContactSchema => {
   const contact: ContactSchema = {
     full_name: contactInfo.name?.[0] ?? "",
-    email: contactInfo.email?.[0] ?? "",
-    phone: contactInfo.tel?.[0] ?? "",
-    image: contactInfo.icon?.[0] ?? "",
+    email: contactInfo.email?.[0],
+    phone: contactInfo.tel?.[0],
+    image: contactInfo.icon?.[0],
   };
   return contact;
 };
