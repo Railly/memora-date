@@ -1,8 +1,6 @@
 import { cookies } from "next/headers";
-import { redirect } from "next/navigation";
 
 import { ContactsSection } from "@/components/contacts/contacts-section";
-
 import { SubHeader } from "@/components/shared/molecules/sub-header";
 import { Badge } from "@/components/ui/badge";
 import RscApiProvider from "@/services/rsc";
@@ -25,7 +23,7 @@ export default async function MyContactsPage() {
         </SubHeader>
         <main className="flex flex-col w-full gap-4 mb-2">
           <ContactsSection
-            initialContacts={contacts.data}
+            contacts={contacts.data}
             user={session?.user || null}
           />
         </main>

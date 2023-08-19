@@ -56,19 +56,17 @@ export const ContactDialog: React.FC<IContactCardProps> = ({
       full_name: contact?.full_name ?? "",
       email: contact?.email ?? "",
       phone: contact?.phone ?? "",
-      image: contact?.image_url ?? "",
+      image: contact?.image_url ?? undefined,
     },
   });
 
   const {
-    setValue,
     formState: { errors },
     reset,
   } = form;
 
   const clearForm = () => {
     reset();
-    setValue("image", "");
   };
 
   const onSubmit = async (submit: ContactSchema) => {
@@ -181,7 +179,7 @@ export const ContactDialog: React.FC<IContactCardProps> = ({
                     <FormLabel htmlFor={field.name}>Image</FormLabel>
                     <FormControl>
                       <UploadProfileImage
-                        image={contact?.image_url ?? ""}
+                        image={contact?.image_url ?? undefined}
                         fullName={contact?.full_name}
                         onChange={field.onChange}
                       />

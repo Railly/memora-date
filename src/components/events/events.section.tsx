@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { IconSearch, IconX } from "@tabler/icons-react";
 
 import { useSearch } from "@/hooks/useSearch";
@@ -9,19 +10,27 @@ import clientApiProvider from "@/services/client";
 import EventCard, { EventCardSkeleton } from "../shared/molecules/event-card";
 import { Input } from "../ui/input";
 import EventsEmptyState from "../shared/molecules/events-empty-state";
+import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
+import { useToast } from "../ui/use-toast";
 
 interface IEventsSectionProps {
-  initialEvents: EventWithType[] | null;
+  events: EventWithType[] | null;
   isSkeleton?: boolean;
 }
 
 export const EventsSection: React.FC<IEventsSectionProps> = ({
-  initialEvents,
+  events,
   isSkeleton,
 }) => {
-  const [events, setEvents] = useState<EventWithType[] | null>(initialEvents);
+  const [results, setResults] = useState(events);
 
-  const { search, setSearch, handleSupabaseSearch } = useSearch();
+  const { toast } = useToast();
+
+  const router = useRouter();
+
+  const { search, setSearch, handleSupabaseSearch, onClearSearch } =
+    useSearch();
 
   const onSearch = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -29,20 +38,29 @@ export const EventsSection: React.FC<IEventsSectionProps> = ({
 
     if (!parsedSearch) return;
 
-    // Search
-    const { data, error } = await clientApiProvider.event.searchEvents({
-      column: "title_description",
-      searchTerm: parsedSearch,
-    });
+    try {
+      // Search
+      const { data, error } = await clientApiProvider.event.searchEvents({
+        column: "title_description",
+        searchTerm: parsedSearch,
+      });
 
-    setEvents(data);
+      setResults(data);
 
-    console.log({ data, error });
+      router.refresh();
+      console.log({ data, error });
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Something went wrong",
+        variant: "danger",
+      });
+    }
   };
 
   const clearSearch = () => {
-    setSearch("");
-    setEvents(initialEvents);
+    onClearSearch();
+    setResults(events);
   };
 
   return (
@@ -68,13 +86,37 @@ export const EventsSection: React.FC<IEventsSectionProps> = ({
           value={search}
           variant={"default"}
         />
+        <Button
+          type="submit"
+          variant="secondary"
+          className={cn("ml-2", {
+            "opacity-50 cursor-not-allowed": search.length === 0,
+          })}
+          disabled={search.length === 0}
+        >
+          <IconSearch
+            size={20}
+            className={cn("mr-2", {
+              "text-gray-400": search.length === 0,
+            })}
+          />
+          <span
+            className={cn("text-sm font-semibold", {
+              "text-gray-400": search.length === 0,
+            })}
+          >
+            Search
+          </span>
+        </Button>
       </form>
       {isSkeleton
         ? Array.from({ length: 3 }, (_, index) => (
             <EventCardSkeleton key={index} />
           ))
-        : events?.map((event) => <EventCard key={event.id} event={event} />)}
-      {events?.length === 0 && <EventsEmptyState />}
+        : (search.length > 0 ? results : events)?.map((event) => (
+            <EventCard key={event.id} event={event} />
+          ))}
+      {(events?.length === 0 || results?.length === 0) && <EventsEmptyState />}
     </section>
   );
 };

@@ -1,16 +1,18 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { User } from "@supabase/supabase-js";
 import { IconSearch, IconX } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 
 import { useSearch } from "@/hooks/useSearch";
 import { Contact } from "@/lib/entities.types";
+import { cn } from "@/lib/utils";
 import { ContactSchema } from "@/schemas/contact.schema";
 import clientApiProvider from "@/services/client";
 import { FloatingActionButton } from "../shared/atoms/FAB";
 import ContactsEmptyState from "../shared/molecules/contacts-empty-state";
+import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useToast } from "../ui/use-toast";
 import ContactCard, { ContactCardSkeleton } from "./molecules/contact-card";
@@ -18,23 +20,24 @@ import { ContactDialog } from "./molecules/contact-dialog";
 import ContactPicker from "./molecules/contact-picker";
 
 interface IContactsSectionProps {
-  initialContacts: Contact[] | null;
+  contacts: Contact[] | null;
   user: User | null;
   isSkeleton?: boolean;
 }
 
 export const ContactsSection: React.FC<IContactsSectionProps> = ({
-  initialContacts,
+  contacts,
   isSkeleton,
   user,
 }) => {
-  const [contacts, setContacts] = useState<Contact[] | null>(initialContacts);
+  const [results, setResults] = useState(contacts);
 
   const router = useRouter();
 
   const { toast } = useToast();
 
-  const { search, setSearch, handleSupabaseSearch } = useSearch();
+  const { search, setSearch, handleSupabaseSearch, onClearSearch } =
+    useSearch();
 
   const onSearch = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -43,27 +46,46 @@ export const ContactsSection: React.FC<IContactsSectionProps> = ({
 
     if (!parsedSearch) return;
 
-    // Search
-    const { data, error } = await clientApiProvider.contact.searchContact({
-      column: "name_email_phone",
-      searchTerm: parsedSearch,
-    });
+    try {
+      // Search
+      const { data, error } = await clientApiProvider.contact.searchContact({
+        column: "name_email_phone",
+        searchTerm: parsedSearch,
+      });
 
-    setContacts(data);
+      setResults(data);
 
-    console.log({ data, error });
+      router.refresh();
+      console.log({ data, error });
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Error searching contact",
+        description: "Please try again later",
+        variant: "danger",
+      });
+    }
   };
 
   const clearSearch = () => {
-    setSearch("");
-    setContacts(initialContacts);
+    onClearSearch();
+    setResults(contacts);
   };
 
   const onCreateContact = async (data: ContactSchema) => {
     if (!user) return;
+    const { email, phone, ...rest } = data;
+    // use this object to avoid sending empty strings to the database (because default values are empty strings)
+    const formattedData = {
+      email: email || undefined,
+      phone: phone || undefined,
+      ...rest,
+    };
     // Validate if contact already exists with the same email or phone
     const matchingContact = contacts?.find(
-      (contact) => contact.email === data.email || contact.phone === data.phone
+      (contact) =>
+        contact.email === formattedData.email ||
+        contact.phone === formattedData.phone
     );
 
     if (matchingContact) {
@@ -77,7 +99,7 @@ export const ContactsSection: React.FC<IContactsSectionProps> = ({
 
     try {
       const response = await clientApiProvider.contact.createContact({
-        contact: data,
+        contact: formattedData,
         user_id: user.id,
       });
 
@@ -88,8 +110,6 @@ export const ContactsSection: React.FC<IContactsSectionProps> = ({
           variant: "success",
         });
       }
-
-      setContacts((prevContacts) => [...(prevContacts ?? []), response.data]);
 
       router.refresh();
     } catch (error) {
@@ -104,20 +124,27 @@ export const ContactsSection: React.FC<IContactsSectionProps> = ({
 
   const onUpdatedContact = async (data: ContactSchema, contact_id: string) => {
     if (!user) return;
+    const { email, phone, ...rest } = data;
+    // use this object to avoid sending empty strings to the database (because default values are empty strings)
+    const formattedData = {
+      email: email || undefined,
+      phone: phone || undefined,
+      ...rest,
+    };
     const oldPath =
       contacts?.find(
         (contact) => contact.id === contact_id && contact.image_url !== null
       )?.image_url ?? null;
 
     const contact = {
-      ...data,
-      contact_id: contact_id,
+      contact_id,
       oldPath,
+      ...formattedData,
     };
 
     try {
       const response = await clientApiProvider.contact.updateContact({
-        contact: contact,
+        contact,
         user_id: user.id,
       });
 
@@ -129,11 +156,7 @@ export const ContactsSection: React.FC<IContactsSectionProps> = ({
         });
       }
 
-      setContacts(
-        contacts?.map((contact) =>
-          contact.id === contact_id ? response.data[0] : contact
-        ) ?? []
-      );
+      router.refresh();
     } catch (error) {
       console.log(error);
       toast({
@@ -148,14 +171,27 @@ export const ContactsSection: React.FC<IContactsSectionProps> = ({
     contact_id: string,
     contact_image: string | null
   ) => {
-    const { data, error } = await clientApiProvider.contact.deleteContact({
-      contact_id,
-      image_url: contact_image,
-    });
-    setContacts(contacts?.filter((contact) => contact.id !== contact_id) ?? []);
-
-    router.refresh();
-    console.log({ data, error });
+    try {
+      const response = await clientApiProvider.contact.deleteContact({
+        contact_id,
+        image_url: contact_image,
+      });
+      if (response.ok) {
+        toast({
+          title: "Contact deleted",
+          description: "Contact deleted successfully",
+          variant: "success",
+        });
+      }
+      router.refresh();
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Error deleting contact",
+        description: "Please try again later",
+        variant: "danger",
+      });
+    }
   };
 
   return (
@@ -180,18 +216,36 @@ export const ContactsSection: React.FC<IContactsSectionProps> = ({
           value={search}
           variant={"default"}
         />
+        <Button
+          type="submit"
+          variant="secondary"
+          className={cn("ml-2", {
+            "opacity-50 cursor-not-allowed": search.length === 0,
+          })}
+          disabled={search.length === 0}
+        >
+          <IconSearch
+            size={20}
+            className={cn("mr-2", {
+              "text-gray-400": search.length === 0,
+            })}
+          />
+          <span
+            className={cn("text-sm font-semibold", {
+              "text-gray-400": search.length === 0,
+            })}
+          >
+            Search
+          </span>
+        </Button>
       </form>
-      <ContactPicker
-        currentContacts={contacts}
-        setCurrentContacts={setContacts}
-        user={user}
-      />
+      <ContactPicker currentContacts={contacts} user={user} />
 
       {isSkeleton
         ? Array.from({ length: 3 }, (_, index) => (
             <ContactCardSkeleton key={index} />
           ))
-        : contacts?.map((contact) => (
+        : (search.length > 0 ? results : contacts)?.map((contact) => (
             <ContactCard
               key={contact.id}
               contact={contact}
@@ -199,7 +253,8 @@ export const ContactsSection: React.FC<IContactsSectionProps> = ({
               onDeleteContact={onDeleteContact}
             />
           ))}
-      {contacts?.length === 0 && (
+
+      {(contacts?.length === 0 || results?.length === 0) && (
         <ContactsEmptyState onCreatedContact={onCreateContact} />
       )}
       <ContactDialog onCreatedContact={onCreateContact}>
