@@ -26,3 +26,10 @@ export function debugFormValues({
     ),
   });
 }
+
+export function getInitials(name: string) {
+  const haveOnlyName = name.split(" ").length === 1;
+  if (haveOnlyName) return name.slice(0, 2).toLocaleUpperCase();
+  const [first, second] = name.split(" ");
+  return `${first[0]}${second[0]}`;
+}

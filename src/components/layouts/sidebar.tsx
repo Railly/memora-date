@@ -21,6 +21,7 @@ import { SheetClose, SheetContent } from "../ui/sheet";
 import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { Session } from "@supabase/supabase-js";
+import { getInitials } from "@/lib/utils";
 
 interface SidebarProps {
   session: Session;
@@ -52,6 +53,9 @@ const Sidebar: React.FC<SidebarProps> = ({ session }) => {
     "bg-zinc-500 hover:bg-zinc-500/90": path === targetRoute,
   });
 
+  const userName =
+    session?.user.user_metadata.full_name ?? session?.user.user_metadata.name;
+
   return (
     <SheetContent className="w-3/4 sm:max-w-[18rem]">
       <div className="flex flex-col justify-between h-full">
@@ -64,7 +68,7 @@ const Sidebar: React.FC<SidebarProps> = ({ session }) => {
                     src={session?.user.user_metadata.avatar_url}
                     alt="avatar"
                   />
-                  <AvatarFallback>HU</AvatarFallback>
+                  <AvatarFallback>{getInitials(userName)}</AvatarFallback>
                 </Avatar>
               </div>
               <div className="w-[22ch] flex flex-col justify-center">

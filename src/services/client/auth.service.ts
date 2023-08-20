@@ -29,10 +29,10 @@ class ClientAuthService {
 
   async signUpWithEmailAndPassword(body: SignUpSchema) {
     try {
-      const { name, email, password } = body;
+      const { full_name, email, password } = body;
       const response = await fetch("/api/auth/sign-up", {
         method: "POST",
-        body: JSON.stringify({ name, email, password }),
+        body: JSON.stringify({ full_name, email, password }),
         headers: {
           "Content-Type": "application/json",
         },

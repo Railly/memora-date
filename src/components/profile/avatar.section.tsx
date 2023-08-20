@@ -1,19 +1,13 @@
 import React from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Session } from "@supabase/supabase-js";
+import { getInitials } from "@/lib/utils";
 
 interface AvatarSectionProps {
   session: Session | null;
 }
 
 const AvatarSection: React.FC<AvatarSectionProps> = ({ session }) => {
-  const firstTwoLetters = (name: string) => {
-    const haveOnlyName = name.split(" ").length === 1;
-    if (haveOnlyName) return name.slice(0, 2).toLocaleUpperCase();
-    const [first, second] = name.split(" ");
-    return `${first[0]}${second[0]}`;
-  };
-
   const userName =
     session?.user.user_metadata.full_name ?? session?.user.user_metadata.name;
 
@@ -26,7 +20,7 @@ const AvatarSection: React.FC<AvatarSectionProps> = ({ session }) => {
             alt={`${userName}'s avatar image.`}
           />
           <AvatarFallback className="text-6xl">
-            {firstTwoLetters(userName)}
+            {getInitials(userName)}
           </AvatarFallback>
         </Avatar>
       </div>

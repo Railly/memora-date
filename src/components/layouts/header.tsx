@@ -2,8 +2,7 @@
 import LogoMemora from "@/components/icons/logo-memora";
 import { IconMenuDeep } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
-import Sidebar from "./sidebar";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { SheetTrigger } from "@/components/ui/sheet";
 import Link from "next/link";
 
 const Header = () => {
