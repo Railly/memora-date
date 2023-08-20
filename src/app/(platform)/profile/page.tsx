@@ -11,6 +11,8 @@ export default async function ProfilePage() {
   const contacts = await rscApiProvider.contact.getContacts();
   const session = await rscApiProvider.auth.getSession();
 
+  console.log(events);
+
   return (
     <div className="flex justify-center">
       <div className="flex flex-col w-full gap-6">
@@ -22,7 +24,7 @@ export default async function ProfilePage() {
             countSaved={null}
             countContact={contacts?.count}
           />
-          <SummaryEventSection events={events?.data} />
+          <SummaryEventSection upcoming={events?.data} past={null} />
         </main>
       </div>
     </div>
