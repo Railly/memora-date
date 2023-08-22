@@ -1,12 +1,13 @@
+import { ContactSchema } from "@/schemas/contact.schema";
 import { CreateEventSchema } from "@/schemas/create-event.schema";
 
 export type CreateContactParams = {
-  contact: CreateEventSchema["contact"];
+  contact: ContactSchema;
   user_id: string;
 };
 
 export type UpdateContactParams = {
-  contact: CreateEventSchema["contact"] & {
+  contact: ContactSchema & {
     contact_id: string;
     oldPath?: string | null;
   };

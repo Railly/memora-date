@@ -59,7 +59,7 @@ const Countdown: React.FC<CountdownProps> = ({ event }) => {
 
   return (
     <>
-      <div className="flex flex-col justify-between bg-[#191919] px-10 py-2 text-center border rounded-lg min-w-max border-primary">
+      <div className="flex flex-col justify-between bg-[#191919] px-10 py-2 text-center border rounded-lg min-w-max border-form-stroke/20">
         <div className="flex flex-col items-center justify-center gap-2 md:gap-4">
           <div className="flex gap-8 md:gap-12">
             <CountDownUnit

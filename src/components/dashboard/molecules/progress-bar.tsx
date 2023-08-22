@@ -27,7 +27,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ event }) => {
   }, [event]);
 
   return (
-    <div className="relative w-full h-8 bg-[#191919] border border-primary rounded-lg overflow-hidden">
+    <div className="relative w-full h-8 bg-[#191919] border border-form-stroke/20 rounded-lg overflow-hidden">
       <div
         style={{
           width: progress === 0 ? "100%" : `${progress}%`,

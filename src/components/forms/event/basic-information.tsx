@@ -1,5 +1,5 @@
 import { IconSpeakerphone } from "@tabler/icons-react";
-import { Control, FieldErrors } from "react-hook-form";
+import { Control } from "react-hook-form";
 import {
   FormControl,
   FormErrorMessage,
@@ -17,21 +17,24 @@ import {
 import { EventType } from "@/lib/entities.types";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { DatePicker } from "@/components/ui/date-picker";
 import { Visibility } from "./visibility";
 import { CreateEventSchema } from "@/schemas/create-event.schema";
 import { Separator } from "@/components/ui/separator";
+import { InfoTooltip } from "@/components/shared/atoms/info-tooltip";
+import { Badge } from "@/components/ui/badge";
+import { eventTypeUtils } from "@/components/icons/event-type";
+import { useState } from "react";
+import { cn } from "@/lib/utils";
 
 interface IBasicInformationProps {
   eventTypes: EventType[] | null;
   control: Control<CreateEventSchema>;
-  errors: FieldErrors<CreateEventSchema>;
 }
 export const BasicInformation: React.FC<IBasicInformationProps> = ({
   eventTypes,
   control,
-  errors,
 }) => {
+  const [eventTypeClassName, setEventTypeClassName] = useState<string>("");
   return (
     <div className="p-4 space-y-2 border rounded-sm border-form-stroke/20 bg-muted/40">
       <p className="text-[#B4B4B4] text-md">Basic information</p>
@@ -41,7 +44,7 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
           <FormField
             control={control}
             name="event.name"
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <FormItem className="relative flex flex-col w-full">
                 <FormLabel htmlFor={field.name}>Name</FormLabel>
                 <FormControl>
@@ -51,7 +54,7 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
                     type="text"
                     placeholder="An Incredible Event"
                     leftIcon={<IconSpeakerphone size={20} />}
-                    variant={errors.event?.name ? "error" : "default"}
+                    variant={fieldState.error ? "error" : "default"}
                     value={field.value}
                     onChange={field.onChange}
                   />
@@ -63,27 +66,61 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
           <FormField
             control={control}
             name="event_type.type"
-            render={({ field }) => (
+            render={({ field, fieldState }) => (
               <FormItem className="relative flex flex-col w-full">
                 <FormLabel htmlFor={field.name}>Category</FormLabel>
                 <FormControl>
                   <Select
                     disabled={eventTypes?.length === 0}
-                    onValueChange={field.onChange}
+                    onValueChange={(event) => {
+                      field.onChange(event);
+                      const eventType = eventTypes?.find(
+                        (eventType) => eventType.id === event
+                      );
+                      setEventTypeClassName(
+                        eventTypeUtils[eventType?.value || "default"].className
+                      );
+                    }}
                   >
                     <SelectTrigger
                       id={field.name}
                       name={field.name}
-                      variant={errors.event_type?.type ? "error" : "default"}
-                      className="w-[180px]"
+                      variant={fieldState.error ? "error" : "default"}
+                      className={cn("w-[180px] duration-0", {
+                        [eventTypeClassName]: field.value,
+                      })}
                     >
                       <SelectValue placeholder="Select a category" />
                     </SelectTrigger>
-                    <SelectContent>
+                    <SelectContent className="bg-transparent">
                       {eventTypes &&
-                        eventTypes.map((eventType) => (
-                          <SelectItem key={eventType.id} value={eventType.id}>
-                            {eventType.value}
+                        eventTypes.map((eventType, index) => (
+                          <SelectItem
+                            className={cn(
+                              "rounded-none",
+                              eventTypeUtils[eventType?.value || "default"]
+                                .className,
+                              {
+                                "rounded-t-md": index === 0,
+                                "rounded-b-md": index === eventTypes.length - 1,
+                              }
+                            )}
+                            key={eventType.id}
+                            value={eventType.id}
+                          >
+                            <Badge
+                              icon={
+                                eventTypeUtils[eventType?.value || "default"]
+                                  .icon
+                              }
+                              variant={
+                                eventTypeUtils[eventType?.value || "default"]
+                                  .color
+                              }
+                              className="shadow-none"
+                            >
+                              {eventType?.value}
+                            </Badge>
                           </SelectItem>
                         ))}
                     </SelectContent>
@@ -97,7 +134,7 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
         <FormField
           control={control}
           name="event.description"
-          render={({ field }) => (
+          render={({ field, fieldState }) => (
             <FormItem className="relative flex flex-col">
               <FormLabel htmlFor={field.name}>Description</FormLabel>
               <FormControl>
@@ -105,7 +142,7 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
                   id={field.name}
                   name={field.name}
                   placeholder="Your detailed description"
-                  variant={errors.event?.description ? "error" : "default"}
+                  variant={fieldState.error ? "error" : "default"}
                   value={field.value}
                   onChange={field.onChange}
                 />
@@ -117,27 +154,26 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
         <div className="flex w-full gap-4">
           <FormField
             control={control}
-            name="event.date"
-            render={({ field }) => (
-              <FormItem className="relative flex flex-col justify-center w-1/2">
-                <FormLabel htmlFor={field.name}>Date</FormLabel>
-                <FormControl>
-                  <DatePicker
-                    selected={field.value ? new Date(field.value) : undefined}
-                    onChange={(date) => field.onChange(date)}
-                    error={errors.event?.date}
-                  />
-                </FormControl>
-                <FormErrorMessage name={field.name} />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={control}
             name="event.is_public"
             render={({ field }) => (
-              <FormItem className="relative flex flex-col justify-center w-1/2">
-                <FormLabel htmlFor={field.name}>Visibility</FormLabel>
+              <FormItem className="relative flex flex-col justify-center w-full">
+                <div className="flex gap-2">
+                  <FormLabel htmlFor={field.name}>Visibility</FormLabel>
+                  <InfoTooltip
+                    content={
+                      <>
+                        <p>
+                          <strong>Public</strong> events are visible to any
+                          contact with the link
+                        </p>
+                        <p>
+                          <strong>Private</strong> events are only visible to
+                          you.
+                        </p>
+                      </>
+                    }
+                  />
+                </div>
                 <FormControl>
                   <Visibility
                     isPublic={field.value}

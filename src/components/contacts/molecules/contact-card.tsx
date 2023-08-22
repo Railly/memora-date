@@ -34,7 +34,7 @@ const ContactCard: React.FC<IContactCardProps> = ({
   onUpdateContact,
 }) => {
   return (
-    <div className="flex justify-center items-center bg-[#191919] p-3 border border-primary rounded-xl min-w-full">
+    <div className="flex justify-center items-center bg-[#191919] p-3 border border-form-stroke/20 rounded-xl min-w-full">
       <Avatar className="flex justify-center items-center w-14 h-14">
         <AvatarImage
           src={`${
@@ -65,18 +65,18 @@ const ContactCard: React.FC<IContactCardProps> = ({
         <ContactDialog
           contact={contact}
           onUpdatedContact={onUpdateContact}
-          triggerClassName="p-0.5 rounded-sm bg-white"
+          triggerClassName="p-0.5 rounded-sm bg-white text-background cursor-pointer flex justify-center items-center p-1"
         >
-          {<IconPencil size={24} className="stroke-black" />}
+          {<IconPencil size={20} />}
         </ContactDialog>
         <ConfirmDialog
           key={contact?.id}
           title="Are you sure you want to delete this contact?"
           description="This action cannot be undone."
-          triggerClassName="p-0.5 rounded-sm bg-[#EA5577] cursor-pointer"
+          triggerClassName="p-0.5 rounded-sm bg-memora-pink cursor-pointer flex justify-center items-center p-1"
           onConfirm={() => onDeleteContact(contact.id, contact?.image_url)}
         >
-          {<IconTrash size={24} />}
+          {<IconTrash size={20} />}
         </ConfirmDialog>
       </div>
     </div>
@@ -85,7 +85,7 @@ const ContactCard: React.FC<IContactCardProps> = ({
 
 export const ContactCardSkeleton: React.FC = () => {
   return (
-    <div className="flex justify-center items-center bg-[#191919] p-3 border border-primary rounded-xl min-w-full">
+    <div className="flex justify-center items-center bg-[#191919] p-3 border border-form-stroke/20 rounded-xl min-w-full">
       <Avatar className="flex justify-center items-center w-14 h-14">
         <AvatarFallback className="text-3l font-bold text-white">
           <div className="scale-50 pt-1">

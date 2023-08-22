@@ -13,7 +13,7 @@ import { FieldError } from "react-hook-form";
 
 interface IDatePickerProps {
   selected?: Date;
-  onChange: (date: Date | undefined) => void;
+  onChange: (date: any) => void;
   error?: FieldError;
   disabled?: boolean;
 }
@@ -37,7 +37,7 @@ export const DatePicker: React.FC<IDatePickerProps> = ({
           )}
         >
           <CalendarIcon className="w-4 h-4 mr-2" />
-          {selected ? format(selected, "PPP") : <span>Pick a date</span>}
+          {selected ? format(selected, "EEE, MMM d") : <span>Pick a date</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
@@ -46,6 +46,7 @@ export const DatePicker: React.FC<IDatePickerProps> = ({
           selected={selected}
           onSelect={(date) => onChange(date)}
           initialFocus
+          ISOWeek
         />
       </PopoverContent>
     </Popover>
