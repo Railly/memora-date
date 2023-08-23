@@ -18,7 +18,7 @@ const EventCard: React.FC<IEventCardProps> = ({ event }) => {
         >
           {event.event_type?.value}
         </Badge>
-        <TimeLeft date={event.date} />
+        <TimeLeft reminder={event.reminder} />
       </div>
       <div className="flex flex-col w-full py-2">
         <span className="text-2xl font-bold">{event.name}</span>

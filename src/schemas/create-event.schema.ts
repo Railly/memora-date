@@ -12,7 +12,7 @@ export const createEventSchema = zod.object({
 
 export type CreateEventSchema = zod.infer<typeof createEventSchema>;
 
-type RecursivePartial<T> = {
+export type RecursivePartial<T> = {
   [P in keyof T]?: RecursivePartial<T[P]>;
 };
 

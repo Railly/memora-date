@@ -23,7 +23,7 @@ export type CreateEventParams = {
   event: CreateEventSchema["event"];
   user_id: string;
   event_type_id: string;
-  contact_id: string;
+  contact_id: string | null;
 };
 
 export type CreateReminderParams = {

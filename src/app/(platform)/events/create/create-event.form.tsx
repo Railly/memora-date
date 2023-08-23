@@ -42,43 +42,38 @@ const CreateEventForm: React.FC<ICreateEventFormProps> = ({
   const onSubmit = async (data: CreateEventSchema) => {
     debugFormValues({ data, toast });
 
-    // if (!session) return;
+    if (!session) return;
 
-    // const contactResponse = await clientApiProvider.contact.createContact({
-    //   contact: data.contact,
-    //   user_id: session.user.id,
-    // });
+    let contactId: string | null = null;
+    if ("selectedContact" in data.contact && data.contact.selectedContact) {
+      contactId = data.contact.selectedContact;
+    }
 
-    // const eventResponse = await clientApiProvider.event.createEvent({
-    //   event: data.event,
-    //   event_type_id: data.event_type.type,
-    //   contact_id: contactResponse.data.id,
-    //   user_id: session.user.id,
-    // });
+    const eventResponse = await clientApiProvider.event.createEvent({
+      event: data.event,
+      event_type_id: data.event_type.type,
+      contact_id: contactId,
+      user_id: session.user.id,
+    });
 
-    // const reminderResponse = await clientApiProvider.reminder.createReminder({
-    //   reminder: data.reminder,
-    //   event_id: eventResponse.data.id,
-    // });
+    const reminderResponse = await clientApiProvider.reminder.createReminder({
+      reminder: data.reminder,
+      event_id: eventResponse.data.id,
+    });
 
-    // debugFormValues({
-    //   title: "Event created successfully",
-    //   data: {
-    //     contactResponse,
-    //     eventResponse,
-    //     reminderResponse,
-    //   },
-    //   toast,
-    // });
+    debugFormValues({
+      title: "Event created successfully",
+      data: {
+        eventResponse,
+        reminderResponse,
+      },
+      toast,
+    });
 
-    // // TODO: Redirect to event page
-    // // router.push(`/events/${eventResponse.data.id}`);
-    // router.push("/events");
+    // TODO: Redirect to event page
+    // router.push(`/events/${eventResponse.data.id}`);
+    router.push("/events");
   };
-
-  console.log({
-    errors: form.formState.errors,
-  });
 
   return (
     <Form {...form}>

@@ -1,32 +1,68 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { differenceInSeconds } from "date-fns";
 import { cn } from "@/lib/utils";
+import { EventWithType } from "@/lib/entities.types";
 
 interface TimeLeftProps {
-  date: string | undefined;
+  reminder: EventWithType["reminder"] | null | undefined;
   isShort?: boolean;
 }
 
-const TimeLeft: React.FC<TimeLeftProps> = ({ date, isShort }) => {
-  const isRecurring = true;
+const TimeLeft: React.FC<TimeLeftProps> = ({ reminder, isShort }) => {
+  const recurrenceType = reminder?.[0]?.recurrence_type;
   const [timeLeft, setTimeLeft] = useState<string | null>(null);
   const [colorClass, setColorClass] = useState<string | null>(null);
+  const [timeSpan, setTimeSpan] = useState<string | null>(null);
+
+  const localDateMerged = useMemo(() => {
+    if (reminder?.length) {
+      const date = reminder[0].date;
+      const time = reminder[0].time;
+      const rawDateMerged = new Date(`${date}T${time}`);
+      return rawDateMerged.toLocaleString("en-US");
+    }
+    return null;
+  }, [reminder]);
 
   useEffect(() => {
     let timeout: NodeJS.Timeout;
 
     function calculateTimeLeft() {
-      if (date) {
+      if (localDateMerged) {
         const now = new Date();
-        let nextEventDate = new Date(date);
-        if (isRecurring && now > nextEventDate) {
-          nextEventDate.setFullYear(now.getFullYear() + 1);
+        let nextEventDate = new Date(localDateMerged);
+        if (recurrenceType === "RECURRING" && now > nextEventDate) {
+          switch (reminder?.[0].recurrence_value) {
+            case "Minute":
+              nextEventDate.setMinutes(nextEventDate.getMinutes() + 1);
+              break;
+            case "Hour":
+              nextEventDate.setHours(nextEventDate.getHours() + 1);
+              break;
+            case "Day":
+              nextEventDate.setDate(nextEventDate.getDate() + 1);
+              break;
+            case "Week":
+              nextEventDate.setDate(nextEventDate.getDate() + 7);
+              break;
+            case "Month":
+              nextEventDate.setMonth(nextEventDate.getMonth() + 1);
+              break;
+            case "Year":
+              nextEventDate.setFullYear(nextEventDate.getFullYear() + 1);
+              break;
+          }
         }
 
-        const totalSeconds = differenceInSeconds(nextEventDate, now);
+        let totalSeconds = differenceInSeconds(nextEventDate, now);
+        let isNegative = false;
         let unit = "seconds";
         let value = totalSeconds;
+        if (totalSeconds < 0) {
+          isNegative = true;
+          totalSeconds = Math.abs(totalSeconds);
+        }
 
         if (totalSeconds >= 60) {
           value = Math.floor(totalSeconds / 60);
@@ -48,7 +84,6 @@ const TimeLeft: React.FC<TimeLeftProps> = ({ date, isShort }) => {
             }
           }
         }
-
         switch (unit) {
           case "seconds":
           case "minutes":
@@ -94,6 +129,13 @@ const TimeLeft: React.FC<TimeLeftProps> = ({ date, isShort }) => {
           setTimeLeft(`${value} ${unitPlural}`);
         }
 
+        if (isNegative) {
+          value = -value;
+          setTimeSpan("ago");
+        } else {
+          setTimeSpan("left");
+        }
+
         timeout = setTimeout(calculateTimeLeft, nextUpdateInSeconds * 1000);
       }
     }
@@ -101,13 +143,17 @@ const TimeLeft: React.FC<TimeLeftProps> = ({ date, isShort }) => {
     calculateTimeLeft();
 
     return () => clearTimeout(timeout);
-  }, [date, isRecurring]);
+  }, [localDateMerged, recurrenceType]);
 
   if (isShort) {
     return <span className="text-black">{timeLeft || "0s"}</span>;
   }
 
-  return <span className={cn(colorClass)}>{timeLeft || "0 seconds"} left</span>;
+  return (
+    <span className={cn(colorClass)}>
+      {timeLeft || "0 seconds"} {timeSpan}
+    </span>
+  );
 };
 
 export default TimeLeft;

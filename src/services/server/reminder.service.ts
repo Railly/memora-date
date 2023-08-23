@@ -1,4 +1,7 @@
-import { CreateEventSchema } from "@/schemas/create-event.schema";
+import {
+  CreateEventSchema,
+  RecursivePartial,
+} from "@/schemas/create-event.schema";
 import { REMINDER_ERROR } from "../constants";
 import { ServerServiceApi } from "./blueprint";
 
@@ -13,26 +16,35 @@ class ServerReminderService extends ServerServiceApi {
     event_id: string;
   }) {
     try {
-      const {
-        interval,
-        notification_methods,
-        notify_before_number,
-        notify_before_time_unit,
-        day_of_week,
-        end_date,
-        reminder_type,
-      } = reminder;
+      if (reminder.isEnabled !== true) return { error: null, data: null };
+      const { notification_methods, date, time, _ } = reminder;
       const assertedEndDate =
-        typeof end_date === "string" ? end_date : end_date?.toISOString();
+        typeof date === "string" ? date : date?.toISOString();
+      if (_?.reminder_type === "ONE_TIME") {
+        const { error, data } = await this.supabase.from("reminder").insert([
+          {
+            event_id,
+            notification_methods,
+            time,
+            reminder_type: "ONE_TIME",
+            date: assertedEndDate,
+          },
+        ]);
+
+        return { error, data };
+      }
+      const { interval, recurrence } = _;
       const { error, data } = await this.supabase.from("reminder").insert([
         {
           event_id,
-          interval,
           notification_methods,
-          day_of_week,
-          reminder_type,
-          end_date: assertedEndDate,
-          notify_before: `${notify_before_number},${notify_before_time_unit}`,
+          time,
+          reminder_type: "RECURRING",
+          date: assertedEndDate,
+          interval_unit: interval?.unit,
+          interval_value: interval?.value,
+          recurrence_type: recurrence?.type,
+          recurrence_value: recurrence?.value.toLocaleString(),
         },
       ]);
 
