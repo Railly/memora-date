@@ -7,7 +7,7 @@ import Link from "next/link";
 
 const Header = () => {
   return (
-    <div className="sticky top-0 z-10 flex items-center justify-between w-full px-5 py-3 border-b border-gray/10 backdrop-blur-md bg-black/30">
+    <div className="sticky top-0 z-10 flex items-center justify-between w-full px-5 py-3 border-b border-gray/10 backdrop-blur-md">
       <Link href="/dashboard">
         <LogoMemora className="w-auto h-7" />
       </Link>

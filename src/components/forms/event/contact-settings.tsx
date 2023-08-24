@@ -109,7 +109,7 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
   return (
     <Collapsible className="p-4 space-y-2 border rounded-sm bg-muted/40 border-form-stroke/20">
       <div className="flex items-center justify-between w-full gap-4">
-        <p className="text-[#B4B4B4] text-md">Contact Settings</p>
+        <p className="text-foreground/80 text-md">Contact Settings</p>
         <div className="flex items-center gap-2 space-y-0 transition duration-200 ease-in-out">
           <CollapsibleTrigger type="button">
             <FormField

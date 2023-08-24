@@ -34,7 +34,7 @@ const ContactCard: React.FC<IContactCardProps> = ({
   onUpdateContact,
 }) => {
   return (
-    <div className="flex justify-center items-center bg-[#191919] p-3 border border-form-stroke/20 rounded-xl min-w-full">
+    <div className="flex justify-center items-center bg-muted p-3 border border-form-stroke/20 rounded-xl min-w-full">
       <Avatar className="flex justify-center items-center w-14 h-14">
         <AvatarImage
           src={`${
@@ -65,7 +65,7 @@ const ContactCard: React.FC<IContactCardProps> = ({
         <ContactDialog
           contact={contact}
           onUpdatedContact={onUpdateContact}
-          triggerClassName="p-0.5 rounded-sm bg-white text-background cursor-pointer flex justify-center items-center p-1"
+          triggerClassName="p-0.5 rounded-sm bg-foreground text-background cursor-pointer flex justify-center items-center p-1"
         >
           {<IconPencil size={20} />}
         </ContactDialog>
@@ -85,7 +85,7 @@ const ContactCard: React.FC<IContactCardProps> = ({
 
 export const ContactCardSkeleton: React.FC = () => {
   return (
-    <div className="flex justify-center items-center bg-[#191919] p-3 border border-form-stroke/20 rounded-xl min-w-full">
+    <div className="flex justify-center items-center bg-muted p-3 border border-form-stroke/20 rounded-xl min-w-full">
       <Avatar className="flex justify-center items-center w-14 h-14">
         <AvatarFallback className="text-3l font-bold text-white">
           <div className="scale-50 pt-1">

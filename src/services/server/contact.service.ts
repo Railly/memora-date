@@ -3,6 +3,7 @@ import { UpdateContactParams } from "@/lib/form.types";
 import { CreateEventSchema } from "@/schemas/create-event.schema";
 import { contactServerError } from "../utils";
 import { ServerServiceApi } from "./blueprint";
+import { ContactSchema } from "@/schemas/contact.schema";
 
 class ServerContactService extends ServerServiceApi {
   async getContacts() {
@@ -19,7 +20,7 @@ class ServerContactService extends ServerServiceApi {
     contact,
     user_id,
   }: {
-    contact: CreateEventSchema["contact"];
+    contact: ContactSchema;
     user_id: string;
   }) {
     try {
