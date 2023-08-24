@@ -10,13 +10,18 @@ class RscEventService extends RscServiceApi {
       .from("event")
       .select(
         `*,
-         event_type (value)
+         event_type (value),
+         reminder (date, time, reminder_type, interval_unit, interval_value, recurrence_type, recurrence_value, created_at),
+         reminders_with_overdue (is_overdue)
       `,
         {
           count: "exact",
         }
       )
-      .order("date", { ascending: true });
+      .order("is_overdue", {
+        foreignTable: "reminders_with_overdue",
+        nullsFirst: true,
+      });
     return events;
   }
 

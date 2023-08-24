@@ -11,12 +11,12 @@ const ACCEPTED_IMAGE_TYPES = [
 const phoneRegex = new RegExp(/^\+\d{1,3}\s*\d{3}\s*[- ]?\d{3}\s*[- ]?\d{3}$/);
 
 export const contactSchema = zod.object({
+  full_name: zod.string().min(3, { message: "Enter at least 3 chars" }),
   selectedContact: zod
     .string()
     .uuid({ message: "Contact selection required." })
     .optional()
     .or(zod.literal("")),
-  full_name: zod.string().min(3, { message: "Enter at least 3 chars" }),
   email: zod
     .string()
     .email({
@@ -43,3 +43,20 @@ export const contactSchema = zod.object({
 });
 
 export type ContactSchema = zod.infer<typeof contactSchema>;
+
+export const contactSettingsSchema = zod.discriminatedUnion("isEnabled", [
+  zod.object({
+    isEnabled: zod.literal(true),
+    selectedContact: zod
+      .string({
+        required_error: "Contact selection required.",
+        invalid_type_error: "Contact selection required.",
+      })
+      .uuid({ message: "Contact selection required." }),
+  }),
+  zod.object({
+    isEnabled: zod.literal(false),
+  }),
+]);
+
+export type ContactSettingsSchema = zod.infer<typeof contactSettingsSchema>;

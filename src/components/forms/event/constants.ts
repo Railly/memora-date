@@ -21,4 +21,5 @@ export const EMPTY_CONTACT: Contact = {
   created_at: "",
   image_url: "",
   user_id: "",
+  name_email_phone: "",
 };
