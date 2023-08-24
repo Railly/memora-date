@@ -1,6 +1,7 @@
 "use client";
+
 import { useEffect, useMemo, useState } from "react";
-import { differenceInDays } from "date-fns";
+
 import { EventWithType } from "@/lib/entities.types";
 import { cn } from "@/lib/utils";
 
@@ -9,15 +10,15 @@ interface ProgressBarProps {
 }
 const ProgressBar: React.FC<ProgressBarProps> = ({ reminder }) => {
   const [progress, setProgress] = useState(0);
-  const intervalUnit = reminder?.[0].interval_unit;
-  const intervalValue = reminder?.[0].interval_value;
-  const reminderType = reminder?.[0].reminder_type;
-  const createdAt = reminder?.[0].created_at;
+  const intervalUnit = reminder?.[0]?.interval_unit;
+  const intervalValue = reminder?.[0]?.interval_value;
+  const reminderType = reminder?.[0]?.reminder_type;
+  const createdAt = reminder?.[0]?.created_at;
 
   const localDateMerged = useMemo(() => {
     if (reminder?.length) {
-      const date = reminder[0].date;
-      const time = reminder[0].time;
+      const date = reminder[0]?.date;
+      const time = reminder[0]?.time;
       const rawDateMerged = new Date(`${date}T${time}`);
       return rawDateMerged.toLocaleString("en-US");
     }

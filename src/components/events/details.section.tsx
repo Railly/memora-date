@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo } from "react";
 import {
   IconBell,
   IconCalendar,
@@ -7,11 +8,11 @@ import {
   IconEdit,
   IconLogout2,
 } from "@tabler/icons-react";
-import { format, parseISO } from "date-fns";
+import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 
 import { eventTypeUtils } from "@/components/icons/event-type";
-import { EventWithType } from "@/lib/entities.types";
+import { EventWithType, Reminder } from "@/lib/entities.types";
 import { cn } from "@/lib/utils";
 import clientApiProvider from "@/services/client";
 import Countdown from "../dashboard/molecules/countdown";
@@ -24,7 +25,6 @@ import {
   EventDetailsCard,
   EventDetailsSkeleton,
 } from "./molecules/details-card";
-import { useMemo } from "react";
 
 interface IEventsSectionProps {
   event: EventWithType | null;
@@ -71,6 +71,19 @@ export const EventsDetailsSection: React.FC<IEventsSectionProps> = ({
     return null;
   }, [event?.reminder]);
 
+  const parseOccurrenceValue = (
+    type?: Reminder["recurrence_type"],
+    value?: string | null
+  ) => {
+    if (!value) {
+      return "No occurrence";
+    }
+    if (type === "After") {
+      return `${type} ${value} ${Number(value) > 1 ? "times" : "time"}`;
+    }
+    return `${type} ${format(new Date(value), "EEE, MMM d yyyy")}`;
+  };
+
   return (
     <section className="flex flex-col w-full gap-4 mb-2">
       {isSkeleton ? (
@@ -116,13 +129,18 @@ export const EventsDetailsSection: React.FC<IEventsSectionProps> = ({
       )}
       <div className="flex w-full gap-4 flex-wrap">
         {generateCards({
-          date:
-            `${
-              localDateMerged &&
-              format(parseISO(localDateMerged), "MMMM do, yyyy")
-            }` || "No date",
-          frequency: "Monthly",
-          notify: "30 minutes",
+          date: localDateMerged
+            ? format(new Date(localDateMerged), "EEE, MMM d")
+            : "No date",
+          occurrence: parseOccurrenceValue(
+            event?.reminder?.[0]?.recurrence_type,
+            event?.reminder?.[0]?.recurrence_value
+          ),
+          interval:
+            `Every ${event?.reminder?.[0]?.interval_value} ${
+              event?.reminder?.[0]?.interval_unit
+            }${Number(event?.reminder?.[0]?.interval_value) > 1 ? "s" : ""}` ||
+            "No interval",
         }).map((info) =>
           isSkeleton ? (
             <EventDetailsSkeleton key={info.title} />
@@ -158,11 +176,15 @@ export const EventsDetailsSection: React.FC<IEventsSectionProps> = ({
 
 interface IGenerateCardsParams {
   date: string;
-  frequency: string;
-  notify: string;
+  occurrence: string;
+  interval: string;
 }
 
-const generateCards = ({ date, frequency, notify }: IGenerateCardsParams) => [
+const generateCards = ({
+  date,
+  occurrence,
+  interval,
+}: IGenerateCardsParams) => [
   {
     icon: <IconCalendar size={20} className="text-white" />,
     title: "Date",
@@ -170,12 +192,12 @@ const generateCards = ({ date, frequency, notify }: IGenerateCardsParams) => [
   },
   {
     icon: <IconChartLine size={20} className="text-white" />,
-    title: "Frequency",
-    content: frequency,
+    title: "Occurrence",
+    content: occurrence,
   },
   {
     icon: <IconBell size={20} className="text-white" />,
-    title: "Notify me",
-    content: notify,
+    title: "Interval",
+    content: interval,
   },
 ];

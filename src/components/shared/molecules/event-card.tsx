@@ -18,7 +18,7 @@ const EventCard: React.FC<IEventCardProps> = ({ event }) => {
 
   return (
     <div
-      className="flex flex-col bg-[#191919] p-4 text-left border rounded-lg w-full border-form-stroke/20"
+      className="flex flex-col bg-[#191919] p-4 text-left border rounded-lg w-full border-form-stroke/20 cursor-pointer"
       onClick={goToEvent}
     >
       <div className="flex justify-between">

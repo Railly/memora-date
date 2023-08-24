@@ -1,6 +1,6 @@
 import { ContactColumns } from "@/lib/entities.types";
 import { UpdateContactParams } from "@/lib/form.types";
-import { CreateEventSchema } from "@/schemas/create-event.schema";
+import { ContactSchema } from "@/schemas/contact.schema";
 import { contactServerError } from "../utils";
 import { ServerServiceApi } from "./blueprint";
 
@@ -19,7 +19,7 @@ class ServerContactService extends ServerServiceApi {
     contact,
     user_id,
   }: {
-    contact: CreateEventSchema["contact"];
+    contact: ContactSchema;
     user_id: string;
   }) {
     try {

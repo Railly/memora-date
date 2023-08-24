@@ -25,10 +25,10 @@ export const SubHeader: React.FC<ISubHeaderProps> = ({
         <Button
           type="button"
           onClick={goBack}
-          className="p-0 px-2 bg-white"
+          className="p-0 px-2"
           variant="outline"
         >
-          <IconArrowLeft size={20} className="stroke-black" />
+          <IconArrowLeft size={20} />
         </Button>
         <h1 className="text-xl">{title}</h1>
       </div>
