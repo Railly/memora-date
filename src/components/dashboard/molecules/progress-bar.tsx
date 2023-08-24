@@ -69,7 +69,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ reminder }) => {
   }, [localDateMerged, reminderType, intervalUnit, intervalValue]);
 
   return (
-    <div className="relative w-full h-8 bg-[#191919] border border-form-stroke/20 rounded-lg overflow-hidden">
+    <div className="relative w-full h-8 bg-muted border border-form-stroke/20 rounded-lg overflow-hidden">
       <div
         style={{
           width: progress === 0 ? "100%" : `${progress}%`,
@@ -77,7 +77,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ reminder }) => {
         className={cn(
           "absolute h-full transition-all duration-500 ease-in-out",
           {
-            "bg-[#191919]": progress === 0,
+            "bg-muted": progress === 0,
             "bg-memora-green": progress < 50 && progress > 0,
             "bg-memora-orange": progress >= 50 && progress < 75,
             "bg-memora-pink": progress >= 75 && progress < 100,
@@ -86,7 +86,7 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ reminder }) => {
         )}
       />
       <div
-        className={cn("absolute w-full text-center text-background", {
+        className={cn("absolute w-full text-black text-center", {
           "text-foreground": progress === 0,
         })}
         style={{

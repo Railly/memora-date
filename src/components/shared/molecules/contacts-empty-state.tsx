@@ -13,7 +13,7 @@ const ContactsEmptyState: React.FC<IContactsEmptyStateProps> = ({
   onCreatedContact,
 }) => {
   return (
-    <div className="flex flex-col items-center gap-2 w-full border border-primary bg-[#191919] rounded-lg p-6">
+    <div className="flex flex-col items-center gap-2 w-full border border-form-stroke/20 bg-muted rounded-lg p-6">
       <IconNotebookOff size={35} />
       <span className="text-2xl font-bold text-center">No Contacts</span>
       <span className="text-center">Create a contact to see it here</span>

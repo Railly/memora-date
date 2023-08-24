@@ -4,7 +4,7 @@ import Link from "next/link";
 
 const EventsEmptyState = () => {
   return (
-    <div className="flex flex-col items-center gap-2 w-full border border-primary bg-[#191919] rounded-lg p-6">
+    <div className="flex flex-col items-center gap-2 w-full border border-form-stroke/20 bg-muted rounded-lg p-6">
       <IconNewsOff size={35} />
       <span className="text-2xl font-bold text-center">No upcoming events</span>
       <span className="text-center">Create an event to see it here</span>

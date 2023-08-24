@@ -7,6 +7,7 @@ import { siteConfig } from "@/config/site";
 import type { Metadata } from "next";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
+import { ServerThemeProvider } from "@wits/next-themes";
 
 export const fontSans = FontSans({
   weight: ["400", "500", "600", "700"],
@@ -92,18 +93,20 @@ export default async function RootLayout({
   // } = await supabaseRsc.auth.getSession();
 
   return (
-    <html lang="en" className="dark">
-      <body
-        className={cn(
-          "min-h-screen bg-background font-sans font-medium antialiased",
-          fontMono.variable,
-          fontSans.variable
-        )}
-      >
-        {children}
-        {/* <ValidateSession serverSession={session} /> */}
-        <Toaster />
-      </body>
-    </html>
+    <ServerThemeProvider attribute="class">
+      <html lang="en">
+        <body
+          className={cn(
+            "min-h-screen bg-background font-sans font-medium antialiased",
+            fontMono.variable,
+            fontSans.variable
+          )}
+        >
+          {children}
+          {/* <ValidateSession serverSession={session} /> */}
+          <Toaster />
+        </body>
+      </html>
+    </ServerThemeProvider>
   );
 }

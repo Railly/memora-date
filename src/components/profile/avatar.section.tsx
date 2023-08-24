@@ -58,8 +58,8 @@ const AvatarSection: React.FC<AvatarSectionProps> = ({ session }) => {
         />
       </div>
       <div className="text-center">
-        <p className="text-xl font-bold text-white">{userName}</p>
-        <p className="text-sm font-medium text-zinc-500">
+        <p className="text-xl font-bold">{userName}</p>
+        <p className="text-sm font-medium text-foreground/80">
           {session?.user.user_metadata.email}
         </p>
       </div>

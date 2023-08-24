@@ -3,6 +3,7 @@ import { UpdateContactParams } from "@/lib/form.types";
 import { ContactSchema } from "@/schemas/contact.schema";
 import { contactServerError } from "../utils";
 import { ServerServiceApi } from "./blueprint";
+import { ContactSchema } from "@/schemas/contact.schema";
 
 class ServerContactService extends ServerServiceApi {
   async getContacts() {

@@ -37,7 +37,7 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
   const [eventTypeClassName, setEventTypeClassName] = useState<string>("");
   return (
     <div className="p-4 space-y-2 border rounded-sm border-form-stroke/20 bg-muted/40">
-      <p className="text-[#B4B4B4] text-md">Basic information</p>
+      <p className="text-foreground/80 text-md">Basic information</p>
       <Separator />
       <div className="flex flex-col gap-5">
         <div className="grid grid-cols-2 gap-4 mt-1 place-items-center place-content-center">
