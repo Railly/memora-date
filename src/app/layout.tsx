@@ -8,6 +8,15 @@ import type { Metadata } from "next";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
 import Sidebar from "@/components/layouts/sidebar";
+import { useEffect } from "react";
+import { SupabaseClient } from "@supabase/supabase-js";
+import {
+  createClientComponentClient,
+  createServerComponentClient,
+} from "@supabase/auth-helpers-nextjs";
+import { useRouter } from "next/navigation";
+import ValidateSession from "@/components/validateSession";
+import { cookies } from "next/headers";
 
 export const fontSans = FontSans({
   weight: ["400", "500", "600", "700"],
@@ -104,11 +113,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // const supabaseRsc = createServerComponentClient({ cookies });
+
+  // const {
+  //   data: { session },
+  // } = await supabaseRsc.auth.getSession();
+
   return (
     <html lang="en" className="dark">
       <body
@@ -119,6 +134,7 @@ export default function RootLayout({
         )}
       >
         {children}
+        {/* <ValidateSession serverSession={session} /> */}
         <Toaster />
       </body>
     </html>

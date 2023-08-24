@@ -1,34 +1,61 @@
-import React from "react";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+"use client";
+
 import { Session } from "@supabase/supabase-js";
+import { UploadProfileImage } from "../forms/event/upload-profile-image";
+import clientApiProvider from "@/services/client";
+import { useToast } from "../ui/use-toast";
 
 interface AvatarSectionProps {
   session: Session | null;
 }
 
 const AvatarSection: React.FC<AvatarSectionProps> = ({ session }) => {
-  const firstTwoLetters = (name: string) => {
-    const haveOnlyName = name.split(" ").length === 1;
-    if (haveOnlyName) return name.slice(0, 2).toLocaleUpperCase();
-    const [first, second] = name.split(" ");
-    return `${first[0]}${second[0]}`;
-  };
+  const { toast } = useToast();
 
   const userName =
     session?.user.user_metadata.full_name ?? session?.user.user_metadata.name;
 
+  const onUpdateAvatar = async (avatar: { image: File }) => {
+    const user = {
+      user_id: session?.user.id ?? "",
+      full_name: userName,
+      avatar_url: session?.user.user_metadata.avatar_url ?? "",
+    };
+
+    try {
+      const response = await clientApiProvider.profile.updateAvatar({
+        avatar,
+        user,
+      });
+      if (response.ok) {
+        toast({
+          title: "Avatar updated!",
+          variant: "success",
+        });
+      }
+      await clientApiProvider.auth.refreshSession();
+    } catch (error) {
+      console.log(error);
+      toast({
+        title: "Error updating avatar",
+        variant: "danger",
+      });
+    }
+  };
+
+  const handleImageChange = (image: File) => {
+    onUpdateAvatar({ image });
+  };
+
   return (
     <section className="flex flex-col items-center gap-2">
-      <div className="w-32 h-32">
-        <Avatar className="w-full h-full border-2 border-opacity-50 border-memora-gray">
-          <AvatarImage
-            src={session?.user.user_metadata.avatar_url}
-            alt={`${userName}'s avatar image.`}
-          />
-          <AvatarFallback className="text-6xl">
-            {firstTwoLetters(userName)}
-          </AvatarFallback>
-        </Avatar>
+      <div className="relative w-32 h-32">
+        <UploadProfileImage
+          image={session?.user.user_metadata.avatar_url ?? undefined}
+          fullName={userName}
+          onChange={handleImageChange}
+          isProfile
+        />
       </div>
       <div className="text-center">
         <p className="text-xl font-bold text-white">{userName}</p>
