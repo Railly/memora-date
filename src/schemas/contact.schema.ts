@@ -40,6 +40,7 @@ export const contactSchema = zod.object({
       return ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type);
     }, "Only .jpg, .jpeg, .png and .webp files.")
     .optional(),
+  isImported: zod.boolean().default(false),
 });
 
 export type ContactSchema = zod.infer<typeof contactSchema>;

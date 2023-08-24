@@ -20,6 +20,7 @@ export const rawVariants = {
   pink: "border-transparent bg-memora-pink text-memora-pink-foreground shadow hover:bg-memora-pink/80",
   orange:
     "border-transparent bg-memora-orange text-black shadow hover:bg-memora-orange/80",
+  imported: "border-transparent bg-memora-green text-black shadow",
   outline: "text-foreground",
 };
 

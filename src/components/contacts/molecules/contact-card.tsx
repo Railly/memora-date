@@ -1,4 +1,4 @@
-import { IconTrash } from "@tabler/icons-react";
+import { IconNotebook, IconPhone, IconTrash } from "@tabler/icons-react";
 
 import { ConfirmDialog } from "@/components/shared/atoms/confirm-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
@@ -7,6 +7,7 @@ import { ContactSchema } from "@/schemas/contact.schema";
 import { IconPencil } from "@tabler/icons-react";
 import { ContactDialog } from "./contact-dialog";
 import { Spinner } from "@/components/shared/atoms/Spinner";
+import { Badge } from "@/components/ui/badge";
 
 interface IContactCardProps {
   contact: Contact;
@@ -57,7 +58,14 @@ const ContactCard: React.FC<IContactCardProps> = ({
         </AvatarFallback>
       </Avatar>
       <div className="flex flex-col w-full py-2 px-4">
-        <span className="text-xl font-bold">{contact?.full_name}</span>
+        <div className="flex gap-1">
+          <span className="text-xl font-bold">{contact?.full_name}</span>
+          {contact?.is_imported && (
+            <Badge variant="imported">
+              <IconNotebook size={24} />
+            </Badge>
+          )}
+        </div>
         <ContactInfo value={!contact.email ? "-" : contact.email} />
         <ContactInfo value={!contact.phone ? "-" : contact.phone} />
       </div>

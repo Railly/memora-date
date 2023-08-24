@@ -1,14 +1,21 @@
+"use client";
+
+import { useRouter } from "next/navigation";
+
 import { eventTypeUtils } from "@/components/icons/event-type";
 import { Badge } from "@/components/ui/badge";
 import { EventWithType } from "@/lib/entities.types";
-import TimeLeft from "./time-left";
 import { IconSpeakerphone } from "@tabler/icons-react";
+import TimeLeft from "./time-left";
 
 interface IEventCardProps {
   event: EventWithType;
 }
 
 const EventCard: React.FC<IEventCardProps> = ({ event }) => {
+  const router = useRouter();
+  const goToEvent = () => router.push(`/events/details/${event.id}`);
+
   return (
     <div className="flex flex-col bg-muted p-4 text-left border rounded-lg w-full border-form-stroke/20">
       <div className="flex justify-between">

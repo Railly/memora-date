@@ -1,6 +1,6 @@
 import { ContactColumns } from "@/lib/entities.types";
 import { UpdateContactParams } from "@/lib/form.types";
-import { CreateEventSchema } from "@/schemas/create-event.schema";
+import { ContactSchema } from "@/schemas/contact.schema";
 import { contactServerError } from "../utils";
 import { ServerServiceApi } from "./blueprint";
 import { ContactSchema } from "@/schemas/contact.schema";
@@ -24,7 +24,7 @@ class ServerContactService extends ServerServiceApi {
     user_id: string;
   }) {
     try {
-      const { full_name, email, phone, image } = contact;
+      const { full_name, email, phone, image, isImported } = contact;
       const { error, data } = await this.supabase
         .from("contact")
         .insert([
@@ -34,6 +34,7 @@ class ServerContactService extends ServerServiceApi {
             email,
             phone,
             image_url: image,
+            is_imported: isImported,
           },
         ])
         .select();

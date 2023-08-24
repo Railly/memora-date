@@ -91,6 +91,31 @@ class ClientEventService extends ClientServiceApi {
       throw error;
     }
   }
+
+  async deleteEvent({ event_id }: { event_id: string }) {
+    try {
+      const response = await fetch("/api/events/delete", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          event_id,
+        }),
+      });
+      if (!response.ok) {
+        throw new HttpError(response.status, response.statusText);
+      }
+      return response.json();
+    } catch (error) {
+      if (error instanceof HttpError) {
+        console.error(`HTTP Error: ${error.status} - ${error.statusText}`);
+      } else {
+        console.error(error);
+      }
+      throw error;
+    }
+  }
 }
 
 export default ClientEventService;

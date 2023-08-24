@@ -29,6 +29,20 @@ class RscEventService extends RscServiceApi {
     const eventTypes = await this.supabase.from("event_type").select("*");
     return eventTypes;
   }
+
+  async getEventById(id: string) {
+    const event = await this.supabase
+      .from("event")
+      .select(
+        `*,
+         event_type (value),
+         reminder (date, time, reminder_type, interval_unit, interval_value, recurrence_type, recurrence_value, created_at),
+         reminders_with_overdue (is_overdue)
+      `
+      )
+      .eq("id", id);
+    return event;
+  }
 }
 
 export default RscEventService;

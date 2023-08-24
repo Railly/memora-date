@@ -71,6 +71,20 @@ class ServerEventService extends ServerServiceApi {
       return eventServiceError(error);
     }
   }
+
+  async deleteEvent({ event_id }: { event_id: string }) {
+    try {
+      const { data, error } = await this.supabase
+        .from("event")
+        .delete()
+        .eq("id", event_id)
+        .select();
+
+      return { data, error };
+    } catch (error) {
+      return eventServiceError(error);
+    }
+  }
 }
 
 export default ServerEventService;

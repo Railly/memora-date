@@ -141,6 +141,7 @@ const adaptContactInfoParam = (contactInfo: ContactInfo): ContactSchema => {
     email: contactInfo.email?.[0],
     phone: contactInfo.tel?.[0],
     image: contactInfo.icon?.[0],
+    isImported: true,
   };
   return contact;
 };
