@@ -15,7 +15,9 @@ class ClientContactService extends ClientServiceApi {
     });
   }
 
-  async createContact({ contact, user_id }: CreateContactParams) {
+  async createContact(params: CreateContactParams | null) {
+    if (!params) return;
+    const { contact, user_id } = params;
     if (!contact.selectedContact && contact.image) {
       contact.image = await this.uploadContactImage(
         contact.full_name,

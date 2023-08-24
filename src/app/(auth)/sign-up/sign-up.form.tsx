@@ -15,7 +15,7 @@ import { useForm } from "react-hook-form";
 const SignUpForm = () => {
   const router = useRouter();
   const { toast } = useToast();
-  const [isLoading, setIsLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const form = useForm<SignUpSchema>({
     resolver: zodResolver(signUpSchema),
     defaultValues: {
@@ -27,15 +27,23 @@ const SignUpForm = () => {
 
   const onSubmit = async (data: SignUpSchema) => {
     setIsLoading(true);
-    const response = await clientApiProvider.auth.signUpWithEmailAndPassword(
-      data
-    );
-    if (!response.error) {
-      router.push("/sign-in");
+    try {
+      const response = await clientApiProvider.auth.signUpWithEmailAndPassword(
+        data
+      );
+      if (!response.error) {
+        router.push("/sign-in");
+        toast({
+          title: "Verify your account",
+          description: "We've sent a confirmation email to your inbox.",
+        });
+      }
+    } catch (error: any) {
       toast({
-        title: "Verify your account",
-        description: "We've sent a confirmation email to your inbox.",
+        title: error.message,
+        variant: "danger",
       });
+      setIsLoading(false);
     }
   };
 

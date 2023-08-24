@@ -24,6 +24,7 @@ import {
   EventDetailsCard,
   EventDetailsSkeleton,
 } from "./molecules/details-card";
+import { useMemo } from "react";
 
 interface IEventsSectionProps {
   event: EventWithType | null;
@@ -60,6 +61,16 @@ export const EventsDetailsSection: React.FC<IEventsSectionProps> = ({
     }
   };
 
+  const localDateMerged = useMemo(() => {
+    if (event?.reminder?.length) {
+      const date = event?.reminder[0].date;
+      const time = event?.reminder[0].time;
+      const rawDateMerged = new Date(`${date}T${time}`);
+      return rawDateMerged.toLocaleString("en-US");
+    }
+    return null;
+  }, [event?.reminder]);
+
   return (
     <section className="flex flex-col w-full gap-4 mb-2">
       {isSkeleton ? (
@@ -81,8 +92,8 @@ export const EventsDetailsSection: React.FC<IEventsSectionProps> = ({
           </Badge>
         )}
       </div>
-      <Countdown event={event} />
-      <ProgressBar event={event} />
+      <Countdown reminder={event?.reminder} />
+      <ProgressBar reminder={event?.reminder} />
       {isSkeleton ? (
         <span className="w-20 h-6 my-1 text-2xl font-bold bg-gray-400 animate-pulse" />
       ) : (
@@ -106,8 +117,10 @@ export const EventsDetailsSection: React.FC<IEventsSectionProps> = ({
       <div className="flex w-full gap-4 flex-wrap">
         {generateCards({
           date:
-            `${event?.date && format(parseISO(event.date), "MMMM do, yyyy")}` ||
-            "No date",
+            `${
+              localDateMerged &&
+              format(parseISO(localDateMerged), "MMMM do, yyyy")
+            }` || "No date",
           frequency: "Monthly",
           notify: "30 minutes",
         }).map((info) =>

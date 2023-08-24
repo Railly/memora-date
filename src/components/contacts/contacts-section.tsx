@@ -18,6 +18,10 @@ import { useToast } from "../ui/use-toast";
 import ContactCard, { ContactCardSkeleton } from "./molecules/contact-card";
 import { ContactDialog } from "./molecules/contact-dialog";
 import ContactPicker from "./molecules/contact-picker";
+import {
+  parseContactBeforeCreate,
+  parseContactBeforeUpdate,
+} from "./contacts.helpers";
 
 interface IContactsSectionProps {
   contacts: Contact[] | null;
@@ -74,21 +78,12 @@ export const ContactsSection: React.FC<IContactsSectionProps> = ({
 
   const onCreateContact = async (data: ContactSchema) => {
     if (!user) return;
-    const { email, phone, ...rest } = data;
-    // use this object to avoid sending empty strings to the database (because default values are empty strings)
-    const formattedData = {
-      email: email || undefined,
-      phone: phone || undefined,
-      ...rest,
-    };
-    // Validate if contact already exists with the same email or phone
-    const matchingContact = contacts?.find(
-      (contact) =>
-        contact.email === formattedData.email ||
-        contact.phone === formattedData.phone
-    );
+    const contact = parseContactBeforeCreate({
+      contact: data,
+      allContacts: contacts,
+    });
 
-    if (matchingContact) {
+    if (contact.alreadyExists) {
       toast({
         title: "Contact already exists",
         description: "Check your contacts list",
@@ -99,7 +94,7 @@ export const ContactsSection: React.FC<IContactsSectionProps> = ({
 
     try {
       const response = await clientApiProvider.contact.createContact({
-        contact: formattedData,
+        contact: contact.data,
         user_id: user.id,
       });
 
@@ -124,24 +119,11 @@ export const ContactsSection: React.FC<IContactsSectionProps> = ({
 
   const onUpdatedContact = async (data: ContactSchema, contact_id: string) => {
     if (!user) return;
-    const { email, phone, ...rest } = data;
-    // use this object to avoid sending empty strings to the database (because default values are empty strings)
-    const formattedData = {
-      email: email || undefined,
-      phone: phone || undefined,
-      ...rest,
-    };
-    const oldPath =
-      contacts?.find(
-        (contact) => contact.id === contact_id && contact.image_url !== null
-      )?.image_url ?? null;
-
-    const contact = {
+    const contact = parseContactBeforeUpdate({
+      allContacts: contacts,
+      contact: data,
       contact_id,
-      oldPath,
-      ...formattedData,
-    };
-
+    });
     try {
       const response = await clientApiProvider.contact.updateContact({
         contact,

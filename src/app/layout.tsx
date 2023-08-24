@@ -7,7 +7,6 @@ import { siteConfig } from "@/config/site";
 import type { Metadata } from "next";
 import { cn } from "@/lib/utils";
 import { Toaster } from "@/components/ui/toaster";
-import Sidebar from "@/components/layouts/sidebar";
 
 export const fontSans = FontSans({
   weight: ["400", "500", "600", "700"],
@@ -79,36 +78,19 @@ export const metadata: Metadata = {
     images: [siteConfig.ogImage],
     creator: "@raillyhugo",
   },
-  icons: {
-    icon: [
-      { url: "/favicon.ico" },
-      { url: "/favicon-16x16.png", sizes: "16x16", type: "image/png" },
-      { url: "/favicon-16x16.png", sizes: "32x32", type: "image/png" },
-    ],
-    apple: [
-      { url: "/apple-touch-icon.png" },
-      { url: "/apple-touch-icon.png", sizes: "180x180", type: "image/png" },
-    ],
-    other: [
-      {
-        url: "/android-chrome-192x192.png",
-        sizes: "192x192",
-        type: "image/png",
-      },
-      {
-        url: "/android-chrome-512x512.png",
-        sizes: "512x512",
-        type: "image/png",
-      },
-    ],
-  },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // const supabaseRsc = createServerComponentClient({ cookies });
+
+  // const {
+  //   data: { session },
+  // } = await supabaseRsc.auth.getSession();
+
   return (
     <html lang="en" className="dark">
       <body
@@ -119,6 +101,7 @@ export default function RootLayout({
         )}
       >
         {children}
+        {/* <ValidateSession serverSession={session} /> */}
         <Toaster />
       </body>
     </html>

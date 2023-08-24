@@ -28,21 +28,23 @@ class ServerEventService extends ServerServiceApi {
     contact_id: string;
   }) {
     try {
-      const { name, description, date, is_public } = event;
-      const assertedDate = typeof date === "string" ? date : date.toISOString();
+      const { name, description, is_public } = event;
+      const fieldsToInsert = [
+        {
+          user_id,
+          event_type_id,
+          name,
+          description,
+          is_public,
+        },
+      ];
       const { error, data } = await this.supabase
         .from("event")
-        .insert([
-          {
-            user_id,
-            event_type_id,
-            name,
-            description,
-            is_public,
-            contact_id,
-            date: assertedDate,
-          },
-        ])
+        .insert(
+          contact_id
+            ? fieldsToInsert.map((field) => ({ ...field, contact_id }))
+            : fieldsToInsert
+        )
         .select();
 
       return { error, data: data?.[0] };
@@ -62,8 +64,7 @@ class ServerEventService extends ServerServiceApi {
       const { data, error } = await this.supabase
         .from("event")
         .select(`*, event_type ( value )`)
-        .textSearch(`${column}`, `${searchTerm}`)
-        .order("date", { ascending: true });
+        .textSearch(`${column}`, `${searchTerm}`);
 
       return { data, error };
     } catch (error) {

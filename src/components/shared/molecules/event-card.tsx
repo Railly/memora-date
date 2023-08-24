@@ -18,7 +18,7 @@ const EventCard: React.FC<IEventCardProps> = ({ event }) => {
 
   return (
     <div
-      className="flex flex-col bg-[#191919] p-4 text-left border rounded-lg w-full border-primary"
+      className="flex flex-col bg-[#191919] p-4 text-left border rounded-lg w-full border-form-stroke/20"
       onClick={goToEvent}
     >
       <div className="flex justify-between">
@@ -28,7 +28,7 @@ const EventCard: React.FC<IEventCardProps> = ({ event }) => {
         >
           {event.event_type?.value}
         </Badge>
-        <TimeLeft date={event.date} />
+        <TimeLeft reminder={event.reminder} />
       </div>
       <div className="flex flex-col w-full py-2">
         <span className="text-2xl font-bold">{event.name}</span>
@@ -42,7 +42,7 @@ const EventCard: React.FC<IEventCardProps> = ({ event }) => {
 
 export const EventCardSkeleton: React.FC = () => {
   return (
-    <div className="flex flex-col bg-[#191919] p-4 text-left border rounded-lg w-full border-primary">
+    <div className="flex flex-col bg-[#191919] p-4 text-left border rounded-lg w-full border-form-stroke/20">
       <div className="flex justify-between">
         <Badge
           icon={<IconSpeakerphone size={16} className="stroke-black" />}

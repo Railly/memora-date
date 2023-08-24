@@ -40,13 +40,11 @@ const AuthForm = () => {
 
   const onSubmit = async (data: SignInSchema) => {
     setIsLoading({ ...isLoading, login: true });
-    console.log(data);
     try {
       const response = await clientApiProvider.auth.signInWithEmailAndPassword(
         data
       );
       if (response.error) {
-        console.log({ response });
         toast({
           title: response.error.message,
           variant: "success",
@@ -56,11 +54,11 @@ const AuthForm = () => {
       const redirectTo = searchParams.get("redirectTo") || "/dashboard";
       router.push(redirectTo);
     } catch (error: any) {
-      console.log({ error });
       toast({
         title: error.message,
         variant: "danger",
       });
+      setIsLoading({ ...isLoading, login: false });
     }
   };
 
@@ -75,7 +73,6 @@ const AuthForm = () => {
         router.push(response.data.url);
       }
     } catch (error) {
-      console.log(error);
       setIsLoading({ ...isLoading, google: false });
     }
   };
@@ -88,11 +85,9 @@ const AuthForm = () => {
         searchParams.get("redirectTo") || "/dashboard"
       );
       if (response.ok) {
-        console.log({ response });
         router.push(response.data.url);
       }
     } catch (error) {
-      console.log(error);
       setIsLoading({ ...isLoading, github: false });
     }
   };

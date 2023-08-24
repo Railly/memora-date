@@ -4,6 +4,8 @@ import { signInSchema } from "@/schemas/auth.schema";
 import { ApiResponse } from "../../../utils/response.utils";
 import { validateBody } from "../../../utils/validation.utils";
 
+export const dynamic = "force-dynamic";
+
 export async function POST(req: Request) {
   try {
     const body = validateBody(signInSchema, await req.json());

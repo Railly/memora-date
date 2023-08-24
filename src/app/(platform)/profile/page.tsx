@@ -22,7 +22,7 @@ export default async function ProfilePage() {
             countSaved={null}
             countContact={contacts?.count}
           />
-          <SummaryEventSection events={events?.data} />
+          <SummaryEventSection upcoming={events?.data} past={null} />
         </main>
       </div>
     </div>

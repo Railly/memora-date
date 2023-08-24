@@ -5,7 +5,6 @@ import { Contact, EventType } from "@/lib/entities.types";
 import { Button } from "@/components/ui/button";
 import clientApiProvider from "@/services/client";
 import { BasicInformation } from "@/components/forms/event/basic-information";
-import { NotificationSettings } from "@/components/forms/event/notification-settings";
 import { Form } from "@/components/ui/form";
 import { ReminderSettings } from "@/components/forms/event/reminder-settings";
 import { ContactSettings } from "@/components/forms/event/contact-settings";
@@ -45,15 +44,15 @@ const CreateEventForm: React.FC<ICreateEventFormProps> = ({
 
     if (!session) return;
 
-    const contactResponse = await clientApiProvider.contact.createContact({
-      contact: data.contact,
-      user_id: session.user.id,
-    });
+    let contactId: string | null = null;
+    if ("selectedContact" in data.contact && data.contact.selectedContact) {
+      contactId = data.contact.selectedContact;
+    }
 
     const eventResponse = await clientApiProvider.event.createEvent({
       event: data.event,
       event_type_id: data.event_type.type,
-      contact_id: contactResponse.data.id,
+      contact_id: contactId,
       user_id: session.user.id,
     });
 
@@ -65,7 +64,6 @@ const CreateEventForm: React.FC<ICreateEventFormProps> = ({
     debugFormValues({
       title: "Event created successfully",
       data: {
-        contactResponse,
         eventResponse,
         reminderResponse,
       },
@@ -84,33 +82,24 @@ const CreateEventForm: React.FC<ICreateEventFormProps> = ({
         className="flex flex-col gap-6"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <BasicInformation
-          control={form.control}
-          errors={form.formState.errors}
-          eventTypes={eventTypes}
-        />
-        <NotificationSettings
-          control={form.control}
-          errors={form.formState.errors}
-          user={session?.user}
-        />
+        <BasicInformation control={form.control} eventTypes={eventTypes} />
         <ReminderSettings
           control={form.control}
-          errors={form.formState.errors}
           watch={form.watch}
           setValue={form.setValue}
+          user={session?.user}
         />
         <ContactSettings
           control={form.control}
-          errors={form.formState.errors}
           watch={form.watch}
           setValue={form.setValue}
           contacts={contacts}
+          user={session?.user}
         />
         <div className="flex w-full gap-4">
           <Button
             variant="secondary"
-            type="submit"
+            type="button"
             className="flex w-full gap-1"
             onClick={goBack}
           >

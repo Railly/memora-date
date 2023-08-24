@@ -24,7 +24,7 @@ export default async function NextEventSection({
           </i>
           <span>Next Event</span>
           <span>{" • "}</span>
-          <TimeLeft date={event?.date} />
+          <TimeLeft reminder={event?.reminder} />
         </div>
         <Badge
           icon={eventTypeUtils[event?.event_type?.value || "default"].icon}
@@ -41,10 +41,10 @@ export default async function NextEventSection({
         </h1>
       )}
       <main>
-        <Countdown event={event} />
+        <Countdown reminder={event?.reminder} />
       </main>
       <footer>
-        <ProgressBar event={event} />
+        <ProgressBar reminder={event?.reminder} />
       </footer>
     </section>
   );
