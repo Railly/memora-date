@@ -6,12 +6,12 @@ import { IconSearch, IconX } from "@tabler/icons-react";
 
 import { useSearch } from "@/hooks/useSearch";
 import { EventWithType } from "@/lib/entities.types";
+import { cn } from "@/lib/utils";
 import clientApiProvider from "@/services/client";
 import EventCard, { EventCardSkeleton } from "../shared/molecules/event-card";
-import { Input } from "../ui/input";
 import EventsEmptyState from "../shared/molecules/events-empty-state";
 import { Button } from "../ui/button";
-import { cn } from "@/lib/utils";
+import { Input } from "../ui/input";
 import { useToast } from "../ui/use-toast";
 
 interface IEventsSectionProps {

@@ -17,6 +17,7 @@ export interface Database {
           full_name: string
           id: string
           image_url: string | null
+          is_imported: boolean
           phone: string | null
           user_id: string
           name_email_phone: string | null
@@ -28,6 +29,7 @@ export interface Database {
           full_name: string
           id?: string
           image_url?: string | null
+          is_imported?: boolean
           phone?: string | null
           user_id: string
         }
@@ -38,6 +40,7 @@ export interface Database {
           full_name?: string
           id?: string
           image_url?: string | null
+          is_imported?: boolean
           phone?: string | null
           user_id?: string
         }
@@ -54,7 +57,6 @@ export interface Database {
         Row: {
           contact_id: string | null
           created_at: string | null
-          date: string
           description: string | null
           event_type_id: string
           id: string
@@ -66,7 +68,6 @@ export interface Database {
         Insert: {
           contact_id?: string | null
           created_at?: string | null
-          date: string
           description?: string | null
           event_type_id: string
           id?: string
@@ -77,7 +78,6 @@ export interface Database {
         Update: {
           contact_id?: string | null
           created_at?: string | null
-          date?: string
           description?: string | null
           event_type_id?: string
           id?: string
@@ -127,42 +127,51 @@ export interface Database {
       reminder: {
         Row: {
           created_at: string | null
-          day_of_week: string | null
-          end_date: string | null
+          date: string | null
           event_id: string
           id: string
-          interval: string | null
+          interval_unit: string | null
+          interval_value: number | null
+          isEnabled: boolean
           last_sent: string | null
           notification_methods: string[]
-          notify_before: string
+          recurrence_type: string | null
+          recurrence_value: string | null
           reminder_type: string
           sent_count: number | null
+          time: string | null
         }
         Insert: {
           created_at?: string | null
-          day_of_week?: string | null
-          end_date?: string | null
+          date?: string | null
           event_id: string
           id?: string
-          interval?: string | null
+          interval_unit?: string | null
+          interval_value?: number | null
+          isEnabled?: boolean
           last_sent?: string | null
           notification_methods: string[]
-          notify_before: string
+          recurrence_type?: string | null
+          recurrence_value?: string | null
           reminder_type?: string
           sent_count?: number | null
+          time?: string | null
         }
         Update: {
           created_at?: string | null
-          day_of_week?: string | null
-          end_date?: string | null
+          date?: string | null
           event_id?: string
           id?: string
-          interval?: string | null
+          interval_unit?: string | null
+          interval_value?: number | null
+          isEnabled?: boolean
           last_sent?: string | null
           notification_methods?: string[]
-          notify_before?: string
+          recurrence_type?: string | null
+          recurrence_value?: string | null
           reminder_type?: string
           sent_count?: number | null
+          time?: string | null
         }
         Relationships: [
           {
@@ -175,7 +184,67 @@ export interface Database {
       }
     }
     Views: {
-      [_ in never]: never
+      reminders_with_overdue: {
+        Row: {
+          created_at: string | null
+          date: string | null
+          event_id: string | null
+          id: string | null
+          interval_unit: string | null
+          interval_value: number | null
+          is_overdue: boolean | null
+          isEnabled: boolean | null
+          last_sent: string | null
+          notification_methods: string[] | null
+          recurrence_type: string | null
+          recurrence_value: string | null
+          reminder_type: string | null
+          sent_count: number | null
+          time: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          date?: string | null
+          event_id?: string | null
+          id?: string | null
+          interval_unit?: string | null
+          interval_value?: number | null
+          is_overdue?: never
+          isEnabled?: boolean | null
+          last_sent?: string | null
+          notification_methods?: string[] | null
+          recurrence_type?: string | null
+          recurrence_value?: string | null
+          reminder_type?: string | null
+          sent_count?: number | null
+          time?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          date?: string | null
+          event_id?: string | null
+          id?: string | null
+          interval_unit?: string | null
+          interval_value?: number | null
+          is_overdue?: never
+          isEnabled?: boolean | null
+          last_sent?: string | null
+          notification_methods?: string[] | null
+          recurrence_type?: string | null
+          recurrence_value?: string | null
+          reminder_type?: string | null
+          sent_count?: number | null
+          time?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reminder_event_id_fkey"
+            columns: ["event_id"]
+            referencedRelation: "event"
+            referencedColumns: ["id"]
+          }
+        ]
+      }
     }
     Functions: {
       name_email_phone: {

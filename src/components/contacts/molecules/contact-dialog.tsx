@@ -202,7 +202,7 @@ export const ContactDialog: React.FC<IContactCardProps> = ({
                 </Button>
                 <Button type="submit" className="flex w-full gap-1">
                   <IconCheck size={20} />
-                  <span>{contact ? "Save Changes" : "Create Contact"}</span>
+                  <span>{contact ? "Update" : "Create"}</span>
                 </Button>
               </div>
             </DialogFooter>
