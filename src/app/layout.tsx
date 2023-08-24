@@ -80,11 +80,17 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  // const supabaseRsc = createServerComponentClient({ cookies });
+
+  // const {
+  //   data: { session },
+  // } = await supabaseRsc.auth.getSession();
+
   return (
     <html lang="en" className="dark">
       <body
@@ -95,6 +101,7 @@ export default function RootLayout({
         )}
       >
         {children}
+        {/* <ValidateSession serverSession={session} /> */}
         <Toaster />
       </body>
     </html>

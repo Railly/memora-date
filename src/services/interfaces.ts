@@ -13,6 +13,10 @@ import RscContactService from "./rsc/contact.service";
 /* Reminder */
 import ServerReminderService from "./server/reminder.service";
 import ClientReminderService from "./client/reminder.service";
+/* Profile */
+import ServerProfileService from "./server/profile.service";
+import ClientProfileService from "./client/profile.service";
+import RscProfileService from "./rsc/profile.service";
 /* Storage */
 // import StorageService from "./client/storage.service";
 
@@ -39,5 +43,10 @@ export interface IServiceApi<T extends ServiceType> {
     : T extends "client"
     ? ClientReminderService
     : null | undefined;
+  profile: T extends "server"
+    ? ServerProfileService
+    : T extends "client"
+    ? ClientProfileService
+    : RscProfileService;
   // storage: T extends "client" ? StorageService : null | undefined;
 }

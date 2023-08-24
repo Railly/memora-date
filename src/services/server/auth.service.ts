@@ -27,12 +27,12 @@ class ServerAuthService extends ServerServiceApi {
 
   async signUpWithEmailAndPassword(body: SignUpSchema) {
     try {
-      const { email, password, name } = body;
+      const { email, password, full_name } = body;
       const { error, data } = await this.supabase.auth.signUp({
         email,
         password,
         options: {
-          data: { name },
+          data: { full_name, email },
         },
       });
 
@@ -110,6 +110,23 @@ class ServerAuthService extends ServerServiceApi {
   async getSession() {
     try {
       const { error, data } = await this.supabase.auth.getSession();
+      return { error, data };
+    } catch (error) {
+      console.error(error);
+      return {
+        data: null,
+        error: {
+          name: AUTH_ERROR,
+          message: "Something went wrong, please try again later",
+          status: 500,
+        },
+      };
+    }
+  }
+
+  async refreshSession() {
+    try {
+      const { error, data } = await this.supabase.auth.refreshSession();
       return { error, data };
     } catch (error) {
       console.error(error);

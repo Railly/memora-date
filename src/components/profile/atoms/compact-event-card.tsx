@@ -2,24 +2,12 @@ import { eventTypeUtils } from "@/components/icons/event-type";
 import TimeLeft from "@/components/shared/molecules/time-left";
 import { EventWithType } from "@/lib/entities.types";
 import { cn } from "@/lib/utils";
-import { IconMoodEmptyFilled } from "@tabler/icons-react";
 
 interface CompactEventCardProps {
   event: EventWithType;
 }
 
 const CompactEventCard: React.FC<CompactEventCardProps> = ({ event }) => {
-  if (!event) {
-    return (
-      <div className="flex flex-col justify-center h-10 text-zinc-500">
-        <p className="flex gap-2">
-          <IconMoodEmptyFilled />
-          Nothing to show...
-        </p>
-      </div>
-    );
-  }
-
   return (
     <div
       className={cn(
