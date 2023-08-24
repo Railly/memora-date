@@ -17,7 +17,10 @@ const EventCard: React.FC<IEventCardProps> = ({ event }) => {
   const goToEvent = () => router.push(`/events/details/${event.id}`);
 
   return (
-    <div className="flex flex-col bg-muted p-4 text-left border rounded-lg w-full border-form-stroke/20">
+    <div
+      className="flex flex-col bg-muted p-4 text-left border rounded-lg w-full border-form-stroke/20 cursor-pointer"
+      onClick={goToEvent}
+    >
       <div className="flex justify-between">
         <Badge
           icon={eventTypeUtils[event.event_type?.value || "default"].icon}
