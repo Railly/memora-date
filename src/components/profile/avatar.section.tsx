@@ -44,7 +44,6 @@ const AvatarSection: React.FC<AvatarSectionProps> = ({ session }) => {
   };
 
   const handleImageChange = (image: File) => {
-    console.log(image);
     onUpdateAvatar({ image });
   };
 
@@ -57,27 +56,6 @@ const AvatarSection: React.FC<AvatarSectionProps> = ({ session }) => {
           onChange={handleImageChange}
           isProfile
         />
-        {/* <Button
-                            type="submit"
-                            className="absolute bottom-0 right-0 z-10 p-1 border rounded-full border-green-900/50 bg-memora-green"
-                          >
-                            <IconPencil color="black" />
-                          </Button> */}
-        {/* <Avatar className="w-full h-full border-2 border-opacity-50 border-memora-gray">
-          <AvatarImage
-            src={session?.user.user_metadata.avatar_url}
-            alt={`${userName}'s avatar image.`}
-          />
-          <AvatarFallback className="text-6xl">
-            {session?.user.user_metadata.avatar_url !== undefined ? (
-              <div className="pt-1">
-                <Spinner />
-              </div>
-            ) : (
-              getInitials(userName)
-            )}
-          </AvatarFallback>
-        </Avatar> */}
       </div>
       <div className="text-center">
         <p className="text-xl font-bold text-white">{userName}</p>
