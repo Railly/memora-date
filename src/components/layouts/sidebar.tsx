@@ -22,6 +22,8 @@ import { cn } from "@/lib/utils";
 import { usePathname } from "next/navigation";
 import { Session } from "@supabase/supabase-js";
 import { getInitials } from "@/lib/utils";
+import { IconLoader } from "@tabler/icons-react";
+import { getImageUrl } from "@/lib/utils";
 
 interface SidebarProps {
   session: Session;
@@ -29,8 +31,14 @@ interface SidebarProps {
 
 const Sidebar: React.FC<SidebarProps> = ({ session }) => {
   const { toast } = useToast();
+
   const router = useRouter();
+
   const path = usePathname();
+
+  const image = session?.user.user_metadata.avatar_url;
+
+  const encodedImage = image ? getImageUrl(image) : undefined;
 
   const handleLogout = async () => {
     try {
@@ -63,12 +71,17 @@ const Sidebar: React.FC<SidebarProps> = ({ session }) => {
           <div className="relative flex items-center justify-between w-full">
             <div className="flex min-w-full gap-x-2">
               <div className="items-center w-10 h-10">
-                <Avatar>
-                  <AvatarImage
-                    src={session?.user.user_metadata.avatar_url}
-                    alt="avatar"
-                  />
-                  <AvatarFallback>{getInitials(userName)}</AvatarFallback>
+                <Avatar className="border-2 border-opacity-50 border-memora-gray">
+                  <AvatarImage src={encodedImage} alt="avatar" />
+                  <AvatarFallback>
+                    {encodedImage !== undefined ? (
+                      <div className="animate-spin">
+                        <IconLoader />
+                      </div>
+                    ) : (
+                      getInitials(userName)
+                    )}
+                  </AvatarFallback>
                 </Avatar>
               </div>
               <div className="w-[22ch] flex flex-col justify-center">

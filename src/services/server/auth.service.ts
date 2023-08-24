@@ -123,6 +123,23 @@ class ServerAuthService extends ServerServiceApi {
       };
     }
   }
+
+  async refreshSession() {
+    try {
+      const { error, data } = await this.supabase.auth.refreshSession();
+      return { error, data };
+    } catch (error) {
+      console.error(error);
+      return {
+        data: null,
+        error: {
+          name: AUTH_ERROR,
+          message: "Something went wrong, please try again later",
+          status: 500,
+        },
+      };
+    }
+  }
 }
 
 export default ServerAuthService;

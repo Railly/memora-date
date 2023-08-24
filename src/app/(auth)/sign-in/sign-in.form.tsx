@@ -85,11 +85,9 @@ const AuthForm = () => {
         searchParams.get("redirectTo") || "/dashboard"
       );
       if (response.ok) {
-        console.log({ response });
         router.push(response.data.url);
       }
     } catch (error) {
-      console.log(error);
       setIsLoading({ ...isLoading, github: false });
     }
   };

@@ -13,6 +13,7 @@ const Header = () => {
       </Link>
       <SheetTrigger asChild>
         <Button
+          title="Menu"
           variant="icon"
           type="button"
           className="p-0 hover:bg-gray-700/30"

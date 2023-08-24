@@ -1,13 +1,14 @@
 import { cookies } from "next/headers";
 import ServerApiProvider from "@/services/server";
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest } from "next/server";
 import { ApiResponse } from "../../utils/response.utils";
+
+export const dynamic = "force-dynamic";
 
 export async function POST(req: NextRequest) {
   try {
     const serverApiProvider = new ServerApiProvider({ cookies });
     const response = await serverApiProvider.auth.signOut();
-    console.log({ response });
     if (response?.error) {
       return ApiResponse.serverError(response.error.message, response.error);
     }

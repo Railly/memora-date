@@ -1,4 +1,4 @@
-import { CONTACT_ERROR, EVENT_TYPE_ERROR } from "./constants";
+import { CONTACT_ERROR, EVENT_TYPE_ERROR, PROFILE_ERROR } from "./constants";
 import { HttpError } from "./errors";
 
 export const clientRequest = async (url: string, options: RequestInit) => {
@@ -36,6 +36,18 @@ export const eventServiceError = (error: any) => {
     data: null,
     error: {
       name: EVENT_TYPE_ERROR,
+      message: "Something went wrong, please try again later",
+      status: 500,
+    },
+  };
+};
+
+export const profileServerError = (error: any) => {
+  console.error(error);
+  return {
+    data: null,
+    error: {
+      name: PROFILE_ERROR,
       message: "Something went wrong, please try again later",
       status: 500,
     },

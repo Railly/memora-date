@@ -11,8 +11,6 @@ export default async function ProfilePage() {
   const contacts = await rscApiProvider.contact.getContacts();
   const session = await rscApiProvider.auth.getSession();
 
-  console.log(events);
-
   return (
     <div className="flex justify-center">
       <div className="flex flex-col w-full gap-6">

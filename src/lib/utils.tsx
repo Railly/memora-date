@@ -33,3 +33,13 @@ export function getInitials(name: string) {
   const [first, second] = name.split(" ");
   return `${first[0]}${second[0]}`;
 }
+
+export const getImageUrl = (image: string) => {
+  const baseUrl =
+    "https://cgkjgmtdxmqoruwpyojn.supabase.co/storage/v1/object/public/profiles/";
+  if (image.startsWith("http")) {
+    return image;
+  } else {
+    return `${baseUrl}${image}`;
+  }
+};
