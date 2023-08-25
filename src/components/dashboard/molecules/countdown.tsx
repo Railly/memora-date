@@ -139,7 +139,7 @@ function CountDownUnit({
   return (
     <div
       className={cn("w-10 sm:w-12", {
-        "text-[#595959]": isGray,
+        "dark:text-[#595959] text-[#929191]": isGray,
       })}
     >
       <span className="block text-4xl font-bold sm:text-5xl">{strValue}</span>

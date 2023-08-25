@@ -1,6 +1,5 @@
 import { ContactColumns } from "@/lib/entities.types";
 import { UpdateContactParams } from "@/lib/form.types";
-import { ContactSchema } from "@/schemas/contact.schema";
 import { contactServerError } from "../utils";
 import { ServerServiceApi } from "./blueprint";
 import { ContactSchema } from "@/schemas/contact.schema";

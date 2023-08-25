@@ -20,10 +20,9 @@ export const Visibility: React.FC<IVisibilityProps> = ({
       variant={isPublic ? "input-green" : "input-pink"}
       className={cn(
         {
-          "text-memora-green hover:bg-memora-green/50 hover:text-foreground":
+          "text-emerald-500 hover:bg-emerald-500/50 hover:text-foreground":
             isPublic,
-          "text-memora-pink hover:bg-memora-pink/50 hover:text-foreground":
-            !isPublic,
+          "text-pink-500 hover:bg-pink-500/50 hover:text-foreground": !isPublic,
         },
         "stroke-current"
       )}

@@ -68,11 +68,14 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
   }, [isReminderEnabled]);
 
   return (
-    <Collapsible className="p-4 space-y-2 border rounded-sm bg-muted/40 border-form-stroke/20">
+    <Collapsible
+      open={isReminderEnabled}
+      className="p-4 space-y-2 border rounded-sm bg-muted/40 border-form-stroke/20"
+    >
       <div className="flex items-center justify-between w-full gap-4">
         <p className="text-foreground/80 text-md">Reminder Settings</p>
         <div className="flex items-center gap-2 space-y-0 transition duration-200 ease-in-out">
-          <CollapsibleTrigger type="button">
+          <CollapsibleTrigger asChild>
             <FormField
               control={control}
               name="reminder.isEnabled"

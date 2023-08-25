@@ -70,9 +70,7 @@ const CreateEventForm: React.FC<ICreateEventFormProps> = ({
       toast,
     });
 
-    // TODO: Redirect to event page
-    // router.push(`/events/${eventResponse.data.id}`);
-    router.push("/events");
+    router.push(`/events/details/${eventResponse.data.id}`);
   };
 
   return (
@@ -95,8 +93,9 @@ const CreateEventForm: React.FC<ICreateEventFormProps> = ({
           setValue={form.setValue}
           contacts={contacts}
           user={session?.user}
+          clearErrors={form.clearErrors}
         />
-        <div className="flex w-full gap-4">
+        <div key="my-button" id="my-button" className="flex w-full gap-4">
           <Button
             variant="secondary"
             type="button"

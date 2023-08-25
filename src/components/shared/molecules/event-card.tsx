@@ -31,7 +31,9 @@ const EventCard: React.FC<IEventCardProps> = ({ event }) => {
         <TimeLeft reminder={event.reminder} />
       </div>
       <div className="flex flex-col w-full py-2">
-        <span className="text-2xl font-bold">{event.name}</span>
+        <span className="text-2xl font-bold overflow-hidden overflow-ellipsis whitespace-nowrap">
+          {event.name}
+        </span>
         <span className="w-full overflow-hidden overflow-ellipsis whitespace-nowrap">
           {event.description}
         </span>

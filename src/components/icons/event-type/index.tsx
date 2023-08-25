@@ -63,7 +63,7 @@ export const eventTypeUtils: EventTypeUtils = {
   generic: {
     icon: <IconSpeakerphone height={18} width={18} />,
     color: "default",
-    className: "bg-white focus:bg-white",
+    className: "bg-foreground text-background focus:bg-foreground",
   },
   default: {
     icon: <IconWindmill size={18} />,
