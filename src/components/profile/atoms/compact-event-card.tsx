@@ -33,7 +33,7 @@ const CompactEventCard: React.FC<CompactEventCardProps> = ({ event }) => {
 
 export const CompactEventCardSkeleton = () => {
   return (
-    <div className="flex flex-col w-40 gap-1 p-2 rounded-md h-28">
+    <div className="flex flex-col w-40 gap-1 p-2 rounded-md h-28 bg-foreground text-muted">
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row items-center gap-1">
           <div className="flex items-center justify-center rounded-md">
@@ -41,12 +41,12 @@ export const CompactEventCardSkeleton = () => {
           </div>
           <p className="text-sm font-medium">generic</p>
         </div>
-        <div className="w-5 h-3 animate-pulse bg-foreground/20"></div>
+        <div className="w-5 h-3 bg-gray-400 animate-pulse"></div>
       </div>
       <div className="flex flex-col gap-2">
-        <div className="h-4 animate-pulse bg-foreground/20"></div>
-        <div className="h-4 animate-pulse bg-foreground/20"></div>
-        <div className="h-4 animate-pulse bg-foreground/20"></div>
+        <div className="h-4 bg-gray-400 animate-pulse"></div>
+        <div className="h-4 bg-gray-400 animate-pulse"></div>
+        <div className="h-4 bg-gray-400 animate-pulse"></div>
       </div>
     </div>
   );

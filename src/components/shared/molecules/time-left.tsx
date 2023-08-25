@@ -146,7 +146,7 @@ const TimeLeft: React.FC<TimeLeftProps> = ({ reminder, isShort }) => {
   }, [localDateMerged, recurrenceType]);
 
   if (isShort) {
-    return <span className="text-black">{timeLeft || "0s"}</span>;
+    return <span>{timeLeft || "0s"}</span>;
   }
 
   return (

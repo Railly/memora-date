@@ -82,11 +82,11 @@ const UserInformationSekeleton = () => {
   return (
     <section className="flex flex-col items-center gap-3">
       <div className="w-32 h-32">
-        <div className="w-full h-full rounded-full bg-foreground/20 animate-pulse" />
+        <div className="w-full h-full bg-gray-400 rounded-full animate-pulse" />
       </div>
       <div className="flex flex-col items-center gap-2 text-center">
-        <div className="h-4 w-28 bg-foreground/20 animate-pulse" />
-        <div className="w-24 h-3 bg-foreground/20 animate-pulse" />
+        <div className="h-4 bg-gray-400 w-28 animate-pulse" />
+        <div className="w-24 h-3 bg-gray-400 animate-pulse" />
       </div>
     </section>
   );
