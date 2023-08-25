@@ -1,19 +1,26 @@
+"use client";
+
 import { eventTypeUtils } from "@/components/icons/event-type";
 import TimeLeft from "@/components/shared/molecules/time-left";
 import { EventWithType } from "@/lib/entities.types";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 interface CompactEventCardProps {
   event: EventWithType;
 }
 
 const CompactEventCard: React.FC<CompactEventCardProps> = ({ event }) => {
+  const router = useRouter();
+  const goToEvent = () => router.push(`/events/details/${event.id}`);
+
   return (
     <div
       className={cn(
-        "flex flex-col w-40 gap-1 p-2 rounded-md text-black",
+        "flex flex-col w-40 gap-1 p-2 rounded-md text-black cursor-pointer",
         eventTypeUtils[event.event_type?.value || "default"].className
       )}
+      onClick={goToEvent}
     >
       <div className="flex flex-row justify-between">
         <div className="flex flex-row items-center gap-1">
