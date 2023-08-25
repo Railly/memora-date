@@ -28,20 +28,20 @@
     --accent: 60 4.8% 95.9%;
     --accent-foreground: 24 9.8% 10%;
 
-    --destructive: 0 84.2% 60.2%;
+    --destructive: 0 54.2% 55.2%;
     --destructive-foreground: 60 9.1% 97.8%;
 
     --ring: 24 5.4% 63.9%;
 
     --radius: 0.5rem;
 
-    --memora-purple: 256 100% 85%;
-    --memora-green: 80 50% 73%;
-    --memora-blue: 202 96% 71%;
-    --memora-yellow: 46 100% 50%;
-    --memora-pink: 346 78% 62%;
-    --memora-orange: 12 99% 81%;
-    --memora-gray: 0 0% 15%;
+    --memora-purple: 256 100% 95%;
+    --memora-green: 80 50% 83%;
+    --memora-blue: 202 96% 81%;
+    --memora-yellow: 46 100% 70%;
+    --memora-pink: 346 78% 82%;
+    --memora-orange: 12 99% 91%;
+    --memora-gray: 0 0% 65%;
 
     --google: 0 0% 19%;
     --github: 224 50% 30%;
@@ -73,7 +73,7 @@
     --accent: 12 6.5% 15.1%;
     --accent-foreground: 60 9.1% 97.8%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 52.8% 40.6%;
     --destructive-foreground: 0 85.7% 97.3%;
 
     --ring: 12 6.5% 15.1%;

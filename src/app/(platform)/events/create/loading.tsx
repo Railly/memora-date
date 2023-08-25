@@ -1,3 +1,5 @@
+import CreateEventForm from "./create-event.form";
+
 export default function CreateEventLoading() {
-  return <div> Loading..</div>;
+  return <CreateEventForm eventTypes={null} contacts={null} session={null} />;
 }

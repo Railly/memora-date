@@ -60,6 +60,8 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           )}
           ref={ref}
           {...props}
+          aria-describedby="input"
+          aria-controls="input"
         />
         {rightIcon && (
           <i className="absolute inset-y-0 flex items-center right-2">

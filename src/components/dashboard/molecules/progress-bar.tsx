@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 
 import { EventWithType } from "@/lib/entities.types";
 import { cn } from "@/lib/utils";
+import { Progress } from "@/components/ui/progress";
 
 interface ProgressBarProps {
   reminder: EventWithType["reminder"] | null | undefined;
@@ -70,19 +71,10 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ reminder }) => {
 
   return (
     <div className="relative w-full h-8 bg-muted border border-form-stroke/20 rounded-lg overflow-hidden">
-      <div
-        style={{
-          width: progress === 0 ? "100%" : `${progress}%`,
-        }}
+      <Progress
+        value={progress}
         className={cn(
-          "absolute h-full transition-all duration-500 ease-in-out",
-          {
-            "bg-muted": progress === 0,
-            "bg-memora-green": progress < 50 && progress > 0,
-            "bg-memora-orange": progress >= 50 && progress < 75,
-            "bg-memora-pink": progress >= 75 && progress < 100,
-            "bg-memora-blue": progress === 100,
-          }
+          "absolute bg-muted h-full transition-all duration-500 ease-in-out"
         )}
       />
       <div

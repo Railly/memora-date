@@ -4,6 +4,7 @@ import { Session } from "@supabase/supabase-js";
 import { UploadProfileImage } from "../forms/event/upload-profile-image";
 import clientApiProvider from "@/services/client";
 import { useToast } from "../ui/use-toast";
+import { useRouter } from "next/navigation";
 
 interface AvatarSectionProps {
   session: Session | null;
@@ -14,6 +15,7 @@ const AvatarSection: React.FC<AvatarSectionProps> = ({
   session,
   isSkeleton,
 }) => {
+  const router = useRouter();
   const { toast } = useToast();
 
   const userName =
@@ -38,6 +40,7 @@ const AvatarSection: React.FC<AvatarSectionProps> = ({
         });
       }
       await clientApiProvider.auth.refreshSession();
+      router.refresh();
     } catch (error) {
       console.log(error);
       toast({

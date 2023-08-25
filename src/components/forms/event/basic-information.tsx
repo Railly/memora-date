@@ -46,7 +46,9 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
             name="event.name"
             render={({ field, fieldState }) => (
               <FormItem className="relative flex flex-col w-full">
-                <FormLabel htmlFor={field.name}>Name</FormLabel>
+                <FormLabel htmlFor={field.name} isRequired>
+                  Name
+                </FormLabel>
                 <FormControl>
                   <Input
                     id={field.name}
@@ -68,7 +70,9 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
             name="event_type.type"
             render={({ field, fieldState }) => (
               <FormItem className="relative flex flex-col w-full">
-                <FormLabel htmlFor={field.name}>Category</FormLabel>
+                <FormLabel htmlFor={field.name} isRequired>
+                  Category
+                </FormLabel>
                 <FormControl>
                   <Select
                     disabled={eventTypes?.length === 0}
@@ -136,7 +140,9 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
           name="event.description"
           render={({ field, fieldState }) => (
             <FormItem className="relative flex flex-col">
-              <FormLabel htmlFor={field.name}>Description</FormLabel>
+              <FormLabel htmlFor={field.name} isRequired>
+                Description
+              </FormLabel>
               <FormControl>
                 <Textarea
                   id={field.name}

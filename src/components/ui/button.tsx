@@ -14,7 +14,7 @@ const buttonVariants = cva(
         "default-2":
           "bg-foreground text-background shadow-sm hover:bg-foreground/80",
         destructive:
-          "bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/90",
+          "bg-destructive text-destructive-foreground text-base shadow-sm hover:bg-destructive/90",
         outline:
           "border border-input bg-background shadow-sm hover:bg-accent hover:text-accent-foreground",
         secondary:
@@ -29,9 +29,9 @@ const buttonVariants = cva(
         "input-error":
           "bg-input border border-red-500 transition ease-in-out duration-200",
         "input-green":
-          "bg-input border border-memora-green transition ease-in-out duration-200",
+          "bg-input border border-emerald-500 transition ease-in-out duration-200",
         "input-pink":
-          "bg-input border border-memora-pink transition ease-in-out duration-200",
+          "bg-input border border-pink-500 transition ease-in-out duration-200",
       },
       size: {
         default: "h-9 px-4 py-2",
@@ -61,9 +61,6 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
         className={cn(buttonVariants({ variant, size, className }))}
         ref={ref}
         {...props}
-        // TODO: Check this two properties:
-        aria-controls="sheet"
-        aria-describedby="sheet"
       />
     );
   }

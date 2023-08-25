@@ -22,4 +22,5 @@ export const EMPTY_CONTACT: Contact = {
   image_url: "",
   user_id: "",
   name_email_phone: "",
+  is_imported: false,
 };

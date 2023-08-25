@@ -35,7 +35,7 @@ const ContactCard: React.FC<IContactCardProps> = ({
   onUpdateContact,
 }) => {
   return (
-    <div className="flex justify-center items-center bg-muted p-3 border border-form-stroke/20 rounded-xl min-w-full">
+    <div className="flex justify-center items-center bg-muted p-3 border border-form-stroke/20 rounded-xl w-full">
       <Avatar className="flex justify-center items-center w-14 h-14">
         <AvatarImage
           src={`${
@@ -58,8 +58,10 @@ const ContactCard: React.FC<IContactCardProps> = ({
         </AvatarFallback>
       </Avatar>
       <div className="flex flex-col w-full py-2 px-4">
-        <div className="flex gap-1">
-          <span className="text-xl font-bold">{contact?.full_name}</span>
+        <div className="flex w-full gap-1">
+          <span className="text-xl w-[20ch] sm:w-full font-bold overflow-hidden overflow-ellipsis whitespace-nowrap">
+            {contact?.full_name}
+          </span>
           {contact?.is_imported && (
             <Badge variant="imported">
               <IconNotebook size={24} />
@@ -81,7 +83,7 @@ const ContactCard: React.FC<IContactCardProps> = ({
           key={contact?.id}
           title="Are you sure you want to delete this contact?"
           description="This action cannot be undone."
-          triggerClassName="p-0.5 rounded-sm bg-memora-pink cursor-pointer flex justify-center items-center p-1"
+          triggerClassName="rounded-sm bg-destructive text-destructive-foreground cursor-pointer flex justify-center items-center p-1"
           onConfirm={() => onDeleteContact(contact.id, contact?.image_url)}
         >
           {<IconTrash size={20} />}
