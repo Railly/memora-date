@@ -1,5 +1,10 @@
 "use client";
-import { Control, UseFormSetValue, UseFormWatch } from "react-hook-form";
+import {
+  Control,
+  UseFormSetValue,
+  UseFormWatch,
+  UseFormClearErrors,
+} from "react-hook-form";
 import {
   FormControl,
   FormErrorMessage,
@@ -43,6 +48,7 @@ interface IContactSettingsProps {
   setValue: UseFormSetValue<CreateEventSchema>;
   watch: UseFormWatch<CreateEventSchema>;
   user: User | undefined;
+  clearErrors: UseFormClearErrors<CreateEventSchema>;
 }
 export const ContactSettings: React.FC<IContactSettingsProps> = ({
   control,
@@ -50,15 +56,13 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
   setValue,
   watch,
   user,
+  clearErrors,
 }) => {
   const router = useRouter();
   const selectContactUuid = watch("contact.selectedContact");
+  const isContactEnabled = watch("contact.isEnabled");
   const contact = contacts?.find((c) => c.id === selectContactUuid);
-  const [justCreatedContact, setJustCreatedContact] = useState<Contact | null>(
-    null
-  );
-
-  const contactToUse = justCreatedContact || contact || EMPTY_CONTACT;
+  console.log({ contact });
 
   const onCreateContact = async (data: ContactSchema) => {
     if (!user) return;
@@ -71,8 +75,6 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
         contact: parsedContact.data,
         user_id: user.id,
       });
-      console.log({ response });
-
       if (response.ok) {
         toast({
           title: "Contact created",
@@ -80,8 +82,11 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
           variant: "success",
         });
       }
-      setJustCreatedContact(response.data);
       router.refresh();
+      setTimeout(() => {
+        setValue("contact.selectedContact", response.data.id);
+        clearErrors("contact.selectedContact");
+      }, 1000);
     } catch (error) {
       console.log(error);
       toast({
@@ -92,12 +97,6 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
     }
   };
 
-  useEffect(() => {
-    if (justCreatedContact) {
-      setValue("contact.selectedContact", justCreatedContact.id);
-    }
-  }, [justCreatedContact]);
-
   const getInitials = (name?: string) => {
     if (!name) return "";
     return name
@@ -107,11 +106,14 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
   };
 
   return (
-    <Collapsible className="p-4 space-y-2 border rounded-sm bg-muted/40 border-form-stroke/20">
+    <Collapsible
+      open={isContactEnabled}
+      className="p-4 space-y-2 border rounded-sm bg-muted/40 border-form-stroke/20"
+    >
       <div className="flex items-center justify-between w-full gap-4">
         <p className="text-foreground/80 text-md">Contact Settings</p>
         <div className="flex items-center gap-2 space-y-0 transition duration-200 ease-in-out">
-          <CollapsibleTrigger type="button">
+          <CollapsibleTrigger asChild>
             <FormField
               control={control}
               name="contact.isEnabled"
@@ -143,7 +145,7 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
             name="contact.selectedContact"
             render={({ field, fieldState }) => (
               <FormItem className="flex flex-col w-full h-full mt-1 transition duration-200 ease-in-out">
-                <FormLabel htmlFor={field.name}>
+                <FormLabel htmlFor={field.name} isRequired>
                   Select an existing contact
                 </FormLabel>
                 <FormControl className="flex gap-4">
@@ -168,19 +170,19 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
             )}
           />
         </div>
-        {selectContactUuid ? (
+        {contact?.id ? (
           <div className="flex items-center justify-between p-4 space-x-4 border border-form-stroke/20">
             <div className="flex items-center gap-4">
               <Avatar className="transition-opacity group-hover:opacity-40">
                 <AvatarImage
                   src={
-                    contactToUse.image_url
+                    contact.image_url
                       ? `${encodeURI(
-                          `https://cgkjgmtdxmqoruwpyojn.supabase.co/storage/v1/object/public/profiles/${contactToUse?.image_url}`
+                          `https://cgkjgmtdxmqoruwpyojn.supabase.co/storage/v1/object/public/profiles/${contact?.image_url}`
                         )}`
                       : undefined
                   }
-                  alt={contactToUse?.full_name}
+                  alt={contact?.full_name}
                 />
                 <AvatarFallback className="select-none">
                   {getInitials(contact?.full_name)}
@@ -188,15 +190,17 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
               </Avatar>
               <div className="flex flex-col">
                 <p className="text-sm font-medium text-foreground">
-                  {contactToUse?.full_name}
+                  {contact?.full_name}
                 </p>
-                <p className="text-xs text-gray-500">{contactToUse?.email}</p>
+                <p className="text-xs text-gray-500">{contact?.email}</p>
               </div>
             </div>
             <Button
               type="button"
               variant="outline"
-              onClick={() => setValue("contact.selectedContact", "")}
+              onClick={() => {
+                setValue("contact.selectedContact", "");
+              }}
             >
               <IconX size={20} />
             </Button>

@@ -138,11 +138,11 @@ export const EventsDetailsSection: React.FC<IEventsSectionProps> = ({
             event?.reminder?.[0]?.recurrence_type,
             event?.reminder?.[0]?.recurrence_value
           ),
-          interval:
-            `Every ${event?.reminder?.[0]?.interval_value} ${
-              event?.reminder?.[0]?.interval_unit
-            }${Number(event?.reminder?.[0]?.interval_value) > 1 ? "s" : ""}` ||
-            "No interval",
+          interval: event?.reminder?.[0]?.interval_value
+            ? `Every ${event?.reminder?.[0]?.interval_value} ${
+                event?.reminder?.[0]?.interval_unit
+              }${Number(event?.reminder?.[0]?.interval_value) > 1 ? "s" : ""}`
+            : "No interval",
         }).map((info) =>
           isSkeleton ? (
             <EventDetailsSkeleton key={info.title} />

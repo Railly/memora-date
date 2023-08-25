@@ -88,16 +88,24 @@ const FormItem = React.forwardRef<
 });
 FormItem.displayName = "FormItem";
 
-const FormLabel = React.forwardRef<
-  React.ElementRef<typeof Label>,
-  React.ComponentPropsWithoutRef<typeof Label>
->(({ className, ...props }, ref) => {
-  const { formItemId } = useFormField();
+interface IFormLabel extends React.ComponentPropsWithoutRef<typeof Label> {
+  isRequired?: boolean;
+}
 
-  return (
-    <Label ref={ref} className={className} htmlFor={formItemId} {...props} />
-  );
-});
+const FormLabel = React.forwardRef<React.ElementRef<typeof Label>, IFormLabel>(
+  ({ className, isRequired, ...props }, ref) => {
+    const { formItemId } = useFormField();
+
+    return (
+      <>
+        <Label ref={ref} className={className} htmlFor={formItemId} {...props}>
+          {props.children}
+          {isRequired && <span className="text-pink-500">*</span>}
+        </Label>
+      </>
+    );
+  }
+);
 FormLabel.displayName = "FormLabel";
 
 const FormControl = React.forwardRef<

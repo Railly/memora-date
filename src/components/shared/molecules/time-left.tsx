@@ -87,17 +87,17 @@ const TimeLeft: React.FC<TimeLeftProps> = ({ reminder, isShort }) => {
         switch (unit) {
           case "seconds":
           case "minutes":
-            setColorClass("text-memora-pink");
+            setColorClass("dark:text-memora-pink text-pink-600");
             break;
           case "hours":
           case "days":
-            setColorClass("text-memora-orange");
+            setColorClass("dark:text-memora-orange text-amber-600");
             break;
           case "months":
-            setColorClass("text-memora-green");
+            setColorClass("dark:text-memora-green text-emerald-600");
             break;
           case "years":
-            setColorClass("text-memora-blue");
+            setColorClass("dark:text-memora-blue text-blue-600");
             break;
           default:
             setColorClass("");

@@ -23,12 +23,10 @@ const CompactEventCard: React.FC<CompactEventCardProps> = ({ event }) => {
           <p className="text-sm font-medium">{event.event_type?.value}</p>
         </div>
         <p className="text-sm font-medium">
-          <TimeLeft date={event.date} isShort={true} />
+          <TimeLeft reminder={event.reminder} isShort />
         </p>
       </div>
-      <p className="font-bold leading-snug line-clamp-3">
-        {event.description?.toLocaleUpperCase()}
-      </p>
+      <p className="font-bold leading-snug line-clamp-3">{event.description}</p>
     </div>
   );
 };
