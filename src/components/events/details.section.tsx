@@ -89,7 +89,9 @@ export const EventsDetailsSection: React.FC<IEventsSectionProps> = ({
       {isSkeleton ? (
         <span className="w-full h-6 my-1 text-2xl font-bold bg-gray-400 animate-pulse" />
       ) : (
-        <h1 className="text-3xl">{event?.name}</h1>
+        <h1 className="inline-block w-full text-2xl font-bold">
+          {event?.name}
+        </h1>
       )}
       <div>
         {isSkeleton ? (
@@ -110,7 +112,7 @@ export const EventsDetailsSection: React.FC<IEventsSectionProps> = ({
       {isSkeleton ? (
         <span className="w-20 h-6 my-1 text-2xl font-bold bg-gray-400 animate-pulse" />
       ) : (
-        <h2 className="text-2xl">Description</h2>
+        <h2 className="text-2xl font-semibold">Description</h2>
       )}
       {isSkeleton ? (
         <>
@@ -125,7 +127,7 @@ export const EventsDetailsSection: React.FC<IEventsSectionProps> = ({
       {isSkeleton ? (
         <span className="w-20 h-6 my-1 text-2xl font-bold bg-gray-400 animate-pulse" />
       ) : (
-        <h3 className="text-2xl">More Details</h3>
+        <h3 className="text-2xl font-semibold">More Details</h3>
       )}
       <div className="flex w-full gap-4 flex-wrap">
         {generateCards({
