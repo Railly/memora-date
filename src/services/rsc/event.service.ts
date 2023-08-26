@@ -6,22 +6,16 @@ class RscEventService extends RscServiceApi {
   }
 
   async getEvents() {
-    const events = await this.supabase
-      .from("event")
-      .select(
-        `*,
+    const events = await this.supabase.from("event").select(
+      `*,
          event_type (value),
-         reminder (date, time, reminder_type, interval_unit, interval_value, recurrence_type, recurrence_value, created_at),
-         reminders_with_overdue (is_overdue)
+         reminder (date, time, reminder_type, interval_unit, interval_value, recurrence_type, recurrence_value, created_at)
       `,
-        {
-          count: "exact",
-        }
-      )
-      .order("is_overdue", {
-        foreignTable: "reminders_with_overdue",
-        nullsFirst: true,
-      });
+      {
+        count: "exact",
+      }
+    );
+
     return events;
   }
 
@@ -36,8 +30,7 @@ class RscEventService extends RscServiceApi {
       .select(
         `*,
          event_type (value),
-         reminder (date, time, reminder_type, interval_unit, interval_value, recurrence_type, recurrence_value, created_at),
-         reminders_with_overdue (is_overdue)
+         reminder (date, time, reminder_type, interval_unit, interval_value, recurrence_type, recurrence_value, created_at)
       `
       )
       .eq("id", id);

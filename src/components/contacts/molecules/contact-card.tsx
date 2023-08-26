@@ -59,7 +59,7 @@ const ContactCard: React.FC<IContactCardProps> = ({
       </Avatar>
       <div className="flex flex-col w-full py-2 px-4">
         <div className="flex w-full gap-1">
-          <span className="text-xl w-[20ch] sm:w-full font-bold overflow-hidden overflow-ellipsis whitespace-nowrap">
+          <span className="text-xl max-w-[20ch] sm:w-full font-bold overflow-hidden overflow-ellipsis whitespace-nowrap">
             {contact?.full_name}
           </span>
           {contact?.is_imported && (
