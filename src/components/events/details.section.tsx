@@ -153,7 +153,7 @@ export const EventsDetailsSection: React.FC<IEventsSectionProps> = ({
           )}
         </div>
       </div>
-      <div className="flex justify-evenly w-full mt-2">
+      <footer className="flex w-full gap-4 fixed bottom-5 left-0 z-20 px-3 justify-center">
         <Button variant="secondary" className="flex gap-x-1" onClick={goToEdit}>
           <IconEdit size={20} className="text-white" />
           Edit Event
@@ -173,7 +173,7 @@ export const EventsDetailsSection: React.FC<IEventsSectionProps> = ({
           <IconLogout2 size={20} className="text-white" />
           Delete Event
         </ConfirmDialog>
-      </div>
+      </footer>
     </section>
   );
 };

@@ -49,6 +49,7 @@ interface IContactSettingsProps {
   watch: UseFormWatch<CreateEventSchema>;
   user: User | undefined;
   clearErrors: UseFormClearErrors<CreateEventSchema>;
+  isEditing?: boolean;
 }
 export const ContactSettings: React.FC<IContactSettingsProps> = ({
   control,
@@ -57,12 +58,12 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
   watch,
   user,
   clearErrors,
+  isEditing,
 }) => {
   const router = useRouter();
   const selectContactUuid = watch("contact.selectedContact");
   const isContactEnabled = watch("contact.isEnabled");
   const contact = contacts?.find((c) => c.id === selectContactUuid);
-  console.log({ contact });
 
   const onCreateContact = async (data: ContactSchema) => {
     if (!user) return;
@@ -124,7 +125,7 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
                       checked={field.value}
                       onCheckedChange={(value) => {
                         field.onChange(value);
-                        if (!value) {
+                        if (!isEditing && !value) {
                           setValue("contact.selectedContact", "");
                         }
                       }}

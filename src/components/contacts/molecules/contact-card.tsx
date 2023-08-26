@@ -8,6 +8,8 @@ import { IconPencil } from "@tabler/icons-react";
 import { ContactDialog } from "./contact-dialog";
 import { Spinner } from "@/components/shared/atoms/Spinner";
 import { Badge } from "@/components/ui/badge";
+import { cn } from "@/lib/utils";
+import { buttonVariants } from "@/components/ui/button";
 
 interface IContactCardProps {
   contact: Contact;
@@ -35,7 +37,15 @@ const ContactCard: React.FC<IContactCardProps> = ({
   onUpdateContact,
 }) => {
   return (
-    <div className="flex justify-center items-center bg-muted p-3 border border-form-stroke/20 rounded-xl w-full">
+    <div
+      tabIndex={0}
+      className={cn(
+        buttonVariants({
+          variant: "event",
+        }),
+        "h-full justify-between flex-row focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+      )}
+    >
       <Avatar className="flex justify-center items-center w-14 h-14">
         <AvatarImage
           src={`${

@@ -1,10 +1,10 @@
-"use client";
-
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 import { eventTypeUtils } from "@/components/icons/event-type";
 import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
 import { EventWithType } from "@/lib/entities.types";
+import { cn } from "@/lib/utils";
 import { IconSpeakerphone } from "@tabler/icons-react";
 import TimeLeft from "./time-left";
 
@@ -13,15 +13,17 @@ interface IEventCardProps {
 }
 
 const EventCard: React.FC<IEventCardProps> = ({ event }) => {
-  const router = useRouter();
-  const goToEvent = () => router.push(`/events/details/${event.id}`);
-
   return (
-    <div
-      className="flex flex-col bg-muted p-4 text-left border rounded-lg w-full border-form-stroke/20 cursor-pointer"
-      onClick={goToEvent}
+    <Link
+      className={cn(
+        buttonVariants({
+          variant: "event",
+        }),
+        "h-full justify-between items-start focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+      )}
+      href={`/events/details/${event.id}`}
     >
-      <div className="flex justify-between">
+      <div className="flex w-full justify-between">
         <Badge
           icon={eventTypeUtils[event.event_type?.value || "default"].icon}
           variant={eventTypeUtils[event.event_type?.value || "default"].color}
@@ -38,7 +40,7 @@ const EventCard: React.FC<IEventCardProps> = ({ event }) => {
           {event.description}
         </span>
       </div>
-    </div>
+    </Link>
   );
 };
 

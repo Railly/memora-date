@@ -24,9 +24,7 @@ export default async function EventsDetailsPage({
     <div className="flex justify-center">
       <div className="flex flex-col w-full gap-6">
         <SubHeader title="Event details"></SubHeader>
-        <main>
-          <EventsDetailsSection event={event} />
-        </main>
+        <EventsDetailsSection event={event} />
       </div>
     </div>
   );

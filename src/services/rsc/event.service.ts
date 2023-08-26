@@ -9,13 +9,12 @@ class RscEventService extends RscServiceApi {
     const events = await this.supabase.from("event").select(
       `*,
          event_type (value),
-         reminder (date, time, reminder_type, interval_unit, interval_value, recurrence_type, recurrence_value, created_at)
+         reminder (id, date, time, reminder_type, interval_unit, interval_value, recurrence_type, recurrence_value, created_at, notification_methods)
       `,
       {
         count: "exact",
       }
     );
-
     return events;
   }
 
@@ -30,7 +29,7 @@ class RscEventService extends RscServiceApi {
       .select(
         `*,
          event_type (value),
-         reminder (date, time, reminder_type, interval_unit, interval_value, recurrence_type, recurrence_value, created_at)
+         reminder (id, date, time, reminder_type, interval_unit, interval_value, recurrence_type, recurrence_value, created_at, notification_methods)
       `
       )
       .eq("id", id);
