@@ -21,12 +21,10 @@ export default async function MyContactsPage() {
             {contacts?.data?.length === 1 ? "contact" : "contacts"}
           </Badge>
         </SubHeader>
-        <main className="flex flex-col w-full gap-4 mb-2">
-          <ContactsSection
-            contacts={contacts.data}
-            user={session?.user || null}
-          />
-        </main>
+        <ContactsSection
+          contacts={contacts.data}
+          user={session?.user || null}
+        />
       </div>
     </div>
   );

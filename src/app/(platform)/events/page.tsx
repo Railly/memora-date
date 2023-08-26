@@ -22,10 +22,8 @@ export default async function MyEventsPage() {
             {events?.data?.length === 1 ? "event" : "events"}
           </Badge>
         </SubHeader>
-        <main className="flex flex-col w-full gap-4 mb-2">
-          <EventsSection events={events?.data} />
-          <FloatingActionButton to={ACTION_BUTTON_PATHS.EVENT_CREATOR} />
-        </main>
+        <EventsSection events={events?.data as any} />
+        <FloatingActionButton to={ACTION_BUTTON_PATHS.EVENT_CREATOR} />
       </div>
     </div>
   );
