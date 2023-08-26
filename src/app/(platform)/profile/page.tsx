@@ -15,7 +15,7 @@ export default async function ProfilePage() {
     <div className="flex justify-center">
       <div className="flex flex-col w-full gap-6">
         <SubHeader title="Profile" />
-        <main className="flex flex-col items-center w-full gap-8 mb-2">
+        <section className="flex flex-col items-center w-full gap-8 mb-2">
           <AvatarSection session={session} />
           <ProfileInfoSection
             countEvent={events?.count}
@@ -23,7 +23,7 @@ export default async function ProfilePage() {
             countContact={contacts?.count}
           />
           <SummaryEventSection upcoming={events?.data} past={null} />
-        </main>
+        </section>
       </div>
     </div>
   );

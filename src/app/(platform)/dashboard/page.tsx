@@ -12,8 +12,6 @@ export default async function DashBoardPage() {
   const events = await rscApiProvider.event.getEvents();
   const nextEvent = events.data?.shift();
 
-  console.log({ events });
-
   return (
     <div className="flex justify-center w-full">
       <div className="flex flex-col w-full gap-6">

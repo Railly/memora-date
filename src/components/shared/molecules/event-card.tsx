@@ -1,27 +1,27 @@
-"use client";
-
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 import { eventTypeUtils } from "@/components/icons/event-type";
 import { Badge } from "@/components/ui/badge";
+import { buttonVariants } from "@/components/ui/button";
 import { EventWithType } from "@/lib/entities.types";
+import { cn } from "@/lib/utils";
 import { IconSpeakerphone } from "@tabler/icons-react";
 import TimeLeft from "./time-left";
-import { Button } from "@/components/ui/button";
 
 interface IEventCardProps {
   event: EventWithType;
 }
 
 const EventCard: React.FC<IEventCardProps> = ({ event }) => {
-  const router = useRouter();
-  const goToEvent = () => router.push(`/events/details/${event.id}`);
-
   return (
-    <Button
-      className="h-full justify-between items-start focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
-      variant="event"
-      onClick={goToEvent}
+    <Link
+      className={cn(
+        buttonVariants({
+          variant: "event",
+        }),
+        "h-full justify-between items-start focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+      )}
+      href={`/events/details/${event.id}`}
     >
       <div className="flex w-full justify-between">
         <Badge
@@ -40,7 +40,7 @@ const EventCard: React.FC<IEventCardProps> = ({ event }) => {
           {event.description}
         </span>
       </div>
-    </Button>
+    </Link>
   );
 };
 

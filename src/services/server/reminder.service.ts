@@ -102,7 +102,6 @@ class ServerReminderService extends ServerServiceApi {
   }
 
   private async handleOneTimeReminder(params: HandleOneTimeReminderParams) {
-    console.log({ params });
     const payload = {
       notification_methods: params.notification_methods,
       time: params.time,
@@ -115,7 +114,6 @@ class ServerReminderService extends ServerServiceApi {
   }
 
   private async handleRecurringReminder(params: HandleRecurringReminderParams) {
-    console.log({ params });
     const payload = {
       notification_methods: params.notification_methods,
       time: params.time,

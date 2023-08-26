@@ -64,7 +64,7 @@ export const EventsSection: React.FC<IEventsSectionProps> = ({
   };
 
   return (
-    <section className="flex flex-col items-center w-full gap-6">
+    <section className="flex flex-col items-center w-full gap-6 mb-2">
       <form onSubmit={onSearch} className="flex w-full">
         <Input
           id="search-events"

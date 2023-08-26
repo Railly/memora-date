@@ -1,30 +1,26 @@
-"use client";
+import Link from "next/link";
 
 import { eventTypeUtils } from "@/components/icons/event-type";
 import TimeLeft from "@/components/shared/molecules/time-left";
-import { Button } from "@/components/ui/button";
+import { buttonVariants } from "@/components/ui/button";
 import { EventWithType } from "@/lib/entities.types";
 import { cn } from "@/lib/utils";
-import { useRouter } from "next/navigation";
 
 interface CompactEventCardProps {
   event: EventWithType;
 }
 
 const CompactEventCard: React.FC<CompactEventCardProps> = ({ event }) => {
-  const router = useRouter();
-  const goToEvent = () => router.push(`/events/details/${event.id}`);
-
   return (
-    <Button
-      variant="event"
+    <Link
       className={cn(
-        "h-full justify-between items-start focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary flex flex-col w-40 gap-1 p-2 rounded-md text-black cursor-pointer",
+        buttonVariants({ variant: "event" }),
+        "h-full justify-normal items-start focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary flex flex-col w-40 gap-1 p-2 rounded-md text-black cursor-pointer",
         eventTypeUtils[event.event_type?.value || "default"].className
       )}
-      onClick={goToEvent}
+      href={`/events/details/${event.id}`}
     >
-      <div className="flex flex-row justify-between">
+      <div className="flex flex-row justify-between w-full">
         <div className="flex flex-row items-center gap-1">
           <div className="flex items-center justify-center rounded-md">
             {eventTypeUtils[event.event_type?.value || "default"].icon}
@@ -35,8 +31,12 @@ const CompactEventCard: React.FC<CompactEventCardProps> = ({ event }) => {
           <TimeLeft reminder={event.reminder} isShort />
         </p>
       </div>
-      <p className="font-bold leading-snug line-clamp-3">{event.description}</p>
-    </Button>
+      <div className="w-full">
+        <p className="font-bold leading-snug sm:w-full overflow-hidden overflow-ellipsis whitespace-break-spaces line-clamp-3">
+          {event.description}
+        </p>
+      </div>
+    </Link>
   );
 };
 

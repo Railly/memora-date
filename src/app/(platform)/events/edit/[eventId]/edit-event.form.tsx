@@ -41,7 +41,6 @@ const EditEventForm: React.FC<ICreateEventFormProps> = ({
   const { toast } = useToast();
   const router = useRouter();
   const goBack = () => router.back();
-  console.log({ event });
 
   const onSubmit = async (data: CreateEventSchema) => {
     debugFormValues({ data, toast });
@@ -157,10 +156,6 @@ const EditEventForm: React.FC<ICreateEventFormProps> = ({
     event.contact_id &&
       form.setValue("contact.selectedContact", event.contact_id);
   }, [event]);
-
-  console.log({
-    event,
-  });
 
   return (
     <Form {...form}>
