@@ -80,7 +80,7 @@ const AvatarSection: React.FC<AvatarSectionProps> = ({
 
 const UserInformationSekeleton = () => {
   return (
-    <section className="flex flex-col items-center gap-3">
+    <section className="flex flex-col items-center gap-3 pb-2">
       <div className="w-32 h-32">
         <div className="w-full h-full bg-gray-400 rounded-full animate-pulse" />
       </div>
