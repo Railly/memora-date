@@ -35,12 +35,14 @@ interface IReminderSettingsProps {
   setValue: UseFormSetValue<CreateEventSchema>;
   watch: UseFormWatch<CreateEventSchema>;
   user: User | undefined;
+  isEditing?: boolean;
 }
 export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
   control,
   watch,
   setValue,
   user,
+  isEditing,
 }) => {
   const isRecurring = watch("reminder._.reminder_type") === "RECURRING";
   const interval = watch("reminder._.interval.unit");
@@ -49,7 +51,7 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
   const isReminderEnabled = watch("reminder.isEnabled");
 
   useEffect(() => {
-    if (isRecurring) {
+    if (isRecurring && !isEditing) {
       setValue("reminder._.interval.unit", "Day");
       setValue("reminder._.interval.value", 1);
       setValue("reminder._.recurrence.type", "After");
@@ -58,7 +60,7 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
   }, [isRecurring]);
 
   useEffect(() => {
-    if (isReminderEnabled) {
+    if (isReminderEnabled && !isEditing) {
       setValue("reminder.isEnabled", true);
       setValue("reminder._.reminder_type", "ONE_TIME");
       setValue("reminder.date", new Date());
@@ -224,7 +226,7 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
                                   >
                                     <SelectTrigger className="w-full">
                                       <SelectValue
-                                        placeholder="ga"
+                                        placeholder="Unit"
                                         className="flex items-center justify-between w-full"
                                       >
                                         <span>
@@ -259,7 +261,7 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
                           <FormLabel
                             variant={isRecurring ? "default" : "disabled"}
                           >
-                            Duration
+                            Recurrence
                           </FormLabel>
                           <div className="grid gap-2 place-items-center grid-cols-[0.5fr,1fr,2fr]">
                             <span className="text-xs text-[#B4B4B4]">End</span>

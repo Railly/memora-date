@@ -50,7 +50,13 @@ const CreateEventForm: React.FC<ICreateEventFormProps> = ({
     }
 
     const eventResponse = await clientApiProvider.event.createEvent({
-      event: data.event,
+      event: {
+        description: data.event.description,
+        name: data.event.name,
+        is_public: data.event.is_public,
+        is_reminder_enabled: data.reminder.isEnabled,
+        is_contact_enabled: data.contact.isEnabled,
+      },
       event_type_id: data.event_type.type,
       contact_id: contactId,
       user_id: session.user.id,
@@ -95,7 +101,7 @@ const CreateEventForm: React.FC<ICreateEventFormProps> = ({
           user={session?.user}
           clearErrors={form.clearErrors}
         />
-        <div key="my-button" id="my-button" className="flex w-full gap-4">
+        <div className="flex w-full gap-4 fixed bottom-5 left-0 z-20 px-3">
           <Button
             variant="secondary"
             type="button"

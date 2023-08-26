@@ -1,8 +1,8 @@
 import { Database } from "./database.types";
 
 export type Event = Database["public"]["Tables"]["event"]["Row"];
-export type RemindersWithOverdue =
-  Database["public"]["Views"]["reminders_with_overdue"]["Row"];
+// export type RemindersWithOverdue =
+//   Database["public"]["Views"]["remi"]["Row"];
 export type Contact = Database["public"]["Tables"]["contact"]["Row"];
 export type EventType = Database["public"]["Tables"]["event_type"]["Row"];
 export type Reminder = Database["public"]["Tables"]["reminder"]["Row"];
@@ -14,6 +14,7 @@ export interface EventWithType extends Event {
     value: EventType["value"];
   } | null;
   reminder: Array<{
+    id: Reminder["id"];
     date: Reminder["date"];
     time: Reminder["time"];
     reminder_type: Reminder["reminder_type"];
@@ -22,8 +23,9 @@ export interface EventWithType extends Event {
     recurrence_type: Reminder["recurrence_type"];
     recurrence_value: Reminder["recurrence_value"];
     created_at: Reminder["created_at"];
+    notification_methods: Reminder["notification_methods"];
   }> | null;
-  reminders_with_overdue: Array<{
-    is_overdue: RemindersWithOverdue["is_overdue"];
-  }> | null;
+  // reminders_with_overdue: Array<{
+  //   is_overdue: RemindersWithOverdue["is_overdue"];
+  // }> | null;
 }

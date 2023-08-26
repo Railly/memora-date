@@ -2,6 +2,7 @@
 
 import { eventTypeUtils } from "@/components/icons/event-type";
 import TimeLeft from "@/components/shared/molecules/time-left";
+import { Button } from "@/components/ui/button";
 import { EventWithType } from "@/lib/entities.types";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
@@ -15,9 +16,10 @@ const CompactEventCard: React.FC<CompactEventCardProps> = ({ event }) => {
   const goToEvent = () => router.push(`/events/details/${event.id}`);
 
   return (
-    <div
+    <Button
+      variant="event"
       className={cn(
-        "flex flex-col w-40 gap-1 p-2 rounded-md text-black cursor-pointer",
+        "h-full justify-between items-start focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary flex flex-col w-40 gap-1 p-2 rounded-md text-black cursor-pointer",
         eventTypeUtils[event.event_type?.value || "default"].className
       )}
       onClick={goToEvent}
@@ -34,7 +36,7 @@ const CompactEventCard: React.FC<CompactEventCardProps> = ({ event }) => {
         </p>
       </div>
       <p className="font-bold leading-snug line-clamp-3">{event.description}</p>
-    </div>
+    </Button>
   );
 };
 
