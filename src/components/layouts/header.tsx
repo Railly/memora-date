@@ -16,7 +16,7 @@ const Header = () => {
           title="Menu"
           variant="icon"
           type="button"
-          className="p-0 hover:bg-gray-700/30"
+          className="p-1 hover:bg-foreground/20"
         >
           <IconMenuDeep />
         </Button>
