@@ -1,5 +1,5 @@
 import { EventColumns } from "@/lib/entities.types";
-import { CreateEventParams } from "@/lib/form.types";
+import { CreateEventParams, UpdateEventParams } from "@/lib/form.types";
 import { HttpError } from "../errors";
 import { ClientServiceApi } from "./blueprint";
 
@@ -101,6 +101,33 @@ class ClientEventService extends ClientServiceApi {
         },
         body: JSON.stringify({
           event_id,
+        }),
+      });
+      if (!response.ok) {
+        throw new HttpError(response.status, response.statusText);
+      }
+      return response.json();
+    } catch (error) {
+      if (error instanceof HttpError) {
+        console.error(`HTTP Error: ${error.status} - ${error.statusText}`);
+      } else {
+        console.error(error);
+      }
+      throw error;
+    }
+  }
+
+  async updateEvent({ event, contact_id, event_type_id }: UpdateEventParams) {
+    try {
+      const response = await fetch("/api/events/update", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          event,
+          contact_id,
+          event_type_id,
         }),
       });
       if (!response.ok) {

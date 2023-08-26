@@ -1,5 +1,5 @@
 import { IconSpeakerphone } from "@tabler/icons-react";
-import { Control } from "react-hook-form";
+import { Control, UseFormWatch } from "react-hook-form";
 import {
   FormControl,
   FormErrorMessage,
@@ -23,18 +23,32 @@ import { Separator } from "@/components/ui/separator";
 import { InfoTooltip } from "@/components/shared/atoms/info-tooltip";
 import { Badge } from "@/components/ui/badge";
 import { eventTypeUtils } from "@/components/icons/event-type";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
 interface IBasicInformationProps {
   eventTypes: EventType[] | null;
   control: Control<CreateEventSchema>;
+  watch?: UseFormWatch<CreateEventSchema>;
 }
 export const BasicInformation: React.FC<IBasicInformationProps> = ({
   eventTypes,
   control,
+  watch,
 }) => {
   const [eventTypeClassName, setEventTypeClassName] = useState<string>("");
+
+  const eventTypeId = watch && watch("event_type.type");
+
+  useEffect(() => {
+    const eventType = eventTypes?.find(
+      (eventType) => eventType.id === eventTypeId
+    );
+    setEventTypeClassName(
+      eventTypeUtils[eventType?.value || "default"].className
+    );
+  }, [eventTypeId]);
+
   return (
     <div className="p-4 space-y-2 border rounded-sm border-form-stroke/20 bg-muted/40">
       <p className="text-foreground/80 text-md">Basic information</p>
@@ -75,16 +89,9 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
                 </FormLabel>
                 <FormControl>
                   <Select
+                    value={field.value}
                     disabled={eventTypes?.length === 0}
-                    onValueChange={(event) => {
-                      field.onChange(event);
-                      const eventType = eventTypes?.find(
-                        (eventType) => eventType.id === event
-                      );
-                      setEventTypeClassName(
-                        eventTypeUtils[eventType?.value || "default"].className
-                      );
-                    }}
+                    onValueChange={field.onChange}
                   >
                     <SelectTrigger
                       id={field.name}

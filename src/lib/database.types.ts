@@ -60,7 +60,9 @@ export interface Database {
           description: string | null
           event_type_id: string
           id: string
+          is_contact_enabled: boolean
           is_public: boolean
+          is_reminder_enabled: boolean
           name: string
           user_id: string
           title_description: string | null
@@ -71,7 +73,9 @@ export interface Database {
           description?: string | null
           event_type_id: string
           id?: string
+          is_contact_enabled?: boolean
           is_public?: boolean
+          is_reminder_enabled?: boolean
           name: string
           user_id: string
         }
@@ -81,7 +85,9 @@ export interface Database {
           description?: string | null
           event_type_id?: string
           id?: string
+          is_contact_enabled?: boolean
           is_public?: boolean
+          is_reminder_enabled?: boolean
           name?: string
           user_id?: string
         }
@@ -132,7 +138,6 @@ export interface Database {
           id: string
           interval_unit: string | null
           interval_value: number | null
-          isEnabled: boolean
           last_sent: string | null
           notification_methods: string[]
           recurrence_type: string | null
@@ -148,7 +153,6 @@ export interface Database {
           id?: string
           interval_unit?: string | null
           interval_value?: number | null
-          isEnabled?: boolean
           last_sent?: string | null
           notification_methods: string[]
           recurrence_type?: string | null
@@ -164,7 +168,6 @@ export interface Database {
           id?: string
           interval_unit?: string | null
           interval_value?: number | null
-          isEnabled?: boolean
           last_sent?: string | null
           notification_methods?: string[]
           recurrence_type?: string | null
@@ -184,67 +187,7 @@ export interface Database {
       }
     }
     Views: {
-      reminders_with_overdue: {
-        Row: {
-          created_at: string | null
-          date: string | null
-          event_id: string | null
-          id: string | null
-          interval_unit: string | null
-          interval_value: number | null
-          is_overdue: boolean | null
-          isEnabled: boolean | null
-          last_sent: string | null
-          notification_methods: string[] | null
-          recurrence_type: string | null
-          recurrence_value: string | null
-          reminder_type: string | null
-          sent_count: number | null
-          time: string | null
-        }
-        Insert: {
-          created_at?: string | null
-          date?: string | null
-          event_id?: string | null
-          id?: string | null
-          interval_unit?: string | null
-          interval_value?: number | null
-          is_overdue?: never
-          isEnabled?: boolean | null
-          last_sent?: string | null
-          notification_methods?: string[] | null
-          recurrence_type?: string | null
-          recurrence_value?: string | null
-          reminder_type?: string | null
-          sent_count?: number | null
-          time?: string | null
-        }
-        Update: {
-          created_at?: string | null
-          date?: string | null
-          event_id?: string | null
-          id?: string | null
-          interval_unit?: string | null
-          interval_value?: number | null
-          is_overdue?: never
-          isEnabled?: boolean | null
-          last_sent?: string | null
-          notification_methods?: string[] | null
-          recurrence_type?: string | null
-          recurrence_value?: string | null
-          reminder_type?: string | null
-          sent_count?: number | null
-          time?: string | null
-        }
-        Relationships: [
-          {
-            foreignKeyName: "reminder_event_id_fkey"
-            columns: ["event_id"]
-            referencedRelation: "event"
-            referencedColumns: ["id"]
-          }
-        ]
-      }
+      [_ in never]: never
     }
     Functions: {
       name_email_phone: {

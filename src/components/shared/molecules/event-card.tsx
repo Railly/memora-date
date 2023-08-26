@@ -7,6 +7,7 @@ import { Badge } from "@/components/ui/badge";
 import { EventWithType } from "@/lib/entities.types";
 import { IconSpeakerphone } from "@tabler/icons-react";
 import TimeLeft from "./time-left";
+import { Button } from "@/components/ui/button";
 
 interface IEventCardProps {
   event: EventWithType;
@@ -17,11 +18,12 @@ const EventCard: React.FC<IEventCardProps> = ({ event }) => {
   const goToEvent = () => router.push(`/events/details/${event.id}`);
 
   return (
-    <div
-      className="flex flex-col bg-muted p-4 text-left border rounded-lg w-full border-form-stroke/20 cursor-pointer"
+    <Button
+      className="h-full justify-between items-start focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+      variant="event"
       onClick={goToEvent}
     >
-      <div className="flex justify-between">
+      <div className="flex w-full justify-between">
         <Badge
           icon={eventTypeUtils[event.event_type?.value || "default"].icon}
           variant={eventTypeUtils[event.event_type?.value || "default"].color}
@@ -38,7 +40,7 @@ const EventCard: React.FC<IEventCardProps> = ({ event }) => {
           {event.description}
         </span>
       </div>
-    </div>
+    </Button>
   );
 };
 

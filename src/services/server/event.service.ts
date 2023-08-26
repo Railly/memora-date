@@ -22,13 +22,22 @@ class ServerEventService extends ServerServiceApi {
     user_id,
     contact_id,
   }: {
-    event: CreateEventSchema["event"];
+    event: CreateEventSchema["event"] & {
+      is_contact_enabled: boolean;
+      is_reminder_enabled: boolean;
+    };
     user_id: string;
     event_type_id: string;
     contact_id: string;
   }) {
     try {
-      const { name, description, is_public } = event;
+      const {
+        name,
+        description,
+        is_public,
+        is_contact_enabled,
+        is_reminder_enabled,
+      } = event;
       const fieldsToInsert = [
         {
           user_id,
@@ -36,6 +45,8 @@ class ServerEventService extends ServerServiceApi {
           name,
           description,
           is_public,
+          is_contact_enabled,
+          is_reminder_enabled,
         },
       ];
       const { error, data } = await this.supabase
@@ -77,6 +88,48 @@ class ServerEventService extends ServerServiceApi {
       const { data, error } = await this.supabase
         .from("event")
         .delete()
+        .eq("id", event_id)
+        .select();
+
+      return { data, error };
+    } catch (error) {
+      return eventServiceError(error);
+    }
+  }
+
+  async updateEvent({
+    event,
+    event_type_id,
+    contact_id,
+  }: {
+    event: CreateEventSchema["event"] & {
+      event_id: string;
+      is_contact_enabled: boolean;
+      is_reminder_enabled: boolean;
+    };
+    event_type_id: string;
+    contact_id: string | null;
+  }) {
+    try {
+      const {
+        event_id,
+        name,
+        description,
+        is_public,
+        is_contact_enabled,
+        is_reminder_enabled,
+      } = event;
+      const { data, error } = await this.supabase
+        .from("event")
+        .update({
+          name,
+          description,
+          is_public,
+          event_type_id,
+          contact_id,
+          is_contact_enabled,
+          is_reminder_enabled,
+        })
         .eq("id", event_id)
         .select();
 

@@ -44,6 +44,10 @@ export const metadata: Metadata = {
       name: "Carlos Tarmeño",
       url: "",
     },
+    {
+      name: "Edward Ramos",
+      url: "",
+    },
   ],
   creator: "Railly Hugo",
   themeColor: [
@@ -97,7 +101,7 @@ export default async function RootLayout({
       <html lang="en">
         <body
           className={cn(
-            "min-h-screen bg-background font-sans font-medium antialiased",
+            "min-h-screen bg-background font-sans font-medium antialiased pb-16",
             fontMono.variable,
             fontSans.variable
           )}
@@ -105,6 +109,7 @@ export default async function RootLayout({
           {children}
           {/* <ValidateSession serverSession={session} /> */}
           <Toaster />
+          <div className="vertical-fade" />
         </body>
       </html>
     </ServerThemeProvider>
