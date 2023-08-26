@@ -9,6 +9,7 @@ import {
   IconLogout2,
   IconSun,
   IconMessageCircle2,
+  IconMoon,
 } from "@tabler/icons-react";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
@@ -177,7 +178,7 @@ const Sidebar: React.FC<SidebarProps> = ({ session }) => {
           <div className="flex flex-col gap-2">
             <SheetClose asChild>
               <Button
-                variant="sidebar-destructive"
+                variant="destructive"
                 className="justify-start h-12"
                 onClick={handleLogout}
               >
@@ -189,13 +190,14 @@ const Sidebar: React.FC<SidebarProps> = ({ session }) => {
             <div className="flex items-center justify-start h-12 px-4 py-2 text-base rounded-md bg-muted">
               <span className="flex items-center justify-between w-full">
                 <div className="flex gap-x-2">
-                  <IconSun /> Light Mode
+                  <IconMoon />
+                  <span>Dark Mode</span>
                 </div>{" "}
                 <Switch
                   onCheckedChange={(value) =>
-                    setTheme(value ? "light" : "dark")
+                    setTheme(value ? "dark" : "light")
                   }
-                  checked={theme === "light"}
+                  checked={theme === "dark"}
                 />
               </span>
             </div>
