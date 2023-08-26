@@ -62,11 +62,11 @@ const SummaryEventSection: React.FC<SummaryEventSectionProps> = ({
 
 const EmptySummaryEvent = () => {
   return (
-    <div className="flex flex-col justify-center h-10 text-foreground/80">
-      <p className="flex gap-2">
+    <div className="flex flex-col w-40 justify-center text-foreground/80 h-[6.6rem] border-dashed border-foreground/80 border-2 rounded-md">
+      <span className="flex justify-center gap-2">
         <IconMoodEmptyFilled />
         Nothing to show...
-      </p>
+      </span>
     </div>
   );
 };

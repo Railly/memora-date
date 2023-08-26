@@ -69,7 +69,7 @@ export const UploadProfileImage: React.FC<IUploadProfileImageProps> = ({
       {isProfile ? (
         <div
           onClick={handleSelectImage}
-          className="absolute bottom-0 right-0 z-10 p-1 rounded-full cursor-pointer bg-memora-green hover:contrast-125"
+          className="absolute bottom-0 right-0 z-10 p-1 border rounded-full cursor-pointer bg-foreground border-muted/40"
         >
           <input
             type="file"
@@ -79,7 +79,7 @@ export const UploadProfileImage: React.FC<IUploadProfileImageProps> = ({
             id="upload"
             disabled={disabled}
           />
-          <IconPencil color="black" />
+          <IconPencil className="text-muted" />
         </div>
       ) : (
         <input

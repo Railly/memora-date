@@ -42,11 +42,11 @@ const CompactEventCard: React.FC<CompactEventCardProps> = ({ event }) => {
 
 export const CompactEventCardSkeleton = () => {
   return (
-    <div className="flex flex-col w-40 gap-1 p-2 rounded-md h-28 bg-foreground text-muted">
+    <div className="flex flex-col w-40 gap-1 h-[6.6rem] p-2 rounded-md bg-foreground text-muted">
       <div className="flex flex-row items-center justify-between">
         <div className="flex flex-row items-center gap-1">
           <div className="flex items-center justify-center rounded-md">
-            {eventTypeUtils["default"].icon}
+            {eventTypeUtils["generic"].icon}
           </div>
           <p className="text-sm font-medium">generic</p>
         </div>
