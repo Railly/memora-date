@@ -1,31 +1,27 @@
 "use client";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-  IconUserCircle,
-  IconSpeakerphone,
-  IconAddressBook,
-  IconBrandTwitter,
-  IconBrandGithub,
-  IconLogout2,
-  IconSun,
-  IconMessageCircle2,
-  IconMoon,
-} from "@tabler/icons-react";
 import { Separator } from "@/components/ui/separator";
 import { Switch } from "@/components/ui/switch";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import Link from "next/link";
+import { cn, getImageUrl, getInitials } from "@/lib/utils";
 import clientApiProvider from "@/services/client";
-import { useRouter } from "next/navigation";
-import { useToast } from "../ui/use-toast";
-import { SheetClose, SheetContent } from "../ui/sheet";
-import { cn } from "@/lib/utils";
-import { usePathname } from "next/navigation";
 import { Session } from "@supabase/supabase-js";
-import { getInitials } from "@/lib/utils";
-import { IconLoader } from "@tabler/icons-react";
-import { getImageUrl } from "@/lib/utils";
+import {
+  IconAddressBook,
+  IconBrandGithub,
+  IconBrandTwitter,
+  IconLoader,
+  IconLogout2,
+  IconMessageCircle2,
+  IconMoon,
+  IconSpeakerphone,
+  IconUserCircle,
+} from "@tabler/icons-react";
 import { useTheme } from "@wits/next-themes";
+import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
+import { SheetClose, SheetContent } from "../ui/sheet";
+import { useToast } from "../ui/use-toast";
 
 interface SidebarProps {
   session: Session;
@@ -103,7 +99,7 @@ const Sidebar: React.FC<SidebarProps> = ({ session }) => {
                 asChild
               >
                 <Link href="/profile">
-                  <span className="flex gap-x-2">
+                  <span className="flex items-center gap-x-2">
                     <IconUserCircle />
                     Profile
                   </span>
@@ -117,7 +113,7 @@ const Sidebar: React.FC<SidebarProps> = ({ session }) => {
                 asChild
               >
                 <Link href="/events">
-                  <span className="flex gap-x-2">
+                  <span className="flex items-center gap-x-2">
                     <IconSpeakerphone /> Events
                   </span>
                 </Link>
@@ -130,7 +126,7 @@ const Sidebar: React.FC<SidebarProps> = ({ session }) => {
                 asChild
               >
                 <Link href="/contacts">
-                  <span className="flex gap-x-2">
+                  <span className="flex items-center gap-x-2">
                     <IconAddressBook /> Contacts
                   </span>
                 </Link>
@@ -144,7 +140,7 @@ const Sidebar: React.FC<SidebarProps> = ({ session }) => {
             <SheetClose asChild>
               <Button variant="outline" className="justify-start h-12" asChild>
                 <Link href="https://twitter.com/raillyhugo" target="_blank">
-                  <span className="flex gap-x-2">
+                  <span className="flex items-center gap-x-2">
                     <IconBrandTwitter /> Twitter
                   </span>
                 </Link>
@@ -156,7 +152,7 @@ const Sidebar: React.FC<SidebarProps> = ({ session }) => {
                   href="https://github.com/Railly/memora-date"
                   target="_blank"
                 >
-                  <span className="flex gap-x-2">
+                  <span className="flex items-center gap-x-2">
                     <IconBrandGithub /> Github
                   </span>
                 </Link>
@@ -165,7 +161,7 @@ const Sidebar: React.FC<SidebarProps> = ({ session }) => {
             <SheetClose asChild>
               <Button variant="outline" className="justify-start h-12" asChild>
                 <Link href="mailto:raillyhugo@gmail.com" target="_blank">
-                  <span className="flex gap-x-2">
+                  <span className="flex items-center gap-x-2">
                     <IconMessageCircle2 /> Send Feedback
                   </span>
                 </Link>
