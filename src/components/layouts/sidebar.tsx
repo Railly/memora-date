@@ -22,22 +22,24 @@ import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { SheetClose, SheetContent } from "../ui/sheet";
 import { useToast } from "../ui/use-toast";
+import LogoMemora from "../icons/logo-memora";
 
 interface SidebarProps {
-  session: Session;
+  className?: string;
+  session: Session | null;
+  withinSheet?: boolean;
 }
 
-const Sidebar: React.FC<SidebarProps> = ({ session }) => {
+const Sidebar: React.FC<SidebarProps> = ({
+  session,
+  withinSheet = true,
+  className,
+}) => {
   const { toast } = useToast();
-
   const { setTheme, theme } = useTheme();
-
   const router = useRouter();
-
   const path = usePathname();
-
   const image = session?.user.user_metadata.avatar_url;
-
   const encodedImage = image ? getImageUrl(image) : undefined;
 
   const handleLogout = async () => {
@@ -61,9 +63,17 @@ const Sidebar: React.FC<SidebarProps> = ({ session }) => {
     session?.user.user_metadata.full_name ?? session?.user.user_metadata.name;
 
   return (
-    <SheetContent className="w-3/4 sm:max-w-[18rem]">
-      <div className="flex flex-col justify-between h-full">
+    <ContentWrapper
+      className={cn("w-3/4 sm:max-w-[18rem]", className)}
+      withinSheet={withinSheet}
+    >
+      <div className="flex flex-col justify-between h-full w-full">
         <div className="flex flex-col gap-3">
+          {!withinSheet && (
+            <Link className="ml-1 mb-4" href="/dashboard">
+              <LogoMemora className="w-auto h-7" />
+            </Link>
+          )}
           <div className="relative flex items-center justify-between w-full">
             <div className="flex min-w-full gap-x-2">
               <div className="items-center w-10 h-10">
@@ -80,7 +90,7 @@ const Sidebar: React.FC<SidebarProps> = ({ session }) => {
                   </AvatarFallback>
                 </Avatar>
               </div>
-              <div className="w-[22ch] flex flex-col justify-center">
+              <div className="w-[12ch] lg:w-[22ch] flex flex-col justify-center">
                 <p className="overflow-hidden text-lg font-bold leading-tight overflow-ellipsis whitespace-nowrap">
                   {session?.user.user_metadata.full_name}
                 </p>
@@ -91,10 +101,67 @@ const Sidebar: React.FC<SidebarProps> = ({ session }) => {
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <h2 className="text-sm font-medium text-foreground/80">Settings</h2>
-            <SheetClose asChild>
+            <h2 className="text-sm font-medium text-foreground/80">Actions</h2>
+            <CloseWrapper withinSheet={withinSheet}>
               <Button
-                variant={path === "/profile" ? "default-2" : "outline"}
+                variant="default"
+                className={cn("justify-start h-12")}
+                asChild
+              >
+                <Link href="/profile">
+                  <span className="flex items-center gap-x-2">
+                    <IconSpeakerphone />
+                    Create Event
+                  </span>
+                </Link>
+              </Button>
+            </CloseWrapper>
+            <CloseWrapper withinSheet={withinSheet}>
+              <Button
+                variant="default"
+                className={cn("justify-start h-12")}
+                asChild
+              >
+                <Link href="/profile">
+                  <span className="flex items-center gap-x-2">
+                    <IconAddressBook />
+                    Create Contact
+                  </span>
+                </Link>
+              </Button>
+            </CloseWrapper>
+          </div>
+          <div className="flex flex-col gap-2">
+            <h2 className="text-sm font-medium text-foreground/80">Settings</h2>
+            <CloseWrapper withinSheet={withinSheet}>
+              <Button
+                variant={path === "/events" ? "secondary" : "outline"}
+                className={cn("justify-start h-12")}
+                asChild
+              >
+                <Link href="/events">
+                  <span className="flex items-center gap-x-2">
+                    <IconSpeakerphone /> Events
+                  </span>
+                </Link>
+              </Button>
+            </CloseWrapper>
+            <CloseWrapper withinSheet={withinSheet}>
+              <Button
+                variant={path === "/contacts" ? "secondary" : "outline"}
+                className={cn("justify-start h-12")}
+                asChild
+              >
+                <Link href="/contacts">
+                  <span className="flex items-center gap-x-2">
+                    <IconAddressBook /> Contacts
+                  </span>
+                </Link>
+              </Button>
+            </CloseWrapper>
+            <CloseWrapper withinSheet={withinSheet}>
+              <Button
+                variant={path === "/profile" ? "secondary" : "outline"}
                 className={cn("justify-start h-12")}
                 asChild
               >
@@ -105,39 +172,13 @@ const Sidebar: React.FC<SidebarProps> = ({ session }) => {
                   </span>
                 </Link>
               </Button>
-            </SheetClose>
-            <SheetClose asChild>
-              <Button
-                variant={path === "/events" ? "default-2" : "outline"}
-                className={cn("justify-start h-12")}
-                asChild
-              >
-                <Link href="/events">
-                  <span className="flex items-center gap-x-2">
-                    <IconSpeakerphone /> Events
-                  </span>
-                </Link>
-              </Button>
-            </SheetClose>
-            <SheetClose asChild>
-              <Button
-                variant={path === "/contacts" ? "default-2" : "outline"}
-                className={cn("justify-start h-12")}
-                asChild
-              >
-                <Link href="/contacts">
-                  <span className="flex items-center gap-x-2">
-                    <IconAddressBook /> Contacts
-                  </span>
-                </Link>
-              </Button>
-            </SheetClose>
+            </CloseWrapper>
           </div>
           <div className="flex flex-col gap-2">
             <h2 className="text-sm font-medium text-foreground/80">
               Contact us
             </h2>
-            <SheetClose asChild>
+            <CloseWrapper withinSheet={withinSheet}>
               <Button variant="outline" className="justify-start h-12" asChild>
                 <Link href="https://twitter.com/raillyhugo" target="_blank">
                   <span className="flex items-center gap-x-2">
@@ -145,8 +186,8 @@ const Sidebar: React.FC<SidebarProps> = ({ session }) => {
                   </span>
                 </Link>
               </Button>
-            </SheetClose>
-            <SheetClose asChild>
+            </CloseWrapper>
+            <CloseWrapper withinSheet={withinSheet}>
               <Button variant="outline" className="justify-start h-12" asChild>
                 <Link
                   href="https://github.com/Railly/memora-date"
@@ -157,8 +198,8 @@ const Sidebar: React.FC<SidebarProps> = ({ session }) => {
                   </span>
                 </Link>
               </Button>
-            </SheetClose>
-            <SheetClose asChild>
+            </CloseWrapper>
+            <CloseWrapper withinSheet={withinSheet}>
               <Button variant="outline" className="justify-start h-12" asChild>
                 <Link href="mailto:raillyhugo@gmail.com" target="_blank">
                   <span className="flex items-center gap-x-2">
@@ -166,13 +207,13 @@ const Sidebar: React.FC<SidebarProps> = ({ session }) => {
                   </span>
                 </Link>
               </Button>
-            </SheetClose>
+            </CloseWrapper>
           </div>
         </div>
         <div>
           <Separator className="w-full mb-3" />
           <div className="flex flex-col gap-2">
-            <SheetClose asChild>
+            <CloseWrapper withinSheet={withinSheet}>
               <Button
                 variant="destructive"
                 className="justify-start h-12"
@@ -182,13 +223,20 @@ const Sidebar: React.FC<SidebarProps> = ({ session }) => {
                   <IconLogout2 /> Logout
                 </span>
               </Button>
-            </SheetClose>
+            </CloseWrapper>
             <div className="flex items-center justify-start h-12 px-4 py-2 text-base rounded-md bg-muted">
               <span className="flex items-center justify-between w-full">
                 <div className="flex gap-x-2">
                   <IconMoon />
-                  <span>Dark Mode</span>
-                </div>{" "}
+                  {withinSheet ? (
+                    <span>Dark Mode</span>
+                  ) : (
+                    <>
+                      <span className="hidden lg:inline-flex">Dark Mode</span>
+                      <span className="inline-flex lg:hidden">Dark</span>
+                    </>
+                  )}
+                </div>
                 <Switch
                   onCheckedChange={(value) =>
                     setTheme(value ? "dark" : "light")
@@ -200,8 +248,32 @@ const Sidebar: React.FC<SidebarProps> = ({ session }) => {
           </div>
         </div>
       </div>
-    </SheetContent>
+    </ContentWrapper>
   );
 };
+
+function CloseWrapper({
+  children,
+  withinSheet,
+}: {
+  children: React.ReactNode;
+  withinSheet?: boolean;
+}) {
+  if (!withinSheet) return children;
+  return <SheetClose asChild>{children}</SheetClose>;
+}
+
+function ContentWrapper({
+  children,
+  withinSheet,
+  className,
+}: {
+  children: React.ReactNode;
+  withinSheet?: boolean;
+  className?: string;
+}) {
+  if (!withinSheet) return <div className={className}>{children}</div>;
+  return <SheetContent className={className}>{children}</SheetContent>;
+}
 
 export default Sidebar;

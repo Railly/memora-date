@@ -104,4 +104,5 @@
     @apply fixed left-0 bottom-0 pointer-events-none select-none w-full z-10 h-20 backdrop-blur-[1px] will-change-transform;
     @apply bg-gradient-to-t from-background to-transparent;
   }
+
 }

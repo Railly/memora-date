@@ -10,7 +10,7 @@ const buttonVariants = cva(
     variants: {
       variant: {
         default:
-          "bg-memora-green text-black text-base shadow hover:bg-button/90",
+          "bg-memora-green text-black text-base shadow hover:bg-memora-green/80",
         "default-2":
           "bg-foreground text-background shadow-sm hover:bg-foreground/80",
         destructive:
@@ -26,7 +26,7 @@ const buttonVariants = cva(
           "bg-memora-pink text-white text-base hover:bg-memora-pink/90",
         icon: "bg-transparent text-base",
         event:
-          "flex flex-col bg-muted p-4 text-left border rounded-lg w-full border-form-stroke/20 hover:bg-muted/90 hover:border-primary cursor-pointer",
+          "flex flex-col w-full bg-muted p-4 text-left border rounded-lg border-form-stroke/20 hover:bg-muted/90 hover:border-primary cursor-pointer",
         "input-default": "bg-input border border-form-stroke/40",
         "input-error":
           "bg-input border border-red-500 transition ease-in-out duration-200",

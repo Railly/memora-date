@@ -1,19 +1,18 @@
 "use client";
 
 import { useMemo } from "react";
-import {
-  IconBell,
-  IconCalendar,
-  IconChartLine,
-  IconEdit,
-  IconLogout2,
-} from "@tabler/icons-react";
+import { IconEdit, IconLogout2 } from "@tabler/icons-react";
 import { format } from "date-fns";
 import { useRouter } from "next/navigation";
 
 import { eventTypeUtils } from "@/components/icons/event-type";
-import { EventWithType, Reminder } from "@/lib/entities.types";
-import { cn } from "@/lib/utils";
+import { EventWithType } from "@/lib/entities.types";
+import {
+  cn,
+  generateCards,
+  parseIntervalValue,
+  parseOccurrenceValue,
+} from "@/lib/utils";
 import clientApiProvider from "@/services/client";
 import Countdown from "../dashboard/molecules/countdown";
 import ProgressBar from "../dashboard/molecules/progress-bar";
@@ -71,19 +70,6 @@ export const EventsDetailsSection: React.FC<IEventsSectionProps> = ({
     return null;
   }, [event?.reminder]);
 
-  const parseOccurrenceValue = (
-    type?: Reminder["recurrence_type"],
-    value?: string | null
-  ) => {
-    if (!value) {
-      return "No occurrence";
-    }
-    if (type === "After") {
-      return `${type} ${value} ${Number(value) > 1 ? "times" : "time"}`;
-    }
-    return `${type} ${format(new Date(value), "EEE, MMM d yyyy")}`;
-  };
-
   return (
     <section className="flex flex-col w-full gap-4 mb-2">
       {isSkeleton ? (
@@ -132,18 +118,18 @@ export const EventsDetailsSection: React.FC<IEventsSectionProps> = ({
       <div className="grid max-w-full grid-flow-col overflow-auto">
         <div className="flex w-full gap-4">
           {generateCards({
-            date: localDateMerged
-              ? format(new Date(localDateMerged), "EEE, MMM d")
-              : "No date",
+            date: localDateMerged,
             occurrence: parseOccurrenceValue(
               event?.reminder?.[0]?.recurrence_type,
               event?.reminder?.[0]?.recurrence_value
             ),
-            interval: event?.reminder?.[0]?.interval_value
-              ? `Every ${event?.reminder?.[0]?.interval_value} ${
-                  event?.reminder?.[0]?.interval_unit
-                }${Number(event?.reminder?.[0]?.interval_value) > 1 ? "s" : ""}`
-              : "No interval",
+            interval: parseIntervalValue(
+              event?.reminder?.[0]?.interval_value,
+              event?.reminder?.[0]?.interval_unit
+            ),
+            visibility: event?.is_public,
+            notification_methods: event?.reminder?.[0]?.notification_methods,
+            recurrence_type: event?.reminder?.[0]?.recurrence_type,
           }).map((info) =>
             isSkeleton ? (
               <EventDetailsSkeleton key={info.title} />
@@ -151,6 +137,21 @@ export const EventsDetailsSection: React.FC<IEventsSectionProps> = ({
               <EventDetailsCard key={info.title} {...info} />
             )
           )}
+          <div className="flex flex-col gap-1 p-2 rounded-md bg-muted text-primary border border-form-stroke/20 h-24 w-[15rem]">
+            <div className="flex flex-row justify-between">
+              <div className="flex flex-row items-center gap-1">
+                <div className="flex items-center justify-center rounded-md p-0.5">
+                  {eventTypeUtils.default.icon}
+                </div>
+                <p className="text-sm font-medium">Contact</p>
+              </div>
+            </div>
+            <div className="h-full flex flex-col justify-center items-center gap-1">
+              <p className="font-bold leading-snug line-clamp-3 text-lg text-center">
+                {event?.contact?.full_name}
+              </p>
+            </div>
+          </div>
         </div>
       </div>
       <footer className="flex w-full gap-4 fixed bottom-5 left-0 z-20 px-3 justify-center">
@@ -177,31 +178,3 @@ export const EventsDetailsSection: React.FC<IEventsSectionProps> = ({
     </section>
   );
 };
-
-interface IGenerateCardsParams {
-  date: string;
-  occurrence: string;
-  interval: string;
-}
-
-const generateCards = ({
-  date,
-  occurrence,
-  interval,
-}: IGenerateCardsParams) => [
-  {
-    icon: <IconCalendar size={20} className="text-white" />,
-    title: "Date",
-    content: date,
-  },
-  {
-    icon: <IconChartLine size={20} className="text-white" />,
-    title: "Occurrence",
-    content: occurrence,
-  },
-  {
-    icon: <IconBell size={20} className="text-white" />,
-    title: "Interval",
-    content: interval,
-  },
-];

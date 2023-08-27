@@ -21,7 +21,9 @@ export default async function PlatformLayout({
         <Header />
         <Sidebar session={session} />
       </Sheet>
-      <main className="p-3">{children}</main>
+      <main className="min-h-screen p-3 sm:px-4 sm:py-6 sm:pb-0">
+        {children}
+      </main>
     </>
   );
 }

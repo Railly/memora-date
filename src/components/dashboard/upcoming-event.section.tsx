@@ -1,5 +1,5 @@
 import { EventWithType } from "@/lib/entities.types";
-import { IconBrandTinder, IconNewsOff } from "@tabler/icons-react";
+import { IconBrandTinder } from "@tabler/icons-react";
 import EventCard, { EventCardSkeleton } from "../shared/molecules/event-card";
 import { Badge } from "../ui/badge";
 import EventsEmptyState from "../shared/molecules/events-empty-state";
@@ -17,7 +17,7 @@ export default function UpcomingEventSection({
 }: UpcomingEventSectionProps) {
   return (
     <section className="flex flex-col w-full">
-      <header className="flex justify-between">
+      <header className="flex justify-between pb-4">
         <div className="flex gap-1.5 items-center">
           <i className="p-0.5 rounded-full bg-memora-orange">
             <IconBrandTinder size={16} className="stroke-black" />
@@ -30,8 +30,8 @@ export default function UpcomingEventSection({
             : `${count} ${count === 1 ? "event" : "events"}`}
         </Badge>
       </header>
-      <main className="w-full">
-        <div className="flex flex-col w-full gap-4 mt-4">
+      <main className="md:h-[91vh] md:overflow-y-auto pb-0 md:pb-16 pr-0 md:pr-2">
+        <div className="flex flex-col gap-4">
           {isSkeleton ? (
             Array.from({ length: 3 }, (_, index) => (
               <EventCardSkeleton key={index} />

@@ -69,9 +69,9 @@ const Countdown: React.FC<CountdownProps> = ({ reminder }) => {
 
   return (
     <>
-      <div className="flex flex-col justify-between bg-muted px-10 py-2 text-center border rounded-lg min-w-max border-form-stroke/20">
+      <div className="flex flex-col justify-between w-full bg-muted px-4 py-2 text-center border rounded-lg min-w-max border-form-stroke/20">
         <div className="flex flex-col items-center justify-center gap-2 md:gap-4">
-          <div className="flex gap-8 md:gap-12">
+          <div className="flex gap-4 md:gap-8 lg:gap-12">
             <CountDownUnit
               value={countdown?.years}
               label="years"
@@ -91,7 +91,7 @@ const Countdown: React.FC<CountdownProps> = ({ reminder }) => {
               lowerValue={countdown?.hours}
             />
           </div>
-          <div className="flex gap-8 md:gap-12">
+          <div className="flex gap-4 md:gap-8 lg:gap-12">
             <CountDownUnit
               value={countdown?.hours}
               label="hours"
@@ -142,7 +142,9 @@ function CountDownUnit({
         "dark:text-[#595959] text-[#929191]": isGray,
       })}
     >
-      <span className="block text-4xl font-bold sm:text-5xl">{strValue}</span>
+      <span className="block text-3xl font-bold sm:text-4xl lg:text-5xl">
+        {strValue}
+      </span>
       <span className="block text-sm">{label}</span>
     </div>
   );
