@@ -35,20 +35,7 @@ export const metadata: Metadata = {
     "Event Creations",
     "Important Dates Reminders",
   ],
-  authors: [
-    {
-      name: "Railly Hugo",
-      url: "https://raillyhugo.com",
-    },
-    {
-      name: "Carlos Tarmeño",
-      url: "",
-    },
-    {
-      name: "Edward Ramos",
-      url: "",
-    },
-  ],
+  authors: siteConfig.authors,
   creator: "Railly Hugo",
   themeColor: [
     {
