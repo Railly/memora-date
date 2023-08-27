@@ -39,7 +39,9 @@ export function debugFormValues({
   });
 }
 
-export function getInitials(name: string) {
+export function getInitials(name: string | null) {
+  if (!name)
+    return <IconMoodEmptyFilled size={20} className="stroke-current" />;
   const haveOnlyName = name.split(" ").length === 1;
   if (haveOnlyName) return name.slice(0, 2).toLocaleUpperCase();
   const [first, second] = name.split(" ");

@@ -1,18 +1,17 @@
 import NextEventSection from "@/components/dashboard/next-event.section";
 import UpcomingEventSection from "@/components/dashboard/upcoming-event.section";
-import {
-  ACTION_BUTTON_PATHS,
-  FloatingActionButton,
-} from "@/components/shared/atoms/FAB";
+import Sidebar from "@/components/layouts/sidebar";
 
 export default function DashboardLoading() {
   return (
-    <div className="flex justify-center w-full">
-      <div className="flex flex-col items-center w-full gap-6">
-        <NextEventSection event={null} isSkeleton />
-        <UpcomingEventSection events={null} count={0} isSkeleton />
-        <FloatingActionButton to={ACTION_BUTTON_PATHS.EVENT_CREATOR} />
-      </div>
+    <div className="grid grid-cols-1 md:grid-cols-[minmax(18vw,_0.5fr)_minmax(33vw,_1fr)_minmax(33vw,_1fr)] gap-6 h-full">
+      <Sidebar
+        className="hidden h-[95vh] md:max-w-full bg-card z-50 md:block w-full"
+        session={null}
+        withinSheet={false}
+      />
+      <NextEventSection event={null} isSkeleton />
+      <UpcomingEventSection events={null} count={0} isSkeleton />
     </div>
   );
 }

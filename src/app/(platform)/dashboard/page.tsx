@@ -16,7 +16,6 @@ export default async function DashBoardPage() {
   console.log({ events });
 
   return (
-    // <div className="grid grid-cols-1 md:grid-cols-[1fr,3fr,2fr] gap-6 h-full">
     <div className="grid grid-cols-1 md:grid-cols-[minmax(18vw,_0.5fr)_minmax(33vw,_1fr)_minmax(33vw,_1fr)] gap-6 h-full">
       <Sidebar
         className="hidden h-[95vh] md:max-w-full bg-card z-50 md:block w-full"
