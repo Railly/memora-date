@@ -38,7 +38,7 @@ export const EventsDetailsSection: React.FC<IEventsSectionProps> = ({
 
   const { toast } = useToast();
 
-  const goToEdit = () => router.push(`/events/edit/${event?.id}`);
+  const goToEdit = () => router.push(`/dashboard/events/edit/${event?.id}`);
 
   const onDeleteEvent = async ({ event_id }: { event_id: string }) => {
     if (!event) return;
@@ -80,41 +80,22 @@ export const EventsDetailsSection: React.FC<IEventsSectionProps> = ({
         </h1>
       )}
       <div>
-        {isSkeleton ? (
-          <span className="inline-block w-16 h-6 text-2xl font-bold bg-gray-400 animate-pulse border-2 border-gray-400 rounded-md" />
-        ) : (
-          <Badge
-            icon={eventTypeUtils[event?.event_type?.value || "default"].icon}
-            variant={
-              eventTypeUtils[event?.event_type?.value || "default"].color
-            }
-          >
-            {event?.event_type?.value}
-          </Badge>
-        )}
+        <Badge
+          icon={eventTypeUtils[event?.event_type?.value || "default"].icon}
+          variant={eventTypeUtils[event?.event_type?.value || "default"].color}
+        >
+          {event?.event_type?.value || "event"}
+        </Badge>
       </div>
       <Countdown reminder={event?.reminder} />
       <ProgressBar reminder={event?.reminder} />
+      <h2 className="text-2xl font-semibold">Description</h2>
       {isSkeleton ? (
-        <span className="w-20 h-6 my-1 text-2xl font-bold bg-gray-400 animate-pulse" />
-      ) : (
-        <h2 className="text-2xl font-semibold">Description</h2>
-      )}
-      {isSkeleton ? (
-        <>
-          <span className="w-full h-6 my-1 text-2xl font-bold bg-gray-400 animate-pulse" />
-          <span className="w-full h-6 my-1 text-2xl font-bold bg-gray-400 animate-pulse" />
-          <span className="w-full h-6 my-1 text-2xl font-bold bg-gray-400 animate-pulse" />
-        </>
+        <span className="w-full h-4 my-1 text-2xl font-bold bg-gray-400 animate-pulse" />
       ) : (
         <p className="text-justify">{event?.description}</p>
       )}
-
-      {isSkeleton ? (
-        <span className="w-20 h-6 my-1 text-2xl font-bold bg-gray-400 animate-pulse" />
-      ) : (
-        <h3 className="text-2xl font-semibold">More Details</h3>
-      )}
+      <h3 className="text-2xl font-semibold">More Details</h3>
       <div className="grid max-w-full grid-flow-col overflow-auto">
         <div className="flex w-full gap-4">
           {generateCards({

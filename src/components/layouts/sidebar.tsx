@@ -10,6 +10,7 @@ import {
   IconAddressBook,
   IconBrandGithub,
   IconBrandTwitter,
+  IconHome,
   IconLoader,
   IconLogout2,
   IconMessageCircle2,
@@ -20,9 +21,9 @@ import {
 import { useTheme } from "@wits/next-themes";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
+import LogoMemora from "../icons/logo-memora";
 import { SheetClose, SheetContent } from "../ui/sheet";
 import { useToast } from "../ui/use-toast";
-import LogoMemora from "../icons/logo-memora";
 
 interface SidebarProps {
   className?: string;
@@ -101,78 +102,66 @@ const Sidebar: React.FC<SidebarProps> = ({
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <h2 className="text-sm font-medium text-foreground/80">Actions</h2>
-            <CloseWrapper withinSheet={withinSheet}>
-              <Button
-                variant="default"
-                className={cn("justify-start h-12")}
-                asChild
-              >
-                <Link href="/profile">
-                  <span className="flex items-center gap-x-2">
-                    <IconSpeakerphone />
-                    Create Event
-                  </span>
-                </Link>
-              </Button>
-            </CloseWrapper>
-            <CloseWrapper withinSheet={withinSheet}>
-              <Button
-                variant="default"
-                className={cn("justify-start h-12")}
-                asChild
-              >
-                <Link href="/profile">
-                  <span className="flex items-center gap-x-2">
-                    <IconAddressBook />
-                    Create Contact
-                  </span>
-                </Link>
-              </Button>
-            </CloseWrapper>
-          </div>
-          <div className="flex flex-col gap-2">
-            <h2 className="text-sm font-medium text-foreground/80">Settings</h2>
-            <CloseWrapper withinSheet={withinSheet}>
-              <Button
-                variant={path === "/events" ? "secondary" : "outline"}
-                className={cn("justify-start h-12")}
-                asChild
-              >
-                <Link href="/events">
-                  <span className="flex items-center gap-x-2">
-                    <IconSpeakerphone /> Events
-                  </span>
-                </Link>
-              </Button>
-            </CloseWrapper>
-            <CloseWrapper withinSheet={withinSheet}>
-              <Button
-                variant={path === "/contacts" ? "secondary" : "outline"}
-                className={cn("justify-start h-12")}
-                asChild
-              >
-                <Link href="/contacts">
-                  <span className="flex items-center gap-x-2">
-                    <IconAddressBook /> Contacts
-                  </span>
-                </Link>
-              </Button>
-            </CloseWrapper>
-            <CloseWrapper withinSheet={withinSheet}>
-              <Button
-                variant={path === "/profile" ? "secondary" : "outline"}
-                className={cn("justify-start h-12")}
-                asChild
-              >
-                <Link href="/profile">
-                  <span className="flex items-center gap-x-2">
-                    <IconUserCircle />
-                    Profile
-                  </span>
-                </Link>
-              </Button>
-            </CloseWrapper>
+            <h2 className="text-sm font-medium text-foreground/80">
+              Quick Actions
+            </h2>
+            <div className="flex flex-col gap-2">
+              <CloseWrapper withinSheet={withinSheet}>
+                <Button
+                  variant={path === "/dashboard" ? "secondary" : "outline"}
+                  className={cn("justify-start h-12")}
+                  asChild
+                >
+                  <Link href="/dashboard">
+                    <span className="flex items-center gap-x-2">
+                      <IconHome />
+                      Home
+                    </span>
+                  </Link>
+                </Button>
+              </CloseWrapper>
+              <CloseWrapper withinSheet={withinSheet}>
+                <Button
+                  variant={path === "/events/create" ? "secondary" : "outline"}
+                  className={cn("justify-start h-12")}
+                  asChild
+                >
+                  <Link href="/events/create">
+                    <span className="flex items-center gap-x-2">
+                      <IconSpeakerphone />
+                      Create Event
+                    </span>
+                  </Link>
+                </Button>
+              </CloseWrapper>
+              <CloseWrapper withinSheet={withinSheet}>
+                <Button
+                  variant={path === "/contacts" ? "secondary" : "outline"}
+                  className={cn("justify-start h-12")}
+                  asChild
+                >
+                  <Link href="/contacts">
+                    <span className="flex items-center gap-x-2">
+                      <IconAddressBook /> View Contacts
+                    </span>
+                  </Link>
+                </Button>
+              </CloseWrapper>
+              <CloseWrapper withinSheet={withinSheet}>
+                <Button
+                  variant={path === "/profile" ? "secondary" : "outline"}
+                  className={cn("justify-start h-12")}
+                  asChild
+                >
+                  <Link href="/profile">
+                    <span className="flex items-center gap-x-2">
+                      <IconUserCircle />
+                      View profile
+                    </span>
+                  </Link>
+                </Button>
+              </CloseWrapper>
+            </div>
           </div>
           <div className="flex flex-col gap-2">
             <h2 className="text-sm font-medium text-foreground/80">

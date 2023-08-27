@@ -7,9 +7,14 @@ import { EventWithType } from "@/lib/entities.types";
 interface TimeLeftProps {
   reminder: EventWithType["reminder"] | null | undefined;
   isShort?: boolean;
+  isSelected?: boolean;
 }
 
-const TimeLeft: React.FC<TimeLeftProps> = ({ reminder, isShort }) => {
+const TimeLeft: React.FC<TimeLeftProps> = ({
+  reminder,
+  isShort,
+  isSelected,
+}) => {
   const recurrenceType = reminder?.[0]?.recurrence_type;
   const [timeLeft, setTimeLeft] = useState<string | null>(null);
   const [colorClass, setColorClass] = useState<string | null>(null);
@@ -87,17 +92,37 @@ const TimeLeft: React.FC<TimeLeftProps> = ({ reminder, isShort }) => {
         switch (unit) {
           case "seconds":
           case "minutes":
-            setColorClass("dark:text-memora-pink text-pink-600");
+            setColorClass(
+              cn({
+                "dark:text-pink-600 text-memora-pink": isSelected,
+                "dark:text-memora-pink text-pink-600": !isSelected,
+              })
+            );
             break;
           case "hours":
           case "days":
-            setColorClass("dark:text-memora-orange text-amber-600");
+            setColorClass(
+              cn({
+                "dark:text-amber-600 text-memora-orange": isSelected,
+                "dark:text-memora-orange text-amber-600": !isSelected,
+              })
+            );
             break;
           case "months":
-            setColorClass("dark:text-memora-green text-emerald-600");
+            setColorClass(
+              cn({
+                "dark:text-emerald-600 text-memora-green": isSelected,
+                "dark:text-memora-green text-emerald-600": !isSelected,
+              })
+            );
             break;
           case "years":
-            setColorClass("dark:text-memora-blue text-blue-600");
+            setColorClass(
+              cn({
+                "dark:text-blue-600 text-memora-blue": isSelected,
+                "dark:text-memora-blue text-blue-600": !isSelected,
+              })
+            );
             break;
           default:
             setColorClass("");
@@ -143,7 +168,7 @@ const TimeLeft: React.FC<TimeLeftProps> = ({ reminder, isShort }) => {
     calculateTimeLeft();
 
     return () => clearTimeout(timeout);
-  }, [localDateMerged, recurrenceType]);
+  }, [localDateMerged, recurrenceType, isSelected]);
 
   if (isShort) {
     return <span>{timeLeft || "0s"}</span>;

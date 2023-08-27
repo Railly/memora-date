@@ -27,6 +27,8 @@ const buttonVariants = cva(
         icon: "bg-transparent text-base",
         event:
           "flex flex-col w-full bg-muted p-4 text-left border rounded-lg border-form-stroke/20 hover:bg-muted/90 hover:border-primary cursor-pointer",
+        "event-selected":
+          "flex flex-col w-full bg-primary text-primary-foreground p-4 text-left border rounded-lg border-form-stroke/20 hover:bg-primary/90 hover:border-primary cursor-pointer",
         "input-default": "bg-input border border-form-stroke/40",
         "input-error":
           "bg-input border border-red-500 transition ease-in-out duration-200",

@@ -1,8 +1,10 @@
+"use client";
 import { EventWithType } from "@/lib/entities.types";
 import { IconBrandTinder } from "@tabler/icons-react";
-import EventCard, { EventCardSkeleton } from "../shared/molecules/event-card";
 import { Badge } from "../ui/badge";
-import EventsEmptyState from "../shared/molecules/events-empty-state";
+import { EventsSection } from "../events/events.section";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 interface UpcomingEventSectionProps {
   events: EventWithType[] | null | undefined;
@@ -15,8 +17,15 @@ export default function UpcomingEventSection({
   count,
   isSkeleton,
 }: UpcomingEventSectionProps) {
+  const pathname = usePathname();
+
   return (
-    <section className="flex flex-col w-full">
+    <section
+      className={cn("w-full", {
+        "hidden md:flex md:flex-col": pathname !== "/dashboard",
+        "flex flex-col": pathname === "/dashboard",
+      })}
+    >
       <header className="flex justify-between pb-4">
         <div className="flex gap-1.5 items-center">
           <i className="p-0.5 rounded-full bg-memora-orange">
@@ -30,22 +39,7 @@ export default function UpcomingEventSection({
             : `${count} ${count === 1 ? "event" : "events"}`}
         </Badge>
       </header>
-      <main className="md:h-[91vh] md:overflow-y-auto pb-0 md:pb-16 pr-0 md:pr-2">
-        <div className="flex flex-col gap-4">
-          {isSkeleton ? (
-            Array.from({ length: 3 }, (_, index) => (
-              <EventCardSkeleton key={index} />
-            ))
-          ) : (
-            <>
-              {count === 0 && <EventsEmptyState />}
-              {events?.map((event) => (
-                <EventCard key={event.id} event={event} />
-              ))}
-            </>
-          )}
-        </div>
-      </main>
+      <EventsSection events={events} />
     </section>
   );
 }
