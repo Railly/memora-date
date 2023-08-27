@@ -10,7 +10,6 @@ export default async function DashBoardPage() {
   const rscApiProvider = new RscApiProvider({ cookies });
   const events = await rscApiProvider.event.getEvents();
   const nextEvent = events.data?.shift();
-  console.log({ events });
 
   return (
     <>
