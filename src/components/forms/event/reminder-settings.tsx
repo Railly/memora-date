@@ -193,6 +193,7 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
                                   <Input
                                     type="number"
                                     min={1}
+                                    inputMode="numeric"
                                     max={
                                       interval === "Minute"
                                         ? 360
@@ -208,6 +209,7 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
                                         ? 10
                                         : ""
                                     }
+                                    pattern="[0-9]*"
                                     value={field.value}
                                     onChange={field.onChange}
                                     disabled={!isRecurring}
@@ -344,12 +346,14 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
                                       <div className="grid gap-2 place-items-start items-center grid-cols-[1.5fr,2fr]">
                                         <Input
                                           type="number"
+                                          inputMode="numeric"
                                           min={1}
                                           max={15}
                                           value={field.value as number}
                                           onChange={field.onChange}
                                           disabled={!isRecurring}
                                           placeholder="1 to 15"
+                                          pattern="[0-9]*"
                                           variant={
                                             fieldState.error
                                               ? "error"

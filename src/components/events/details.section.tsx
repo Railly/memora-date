@@ -165,7 +165,7 @@ export const EventsDetailsSection: React.FC<IEventsSectionProps> = ({
           triggerClassName={cn(
             "flex gap-x-1",
             buttonVariants({
-              variant: "sidebar-destructive",
+              variant: "destructive",
             })
           )}
           onConfirm={() => onDeleteEvent({ event_id: event?.id || "" })}
