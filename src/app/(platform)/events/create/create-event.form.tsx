@@ -76,7 +76,7 @@ const CreateEventForm: React.FC<ICreateEventFormProps> = ({
       toast,
     });
 
-    router.push(`/dashboard/events/details/${eventResponse.data.id}`);
+    router.push(`/events/details/${eventResponse.data.id}`);
   };
 
   return (

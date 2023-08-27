@@ -91,7 +91,7 @@ const EditEventForm: React.FC<IEditEventFormProps> = ({
       toast,
     });
 
-    router.push(`/dashboard/events/details/${event.id}`);
+    router.push(`/events/details/${event.id}`);
     router.refresh();
   };
 

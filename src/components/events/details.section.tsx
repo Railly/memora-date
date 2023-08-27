@@ -38,7 +38,7 @@ export const EventsDetailsSection: React.FC<IEventsSectionProps> = ({
 
   const { toast } = useToast();
 
-  const goToEdit = () => router.push(`/dashboard/events/edit/${event?.id}`);
+  const goToEdit = () => router.push(`/events/edit/${event?.id}`);
 
   const onDeleteEvent = async ({ event_id }: { event_id: string }) => {
     if (!event) return;
