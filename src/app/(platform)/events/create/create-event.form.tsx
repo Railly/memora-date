@@ -17,7 +17,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { Session, User } from "@supabase/supabase-js";
 import { SubHeader } from "@/components/shared/molecules/sub-header";
 import { debugFormValues } from "@/lib/utils";
-import { IconCalendar, IconX } from "@tabler/icons-react";
+import { IconCalendar, IconLoader2, IconX } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
 
 interface ICreateEventFormProps {
@@ -86,7 +86,11 @@ const CreateEventForm: React.FC<ICreateEventFormProps> = ({
         className="flex flex-col gap-6"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <BasicInformation control={form.control} eventTypes={eventTypes} />
+        <BasicInformation
+          control={form.control}
+          eventTypes={eventTypes}
+          watch={form.watch}
+        />
         <ReminderSettings
           control={form.control}
           watch={form.watch}
@@ -107,12 +111,21 @@ const CreateEventForm: React.FC<ICreateEventFormProps> = ({
             type="button"
             className="flex w-full gap-1"
             onClick={goBack}
+            disabled={form.formState.isSubmitting}
           >
             <IconX size={20} />
             <span>Cancel</span>
           </Button>
-          <Button type="submit" className="flex w-full gap-1">
-            <IconCalendar size={20} />
+          <Button
+            disabled={form.formState.isSubmitting}
+            type="submit"
+            className="flex w-full gap-1 contrast-75"
+          >
+            {form.formState.isSubmitting ? (
+              <IconLoader2 className="w-4 h-4 transition ease-in-out left-20 animate-spin inset-x-32" />
+            ) : (
+              <IconCalendar size={20} />
+            )}
             <span>Create Event</span>
           </Button>
         </div>

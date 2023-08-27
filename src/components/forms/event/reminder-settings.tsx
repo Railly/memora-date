@@ -36,6 +36,7 @@ interface IReminderSettingsProps {
   watch: UseFormWatch<CreateEventSchema>;
   user: User | undefined;
   isEditing?: boolean;
+  isReady?: boolean;
 }
 export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
   control,
@@ -43,6 +44,7 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
   setValue,
   user,
   isEditing,
+  isReady = true,
 }) => {
   const isRecurring = watch("reminder._.reminder_type") === "RECURRING";
   const interval = watch("reminder._.interval.unit");
@@ -85,6 +87,7 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
                 <FormItem>
                   <FormControl>
                     <Switch
+                      disabled={isEditing && !isReady}
                       checked={field.value}
                       onCheckedChange={field.onChange}
                       defaultChecked={false}
@@ -177,11 +180,14 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
                           Interval
                         </FormLabel>
                         <div className="grid gap-2 place-items-center grid-cols-[0.5fr,1fr,2fr]">
-                          <span className="text-xs text-[#B4B4B4]">Every</span>
+                          <div className="text-xs text-[#B4B4B4]">
+                            <span>Every</span>
+                            <span className="text-pink-500">*</span>
+                          </div>
                           <FormField
                             control={control}
                             name="reminder._.interval.value"
-                            render={({ field }) => (
+                            render={({ field, fieldState }) => (
                               <FormItem className="flex flex-col w-full h-full transition duration-200 ease-in-out">
                                 <FormControl className="flex gap-4">
                                   <Input
@@ -205,18 +211,19 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
                                     value={field.value}
                                     onChange={field.onChange}
                                     disabled={!isRecurring}
-                                    defaultValue={1}
-                                    placeholder="Number"
+                                    placeholder="123..."
+                                    variant={
+                                      fieldState.error ? "error" : "default"
+                                    }
                                   />
                                 </FormControl>
-                                <FormErrorMessage name={field.name} />
                               </FormItem>
                             )}
                           />
                           <FormField
                             control={control}
                             name="reminder._.interval.unit"
-                            render={({ field }) => (
+                            render={({ field, fieldState }) => (
                               <FormItem className="flex flex-col w-full h-full">
                                 <FormControl className="flex gap-4">
                                   <Select
@@ -224,9 +231,14 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
                                     onValueChange={field.onChange}
                                     disabled={!isRecurring}
                                   >
-                                    <SelectTrigger className="w-full">
+                                    <SelectTrigger
+                                      className="w-full"
+                                      variant={
+                                        fieldState.error ? "error" : "default"
+                                      }
+                                    >
                                       <SelectValue
-                                        placeholder="Unit"
+                                        placeholder="Interval Unit"
                                         className="flex items-center justify-between w-full"
                                       >
                                         <span>
@@ -250,7 +262,6 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
                                     </SelectContent>
                                   </Select>
                                 </FormControl>
-                                <FormErrorMessage name={field.name} />
                               </FormItem>
                             )}
                           />
@@ -264,11 +275,14 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
                             Recurrence
                           </FormLabel>
                           <div className="grid gap-2 place-items-center grid-cols-[0.5fr,1fr,2fr]">
-                            <span className="text-xs text-[#B4B4B4]">End</span>
+                            <div className="text-xs text-[#B4B4B4]">
+                              <span>End</span>
+                              <span className="text-pink-500">*</span>
+                            </div>
                             <FormField
                               control={control}
                               name="reminder._.recurrence.type"
-                              render={({ field }) => (
+                              render={({ field, fieldState }) => (
                                 <FormItem className="flex flex-col w-full h-full">
                                   <FormControl className="flex gap-4">
                                     <Select
@@ -276,7 +290,12 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
                                       onValueChange={field.onChange}
                                       disabled={!isRecurring}
                                     >
-                                      <SelectTrigger className="w-full">
+                                      <SelectTrigger
+                                        className="w-full"
+                                        variant={
+                                          fieldState.error ? "error" : "default"
+                                        }
+                                      >
                                         <SelectValue
                                           placeholder="Select"
                                           className="flex items-center justify-between w-full"
@@ -293,14 +312,13 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
                                       </SelectContent>
                                     </Select>
                                   </FormControl>
-                                  <FormErrorMessage name={field.name} />
                                 </FormItem>
                               )}
                             />
                             <FormField
                               control={control}
                               name="reminder._.recurrence.value"
-                              render={({ field }) => (
+                              render={({ field, fieldState }) => (
                                 <FormItem className="flex flex-col w-full h-full transition duration-200 ease-in-out">
                                   <FormControl className="flex gap-4">
                                     {recurrenceType === "Until" ? (
@@ -320,6 +338,7 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
                                           field.onChange(dateValue);
                                         }}
                                         disabled={!isRecurring}
+                                        error={fieldState.error}
                                       />
                                     ) : (
                                       <div className="grid gap-2 place-items-start items-center grid-cols-[1.5fr,2fr]">
@@ -330,8 +349,12 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
                                           value={field.value as number}
                                           onChange={field.onChange}
                                           disabled={!isRecurring}
-                                          defaultValue={1}
-                                          placeholder="Number"
+                                          placeholder="1 to 15"
+                                          variant={
+                                            fieldState.error
+                                              ? "error"
+                                              : "default"
+                                          }
                                         />
                                         <span className="text-xs text-[#B4B4B4] inline-flex">
                                           occurrences
@@ -339,7 +362,6 @@ export const ReminderSettings: React.FC<IReminderSettingsProps> = ({
                                       </div>
                                     )}
                                   </FormControl>
-                                  <FormErrorMessage name={field.name} />
                                 </FormItem>
                               )}
                             />

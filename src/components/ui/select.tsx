@@ -26,18 +26,20 @@ const SelectValue = React.forwardRef<
 
 SelectValue.displayName = SelectPrimitive.Value.displayName;
 
-const inputVariants = cva(" bg-background text-foreground", {
-  variants: {
-    variant: {
-      default: "bg-input border border-form-stroke/40",
-      error:
-        "bg-input border border-red-500 transition ease-in-out duration-200",
+const inputVariants = cva(
+  "bg-background text-foreground transition ease-in-out duration-200",
+  {
+    variants: {
+      variant: {
+        default: "bg-input border border-form-stroke/40",
+        error: "bg-input border border-red-500",
+      },
     },
-  },
-  defaultVariants: {
-    variant: "default",
-  },
-});
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+);
 
 type SelectTriggerProps = Omit<
   React.ComponentPropsWithoutRef<typeof SelectPrimitive.Trigger>,
