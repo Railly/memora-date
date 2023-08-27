@@ -177,7 +177,7 @@ export const ContactsSection: React.FC<IContactsSectionProps> = ({
   };
 
   return (
-    <section className="flex flex-col items-center w-full gap-6 mb-2">
+    <section className="flex flex-col w-full gap-4">
       <form onSubmit={onSearch} className="flex w-full">
         <Input
           id="search-contacts"
@@ -223,22 +223,26 @@ export const ContactsSection: React.FC<IContactsSectionProps> = ({
       </form>
       <ContactPicker currentContacts={contacts} user={user} />
 
-      {isSkeleton
-        ? Array.from({ length: 3 }, (_, index) => (
-            <ContactCardSkeleton key={index} />
-          ))
-        : (search.length > 0 ? results : contacts)?.map((contact) => (
-            <ContactCard
-              key={contact.id}
-              contact={contact}
-              onUpdateContact={onUpdatedContact}
-              onDeleteContact={onDeleteContact}
-            />
-          ))}
+      <main className="md:h-[84vh] md:overflow-y-auto pb-0 md:pb-16 pr-0 md:pr-2">
+        <div className="flex flex-col gap-4">
+          {isSkeleton
+            ? Array.from({ length: 3 }, (_, index) => (
+                <ContactCardSkeleton key={index} />
+              ))
+            : (search.length > 0 ? results : contacts)?.map((contact) => (
+                <ContactCard
+                  key={contact.id}
+                  contact={contact}
+                  onUpdateContact={onUpdatedContact}
+                  onDeleteContact={onDeleteContact}
+                />
+              ))}
 
-      {(contacts?.length === 0 || results?.length === 0) && (
-        <ContactsEmptyState onCreatedContact={onCreateContact} />
-      )}
+          {(contacts?.length === 0 || results?.length === 0) && (
+            <ContactsEmptyState onCreatedContact={onCreateContact} />
+          )}
+        </div>
+      </main>
       <ContactDialog onCreatedContact={onCreateContact}>
         {<FloatingActionButton />}
       </ContactDialog>

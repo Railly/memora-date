@@ -11,16 +11,23 @@ import { Button } from "@/components/ui/button";
 
 interface IEventCardProps {
   event: EventWithType;
+  isSelected?: boolean;
+  className?: string;
 }
 
-const EventCard: React.FC<IEventCardProps> = ({ event }) => {
+const EventCard: React.FC<IEventCardProps> = ({
+  event,
+  isSelected,
+  className,
+}) => {
   return (
     <Link
       className={cn(
         buttonVariants({
-          variant: "event",
+          variant: isSelected ? "event-selected" : "event",
         }),
-        "h-full justify-between items-start focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+        "h-full justify-between items-start focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary",
+        className
       )}
       href={`/events/details/${event.id}`}
     >
@@ -31,7 +38,7 @@ const EventCard: React.FC<IEventCardProps> = ({ event }) => {
         >
           {event.event_type?.value}
         </Badge>
-        <TimeLeft reminder={event.reminder} />
+        <TimeLeft reminder={event.reminder} isSelected={isSelected} />
       </div>
       <div className="flex flex-col w-full py-2">
         <span className="text-2xl font-bold overflow-hidden overflow-ellipsis whitespace-nowrap">
@@ -47,17 +54,14 @@ const EventCard: React.FC<IEventCardProps> = ({ event }) => {
 
 export const EventCardSkeleton: React.FC = () => {
   return (
-    <div className="flex flex-col bg-muted p-4 text-left border rounded-lg w-full border-form-stroke/20">
-      <div className="flex justify-between">
-        <Badge
-          icon={<IconSpeakerphone size={16} className="stroke-black" />}
-          variant="default"
-        >
+    <div className="flex flex-col bg-muted p-2 text-left border rounded-lg w-full border-form-stroke/20 hover:bg-muted/90 hover:border-primary h-full justify-between items-start">
+      <div className="flex justify-between w-full">
+        <Badge icon={<IconSpeakerphone size={16} />} variant="default">
           event
         </Badge>
-        <span>0 seconds left</span>
+        <span className="text-sm">0 seconds left</span>
       </div>
-      <div className="flex flex-col w-full gap-2 py-2">
+      <div className="flex flex-col w-full gap-2">
         <span className="w-20 h-6 text-2xl font-bold bg-gray-400 animate-pulse" />
         <span className="w-full h-6 overflow-hidden bg-gray-400 overflow-ellipsis whitespace-nowrap animate-pulse" />
       </div>

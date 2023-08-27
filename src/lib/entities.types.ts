@@ -13,6 +13,10 @@ export interface EventWithType extends Event {
   event_type: {
     value: EventType["value"];
   } | null;
+  contact: {
+    id: Contact["id"];
+    full_name: Contact["full_name"];
+  } | null;
   reminder: Array<{
     id: Reminder["id"];
     date: Reminder["date"];

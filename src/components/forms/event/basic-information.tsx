@@ -98,7 +98,8 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
                   Category
                 </FormLabel>
                 <FormControl>
-                  {isSkeleton && isEditing && field.value === "" ? (
+                  {Boolean(!eventTypes) ||
+                  (isSkeleton && isEditing && field.value === "") ? (
                     <div className="w-full h-9 bg-gray-300 rounded-md border-input border animate-pulse" />
                   ) : (
                     <Select
@@ -118,6 +119,7 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
                       </SelectTrigger>
                       <SelectContent className="">
                         <SelectItem
+                          placeholder="ga"
                           className={cn(
                             eventTypeUtils["secondary"].className,
                             "rounded-t-md"

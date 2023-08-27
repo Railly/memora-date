@@ -168,59 +168,61 @@ const EditEventForm: React.FC<IEditEventFormProps> = ({
 
   return (
     <Form {...form}>
-      <SubHeader className="mb-3" title="Edit Event" />
       <form
-        className="flex flex-col gap-6"
+        className="flex flex-col gap-6 relative"
         onSubmit={form.handleSubmit(onSubmit)}
       >
-        <BasicInformation
-          control={form.control}
-          eventTypes={eventTypes}
-          watch={form.watch}
-          isSkeleton={isSkeleton || !isSectionReady.basicInformation}
-          isEditing
-        />
-        <ReminderSettings
-          control={form.control}
-          watch={form.watch}
-          setValue={form.setValue}
-          user={session?.user}
-          isEditing
-          isReady={isSectionReady.reminderSettings}
-        />
-        <ContactSettings
-          control={form.control}
-          watch={form.watch}
-          setValue={form.setValue}
-          contacts={contacts}
-          user={session?.user}
-          clearErrors={form.clearErrors}
-          isEditing
-          isReady={isSectionReady.contactSettings}
-        />
-        <div className="flex w-full gap-4 fixed bottom-5 left-0 z-20 px-3">
-          <Button
-            variant="secondary"
-            type="button"
-            className="flex w-full gap-1"
-            onClick={goBack}
-            disabled={form.formState.isSubmitting}
-          >
-            <IconX size={20} />
-            <span>Cancel</span>
-          </Button>
-          <Button
-            disabled={form.formState.isSubmitting}
-            type="submit"
-            className="flex w-full gap-1"
-          >
-            {form.formState.isSubmitting ? (
-              <IconLoader2 className="w-4 h-4 transition ease-in-out left-20 animate-spin inset-x-32" />
-            ) : (
-              <IconCalendar size={20} />
-            )}
-            <span>Edit Event</span>
-          </Button>
+        <div className="flex flex-col md:h-[90vh] md:overflow-y-auto pb-2 pr-0 md:pr-2 gap-6">
+          <SubHeader title="Edit Event" />
+          <BasicInformation
+            control={form.control}
+            eventTypes={eventTypes}
+            watch={form.watch}
+            isSkeleton={isSkeleton || !isSectionReady.basicInformation}
+            isEditing
+          />
+          <ReminderSettings
+            control={form.control}
+            watch={form.watch}
+            setValue={form.setValue}
+            user={session?.user}
+            isEditing
+            isReady={isSectionReady.reminderSettings}
+          />
+          <ContactSettings
+            control={form.control}
+            watch={form.watch}
+            setValue={form.setValue}
+            contacts={contacts}
+            user={session?.user}
+            clearErrors={form.clearErrors}
+            isEditing
+            isReady={isSectionReady.contactSettings}
+          />
+          <div className="flex w-full gap-4 fixed bottom-5 md:absolute md:bottom-0 left-0 z-20 px-3">
+            <Button
+              variant="secondary"
+              type="button"
+              className="flex w-full gap-1"
+              onClick={goBack}
+              disabled={form.formState.isSubmitting}
+            >
+              <IconX size={20} />
+              <span>Cancel</span>
+            </Button>
+            <Button
+              disabled={form.formState.isSubmitting}
+              type="submit"
+              className="flex w-full gap-1"
+            >
+              {form.formState.isSubmitting ? (
+                <IconLoader2 className="w-4 h-4 transition ease-in-out left-20 animate-spin inset-x-32" />
+              ) : (
+                <IconCalendar size={20} />
+              )}
+              <span>Edit Event</span>
+            </Button>
+          </div>
         </div>
       </form>
     </Form>

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { useRouter } from "next/navigation";
+import { useParams, usePathname, useRouter } from "next/navigation";
 import { IconSearch, IconX } from "@tabler/icons-react";
 
 import { useSearch } from "@/hooks/useSearch";
@@ -15,7 +15,7 @@ import { Input } from "../ui/input";
 import { useToast } from "../ui/use-toast";
 
 interface IEventsSectionProps {
-  events: EventWithType[] | null;
+  events?: EventWithType[] | null;
   isSkeleton?: boolean;
 }
 
@@ -24,10 +24,10 @@ export const EventsSection: React.FC<IEventsSectionProps> = ({
   isSkeleton,
 }) => {
   const [results, setResults] = useState(events);
-
   const { toast } = useToast();
-
   const router = useRouter();
+  const params = useParams();
+  const pathname = usePathname();
 
   const { search, setSearch, handleSupabaseSearch, onClearSearch } =
     useSearch();
@@ -64,7 +64,7 @@ export const EventsSection: React.FC<IEventsSectionProps> = ({
   };
 
   return (
-    <section className="flex flex-col items-center w-full gap-6 mb-2">
+    <section className="flex flex-col w-full gap-4">
       <form onSubmit={onSearch} className="flex w-full">
         <Input
           id="search-events"
@@ -109,14 +109,41 @@ export const EventsSection: React.FC<IEventsSectionProps> = ({
           </span>
         </Button>
       </form>
-      {isSkeleton
-        ? Array.from({ length: 3 }, (_, index) => (
-            <EventCardSkeleton key={index} />
-          ))
-        : (search.length > 0 ? results : events)?.map((event) => (
-            <EventCard key={event.id} event={event} />
-          ))}
-      {(events?.length === 0 || results?.length === 0) && <EventsEmptyState />}
+      <main className="md:h-[86vh] md:overflow-y-auto pb-0 md:pb-16 pr-0 md:pr-2">
+        <div className="flex flex-col gap-4">
+          {isSkeleton
+            ? Array.from({ length: 3 }, (_, index) => (
+                <EventCardSkeleton key={index} />
+              ))
+            : (search.length > 0 ? results : events)?.map((event, index) => {
+                if (pathname === "/dashboard" && index === 0)
+                  return (
+                    <EventCard
+                      className="hidden md:flex"
+                      key={event.id}
+                      event={event}
+                      isSelected={
+                        (pathname === "/dashboard" && index === 0) ||
+                        event.id === params.eventId
+                      }
+                    />
+                  );
+                return (
+                  <EventCard
+                    key={event.id}
+                    event={event}
+                    isSelected={
+                      (pathname === "/dashboard" && index === 0) ||
+                      event.id === params.eventId
+                    }
+                  />
+                );
+              })}
+          {(events?.length === 0 || results?.length === 0) && (
+            <EventsEmptyState />
+          )}
+        </div>
+      </main>
     </section>
   );
 };
