@@ -14,25 +14,27 @@ import {
   defaultValues,
 } from "@/schemas/create-event.schema";
 import { useToast } from "@/components/ui/use-toast";
-import { Session, User } from "@supabase/supabase-js";
+import { Session } from "@supabase/supabase-js";
 import { SubHeader } from "@/components/shared/molecules/sub-header";
 import { debugFormValues } from "@/lib/utils";
-import { IconCalendar, IconX } from "@tabler/icons-react";
+import { IconCalendar, IconLoader2, IconX } from "@tabler/icons-react";
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
-interface ICreateEventFormProps {
+interface IEditEventFormProps {
   eventTypes: EventType[] | null;
   contacts: Contact[] | null;
   session: Session | null;
   event?: EventWithType | null;
+  isSkeleton?: boolean;
 }
 
-const EditEventForm: React.FC<ICreateEventFormProps> = ({
+const EditEventForm: React.FC<IEditEventFormProps> = ({
   eventTypes,
   contacts,
   session,
   event,
+  isSkeleton,
 }) => {
   const form = useForm<CreateEventSchema>({
     resolver: zodResolver(createEventSchema),
@@ -41,10 +43,14 @@ const EditEventForm: React.FC<ICreateEventFormProps> = ({
   const { toast } = useToast();
   const router = useRouter();
   const goBack = () => router.back();
+  const [isSectionReady, setIsSectionReady] = useState({
+    basicInformation: false,
+    reminderSettings: false,
+    contactSettings: false,
+  });
 
   const onSubmit = async (data: CreateEventSchema) => {
     debugFormValues({ data, toast });
-
     if (!session || !event) return;
 
     let contactId: string | null = null;
@@ -98,11 +104,13 @@ const EditEventForm: React.FC<ICreateEventFormProps> = ({
     event.name && form.setValue("event.name", event.name);
     event.is_public && form.setValue("event.is_public", event.is_public);
     currentEventType && form.setValue("event_type.type", currentEventType?.id);
+    setIsSectionReady((prev) => ({ ...prev, basicInformation: true }));
 
     const reminder = event.reminder?.[0];
 
     if (reminder) {
       form.setValue("reminder.isEnabled", event.is_reminder_enabled);
+      setIsSectionReady((prev) => ({ ...prev, reminderSettings: true }));
       setTimeout(() => {
         const date = reminder?.date && new Date(reminder.date);
         date && form.setValue("reminder.date", date);
@@ -153,13 +161,14 @@ const EditEventForm: React.FC<ICreateEventFormProps> = ({
     }
     event.contact_id &&
       form.setValue("contact.isEnabled", event.is_contact_enabled);
+    setIsSectionReady((prev) => ({ ...prev, contactSettings: true }));
     event.contact_id &&
       form.setValue("contact.selectedContact", event.contact_id);
   }, [event]);
 
   return (
     <Form {...form}>
-      <SubHeader className="mb-3" title="New Event" />
+      <SubHeader className="mb-3" title="Edit Event" />
       <form
         className="flex flex-col gap-6"
         onSubmit={form.handleSubmit(onSubmit)}
@@ -168,6 +177,8 @@ const EditEventForm: React.FC<ICreateEventFormProps> = ({
           control={form.control}
           eventTypes={eventTypes}
           watch={form.watch}
+          isSkeleton={isSkeleton || !isSectionReady.basicInformation}
+          isEditing
         />
         <ReminderSettings
           control={form.control}
@@ -175,6 +186,7 @@ const EditEventForm: React.FC<ICreateEventFormProps> = ({
           setValue={form.setValue}
           user={session?.user}
           isEditing
+          isReady={isSectionReady.reminderSettings}
         />
         <ContactSettings
           control={form.control}
@@ -184,6 +196,7 @@ const EditEventForm: React.FC<ICreateEventFormProps> = ({
           user={session?.user}
           clearErrors={form.clearErrors}
           isEditing
+          isReady={isSectionReady.contactSettings}
         />
         <div className="flex w-full gap-4 fixed bottom-5 left-0 z-20 px-3">
           <Button
@@ -191,12 +204,21 @@ const EditEventForm: React.FC<ICreateEventFormProps> = ({
             type="button"
             className="flex w-full gap-1"
             onClick={goBack}
+            disabled={form.formState.isSubmitting}
           >
             <IconX size={20} />
             <span>Cancel</span>
           </Button>
-          <Button type="submit" className="flex w-full gap-1">
-            <IconCalendar size={20} />
+          <Button
+            disabled={form.formState.isSubmitting}
+            type="submit"
+            className="flex w-full gap-1"
+          >
+            {form.formState.isSubmitting ? (
+              <IconLoader2 className="w-4 h-4 transition ease-in-out left-20 animate-spin inset-x-32" />
+            ) : (
+              <IconCalendar size={20} />
+            )}
             <span>Edit Event</span>
           </Button>
         </div>

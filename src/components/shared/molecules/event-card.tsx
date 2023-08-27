@@ -7,6 +7,7 @@ import { EventWithType } from "@/lib/entities.types";
 import { cn } from "@/lib/utils";
 import { IconSpeakerphone } from "@tabler/icons-react";
 import TimeLeft from "./time-left";
+import { Button } from "@/components/ui/button";
 
 interface IEventCardProps {
   event: EventWithType;

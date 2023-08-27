@@ -7,6 +7,7 @@ export default function CreateEventLoading() {
       eventTypes={null}
       contacts={null}
       session={null}
+      isSkeleton
     />
   );
 }

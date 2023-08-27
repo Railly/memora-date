@@ -11,16 +11,24 @@ export const TIME_UNIT_ARRAY = [
 
 const recurrenceDiscriminatedSchema = zod.discriminatedUnion("type", [
   zod.object({
-    type: zod.literal("Until"),
+    type: zod.literal("Until", {
+      required_error: "Recurrence type required",
+      invalid_type_error: "Invalid recurrence type",
+    }),
     value: zod.date({
       invalid_type_error: "Invalid date",
       required_error: "Date required",
     }),
   }),
   zod.object({
-    type: zod.literal("After"),
+    type: zod.literal("After", {
+      required_error: "Recurrence type required",
+      invalid_type_error: "Invalid recurrence type",
+    }),
     value: zod
       .number({
+        required_error: "Value required",
+        invalid_type_error: "Invalid value",
         coerce: true,
       })
       .min(1, { message: "Enter at least 1." }),
@@ -61,10 +69,14 @@ export const reminderSchema = zod.discriminatedUnion("isEnabled", [
       zod.object({
         reminder_type: zod.literal("RECURRING"),
         interval: zod.object({
-          value: zod
-            .number({ coerce: true })
-            .min(1, { message: "Enter at least 1." }),
-          unit: zod.enum(TIME_UNIT_ARRAY),
+          value: zod.number({
+            coerce: true,
+            required_error: "Interval value required",
+            invalid_type_error: "Invalid interval value",
+          }),
+          unit: zod.enum(TIME_UNIT_ARRAY, {
+            required_error: "Interval unit required",
+          }),
         }),
         recurrence: recurrenceDiscriminatedSchema,
       }),

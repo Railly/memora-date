@@ -2,18 +2,20 @@ import * as React from "react";
 import { cn } from "@/lib/utils";
 import { cva, type VariantProps } from "class-variance-authority";
 
-const inputVariants = cva("bg-background text-foreground", {
-  variants: {
-    variant: {
-      default: "bg-input border border-form-stroke/40",
-      error:
-        "bg-input border border-red-500 transition ease-in-out duration-200",
+const inputVariants = cva(
+  "bg-background text-foreground transition ease-in-out duration-200",
+  {
+    variants: {
+      variant: {
+        default: "bg-input border border-form-stroke/40",
+        error: "bg-input border border-red-500",
+      },
     },
-  },
-  defaultVariants: {
-    variant: "default",
-  },
-});
+    defaultVariants: {
+      variant: "default",
+    },
+  }
+);
 
 export interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement>,

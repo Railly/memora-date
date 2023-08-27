@@ -29,25 +29,31 @@ import { cn } from "@/lib/utils";
 interface IBasicInformationProps {
   eventTypes: EventType[] | null;
   control: Control<CreateEventSchema>;
-  watch?: UseFormWatch<CreateEventSchema>;
+  watch: UseFormWatch<CreateEventSchema>;
+  isSkeleton?: boolean;
+  isEditing?: boolean;
 }
 export const BasicInformation: React.FC<IBasicInformationProps> = ({
   eventTypes,
   control,
   watch,
+  isSkeleton,
+  isEditing,
 }) => {
   const [eventTypeClassName, setEventTypeClassName] = useState<string>("");
 
-  const eventTypeId = watch && watch("event_type.type");
+  const eventTypeId = watch("event_type.type");
 
   useEffect(() => {
-    const eventType = eventTypes?.find(
-      (eventType) => eventType.id === eventTypeId
-    );
-    setEventTypeClassName(
-      eventTypeUtils[eventType?.value || "default"].className
-    );
-  }, [eventTypeId]);
+    if (eventTypes && eventTypeId) {
+      const eventType = eventTypes.find((et) => et.id === eventTypeId);
+      if (eventType?.value) {
+        setEventTypeClassName(
+          eventTypeUtils[eventType.value]?.className || "default"
+        );
+      }
+    }
+  }, [eventTypeId, eventTypes]);
 
   return (
     <div className="p-4 space-y-2 border rounded-sm border-form-stroke/20 bg-muted/40">
@@ -64,16 +70,20 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
                   Name
                 </FormLabel>
                 <FormControl>
-                  <Input
-                    id={field.name}
-                    name={field.name}
-                    type="text"
-                    placeholder="An Incredible Event"
-                    leftIcon={<IconSpeakerphone size={20} />}
-                    variant={fieldState.error ? "error" : "default"}
-                    value={field.value}
-                    onChange={field.onChange}
-                  />
+                  {isSkeleton ? (
+                    <div className="w-full h-9 bg-gray-300 rounded-md border-input border animate-pulse" />
+                  ) : (
+                    <Input
+                      id={field.name}
+                      name={field.name}
+                      type="text"
+                      placeholder="An Incredible Event"
+                      leftIcon={<IconSpeakerphone size={20} />}
+                      variant={fieldState.error ? "error" : "default"}
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  )}
                 </FormControl>
                 <FormErrorMessage name={field.name} />
               </FormItem>
@@ -88,54 +98,76 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
                   Category
                 </FormLabel>
                 <FormControl>
-                  <Select
-                    value={field.value}
-                    disabled={eventTypes?.length === 0}
-                    onValueChange={field.onChange}
-                  >
-                    <SelectTrigger
-                      id={field.name}
-                      name={field.name}
-                      variant={fieldState.error ? "error" : "default"}
-                      className={cn("w-[180px] duration-0", {
-                        [eventTypeClassName]: field.value,
-                      })}
+                  {isSkeleton && isEditing && field.value === "" ? (
+                    <div className="w-full h-9 bg-gray-300 rounded-md border-input border animate-pulse" />
+                  ) : (
+                    <Select
+                      value={field.value}
+                      disabled={eventTypes?.length === 0}
+                      onValueChange={field.onChange}
                     >
-                      <SelectValue placeholder="Select a category" />
-                    </SelectTrigger>
-                    <SelectContent className="bg-transparent">
-                      {eventTypes &&
-                        eventTypes.map((eventType, index) => (
-                          <SelectItem
-                            className={cn(
-                              "rounded-none",
-                              eventTypeUtils[eventType?.value || "default"]
-                                .className,
-                              {
-                                "rounded-t-md": index === 0,
-                                "rounded-b-md": index === eventTypes.length - 1,
-                              }
-                            )}
-                            key={eventType.id}
-                            value={eventType.id}
+                      <SelectTrigger
+                        id={field.name}
+                        name={field.name}
+                        variant={fieldState.error ? "error" : "default"}
+                        className={cn("w-[180px]", {
+                          [eventTypeClassName]: field.value,
+                        })}
+                      >
+                        <SelectValue placeholder="Select a category" />
+                      </SelectTrigger>
+                      <SelectContent className="">
+                        <SelectItem
+                          className={cn(
+                            eventTypeUtils["secondary"].className,
+                            "rounded-t-md"
+                          )}
+                          value=""
+                        >
+                          <Badge
+                            icon={<IconSpeakerphone size={20} />}
+                            variant="secondary"
+                            className="shadow-none bg-transparent hover:bg-transparent"
                           >
-                            <Badge
-                              icon={
+                            <span className="hidden sm:block">
+                              Select a category
+                            </span>
+                            <span className="sm:hidden">Select</span>
+                          </Badge>
+                        </SelectItem>
+                        {eventTypes &&
+                          eventTypes.map((eventType, index) => (
+                            <SelectItem
+                              className={cn(
+                                "rounded-none",
                                 eventTypeUtils[eventType?.value || "default"]
-                                  .icon
-                              }
-                              variant={
-                                eventTypeUtils[eventType?.value || "default"]
-                                  .color
-                              }
-                              className="shadow-none"
+                                  .className,
+                                {
+                                  "rounded-b-md":
+                                    index === eventTypes.length - 1,
+                                }
+                              )}
+                              key={eventType.id}
+                              value={eventType.id}
                             >
-                              {eventType?.value}
-                            </Badge>
-                          </SelectItem>
-                        ))}
-                    </SelectContent>
-                  </Select>
+                              <Badge
+                                icon={
+                                  eventTypeUtils[eventType?.value || "default"]
+                                    .icon
+                                }
+                                variant={
+                                  eventTypeUtils[eventType?.value || "default"]
+                                    .color
+                                }
+                                className="shadow-none bg-transparent hover:bg-transparent"
+                              >
+                                {eventType?.value}
+                              </Badge>
+                            </SelectItem>
+                          ))}
+                      </SelectContent>
+                    </Select>
+                  )}
                 </FormControl>
                 <FormErrorMessage name={field.name} />
               </FormItem>
@@ -151,14 +183,18 @@ export const BasicInformation: React.FC<IBasicInformationProps> = ({
                 Description
               </FormLabel>
               <FormControl>
-                <Textarea
-                  id={field.name}
-                  name={field.name}
-                  placeholder="Your detailed description"
-                  variant={fieldState.error ? "error" : "default"}
-                  value={field.value}
-                  onChange={field.onChange}
-                />
+                {isSkeleton ? (
+                  <div className="w-full h-16 bg-gray-300 rounded-md border-input border animate-pulse" />
+                ) : (
+                  <Textarea
+                    id={field.name}
+                    name={field.name}
+                    placeholder="Your detailed description"
+                    variant={fieldState.error ? "error" : "default"}
+                    value={field.value}
+                    onChange={field.onChange}
+                  />
+                )}
               </FormControl>
               <FormErrorMessage name={field.name} />
             </FormItem>
