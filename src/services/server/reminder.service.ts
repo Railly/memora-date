@@ -47,7 +47,7 @@ class ServerReminderService extends ServerServiceApi {
 
         if (!error) {
           const notificationMethod =
-            notification_methods.length > 1 &&
+            notification_methods.length >= 1 &&
             notification_methods[0].toLocaleLowerCase();
           if (!notificationMethod)
             return {
@@ -59,14 +59,14 @@ class ServerReminderService extends ServerServiceApi {
               },
             };
 
-          const exactdateWithTime = new Date(assertedEndDate).setHours(
+          const exactDateWithTime = new Date(assertedEndDate).setHours(
             Number(time.split(":")[0]),
             Number(time.split(":")[1])
           );
 
           console.log({
-            exactdateWithTime,
-            utcSeconds: new Date(exactdateWithTime).getUTCSeconds(),
+            exactDateWithTime,
+            utcSeconds: new Date(exactDateWithTime).getUTCSeconds(),
             notificationMethod,
           });
           const { messageId } = await qstash.publishJSON({
@@ -84,7 +84,7 @@ class ServerReminderService extends ServerServiceApi {
             },
             url: process.env.QSTASH_URL,
             callback: `${process.env.NEXT_PUBLIC_BASE_URL}/api/send/${notificationMethod}`,
-            notBefore: new Date(exactdateWithTime).getUTCSeconds(),
+            notBefore: Math.floor(new Date(exactDateWithTime).getTime() / 1000),
           });
 
           console.log({ messageId });
