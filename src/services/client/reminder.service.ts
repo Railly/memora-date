@@ -4,7 +4,7 @@ import { ClientServiceApi } from "./blueprint";
 import { CreateReminderParams, UpdateReminderParams } from "@/lib/form.types";
 
 class ClientReminderService extends ClientServiceApi {
-  async createReminder({ reminder, event_id }: CreateReminderParams) {
+  async createReminder({ reminder, event_id, event }: CreateReminderParams) {
     try {
       const response = await fetch("/api/reminders", {
         method: "POST",
@@ -14,6 +14,7 @@ class ClientReminderService extends ClientServiceApi {
         body: JSON.stringify({
           reminder,
           event_id,
+          event,
         }),
       });
       if (!response.ok) {

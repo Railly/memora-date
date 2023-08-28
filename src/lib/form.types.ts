@@ -32,6 +32,7 @@ export type CreateEventParams = {
 export type CreateReminderParams = {
   reminder: CreateEventSchema["reminder"];
   event_id: string;
+  event: CreateEventSchema["event"];
 };
 
 export type UpdateReminderParams = {

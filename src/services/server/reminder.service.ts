@@ -6,19 +6,31 @@ import {
   HandleRecurringReminderParams,
   UpdateReminderParams,
 } from "@/lib/form.types";
+import { Client } from "@upstash/qstash";
+
+if (!process.env.QSTASH_URL || !process.env.QSTASH_TOKEN) {
+  throw new Error("Missing QSTASH_URL or QSTASH_TOKEN environment variable");
+}
+
+const qstash = new Client({
+  token: process.env.QSTASH_TOKEN,
+});
 
 class ServerReminderService extends ServerServiceApi {
   async createReminder({
     reminder,
     event_id,
+    event,
   }: {
     reminder: CreateEventSchema["reminder"] & {
       reminder_type: "ONE_TIME" | "RECURRING";
     };
     event_id: string;
+    event: CreateEventSchema["event"];
   }) {
     try {
       if (reminder.isEnabled !== true) return { error: null, data: null };
+      console.log({ event });
       const { notification_methods, date, time, _ } = reminder;
       const assertedEndDate =
         typeof date === "string" ? date : date?.toISOString();
@@ -32,6 +44,57 @@ class ServerReminderService extends ServerServiceApi {
             date: assertedEndDate,
           },
         ]);
+
+        if (!error) {
+          const notificationMethod =
+            notification_methods.length > 1 &&
+            notification_methods[0].toLocaleLowerCase();
+          if (!notificationMethod)
+            return {
+              data: null,
+              error: {
+                name: REMINDER_ERROR,
+                message: "No notification method found",
+                status: 500,
+              },
+            };
+
+          const exactdateWithTime = new Date(assertedEndDate).setHours(
+            Number(time.split(":")[0]),
+            Number(time.split(":")[1])
+          );
+
+          console.log({
+            exactdateWithTime,
+            utcSeconds: new Date(exactdateWithTime).getUTCSeconds(),
+            notificationMethod,
+          });
+          const { messageId } = await qstash.publishJSON({
+            body: {
+              reminder: {
+                reminder_type: "ONE_TIME",
+                time,
+                date: assertedEndDate,
+                notificationMethod,
+              },
+              event: {
+                event_id,
+                ...event,
+              },
+            },
+            url: process.env.QSTASH_URL,
+            callback: `${process.env.NEXT_PUBLIC_BASE_URL}/api/send/${notificationMethod}`,
+            notBefore: new Date(exactdateWithTime).getUTCSeconds(),
+          });
+
+          console.log({ messageId });
+
+          return {
+            error,
+            data,
+            messageId,
+          };
+        }
 
         return { error, data };
       }

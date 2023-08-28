@@ -65,6 +65,7 @@ const CreateEventForm: React.FC<ICreateEventFormProps> = ({
     const reminderResponse = await clientApiProvider.reminder.createReminder({
       reminder: data.reminder,
       event_id: eventResponse.data.id,
+      event: eventResponse.data,
     });
 
     debugFormValues({
