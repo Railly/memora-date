@@ -21,7 +21,7 @@ export default async function EventsDetailsPage({
   const event = eventById.data[0];
 
   return (
-    <div className="flex justify-center">
+    <div className="flex justify-center relative">
       <div className="flex flex-col w-full gap-6">
         <SubHeader title="Event details"></SubHeader>
         <EventsDetailsSection event={event} />

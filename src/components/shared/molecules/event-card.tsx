@@ -1,5 +1,5 @@
-import Link from "next/link";
 import { IconSpeakerphone } from "@tabler/icons-react";
+import Link from "next/link";
 
 import { eventTypeUtils } from "@/components/icons/event-type";
 import { Badge } from "@/components/ui/badge";
@@ -40,7 +40,7 @@ const EventCard: React.FC<IEventCardProps> = ({
         <TimeLeft reminder={event.reminder} isSelected={isSelected} />
       </div>
       <div className="flex flex-col w-full py-2">
-        <span className="text-2xl font-bold overflow-hidden overflow-ellipsis whitespace-nowrap">
+        <span className="text-xl font-bold overflow-hidden overflow-ellipsis whitespace-nowrap">
           {event.name}
         </span>
         <span className="w-full overflow-hidden overflow-ellipsis whitespace-nowrap">

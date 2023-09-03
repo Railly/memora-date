@@ -1,8 +1,9 @@
 "use client";
 
 import { useMemo } from "react";
-import { useRouter } from "next/navigation";
 import { IconEdit, IconLogout2 } from "@tabler/icons-react";
+import { format } from "date-fns";
+import { useRouter } from "next/navigation";
 
 import { eventTypeUtils } from "@/components/icons/event-type";
 import { EventWithType } from "@/lib/entities.types";
@@ -70,7 +71,7 @@ export const EventsDetailsSection: React.FC<IEventsSectionProps> = ({
   }, [event?.reminder]);
 
   return (
-    <section className="flex flex-col w-full gap-4 mb-2">
+    <section className="flex flex-col w-full gap-3 md:mb-8">
       {isSkeleton ? (
         <span className="w-full h-6 my-1 text-2xl font-bold bg-gray-400 animate-pulse" />
       ) : (
@@ -95,7 +96,7 @@ export const EventsDetailsSection: React.FC<IEventsSectionProps> = ({
         <p className="text-justify">{event?.description}</p>
       )}
       <h3 className="text-2xl font-semibold">More Details</h3>
-      <div className="grid max-w-full grid-flow-col overflow-auto">
+      <div className="grid max-w-full grid-flow-col overflow-auto md:mb-8">
         <div className="flex w-full gap-4">
           {generateCards({
             date: localDateMerged,
@@ -134,10 +135,10 @@ export const EventsDetailsSection: React.FC<IEventsSectionProps> = ({
           </div>
         </div>
       </div>
-      <footer className="flex w-full gap-4 fixed bottom-5 left-0 z-20 px-3 justify-center">
+      <footer className="flex w-full gap-4 fixed bottom-5 md:absolute md:bottom-2 left-0 z-20 px-3 justify-center">
         <Button variant="secondary" className="flex gap-x-1" onClick={goToEdit}>
           <IconEdit size={20} className="text-white" />
-          Edit Event
+          Edit
         </Button>
 
         <ConfirmDialog
@@ -152,7 +153,7 @@ export const EventsDetailsSection: React.FC<IEventsSectionProps> = ({
           onConfirm={() => onDeleteEvent({ event_id: event?.id || "" })}
         >
           <IconLogout2 size={20} className="text-white" />
-          Delete Event
+          Delete
         </ConfirmDialog>
       </footer>
     </section>

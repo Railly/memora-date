@@ -223,7 +223,7 @@ export const ContactsSection: React.FC<IContactsSectionProps> = ({
       </form>
       <ContactPicker currentContacts={contacts} user={user} />
 
-      <main className="md:h-[84vh] md:overflow-y-auto pb-0 md:pb-16 pr-0 md:pr-2">
+      <section className="md:h-[84vh] md:overflow-y-auto pb-0 md:pb-16 pr-0 md:pr-2">
         <div className="flex flex-col gap-4">
           {isSkeleton
             ? Array.from({ length: 3 }, (_, index) => (
@@ -242,7 +242,7 @@ export const ContactsSection: React.FC<IContactsSectionProps> = ({
             <ContactsEmptyState onCreatedContact={onCreateContact} />
           )}
         </div>
-      </main>
+      </section>
       <ContactDialog onCreatedContact={onCreateContact}>
         {<FloatingActionButton />}
       </ContactDialog>
