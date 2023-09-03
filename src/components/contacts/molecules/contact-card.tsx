@@ -81,12 +81,13 @@ const ContactCard: React.FC<IContactCardProps> = ({
         <ContactInfo value={!contact.email ? "-" : contact.email} />
         <ContactInfo value={!contact.phone ? "-" : contact.phone} />
       </div>
-      <div className="flex flex-col justify-around h-full">
+      <div className="flex flex-col justify-around h-full gap-4">
         <ContactDialog
           contact={contact}
           onUpdatedContact={onUpdateContact}
           triggerClassName="p-0.5 rounded-sm bg-foreground text-background cursor-pointer flex justify-center items-center p-1"
         >
+          <span className="hidden md:inline-flex px-2 text-base">Edit</span>
           {<IconPencil size={20} />}
         </ContactDialog>
         <ConfirmDialog
@@ -96,6 +97,7 @@ const ContactCard: React.FC<IContactCardProps> = ({
           triggerClassName="rounded-sm bg-destructive text-destructive-foreground cursor-pointer flex justify-center items-center p-1"
           onConfirm={() => onDeleteContact(contact.id, contact?.image_url)}
         >
+          <span className="hidden md:inline-flex px-2 text-base">Delete</span>
           {<IconTrash size={20} />}
         </ConfirmDialog>
       </div>

@@ -1,8 +1,10 @@
+"use client";
 import { EventWithType } from "@/lib/entities.types";
-import { IconBrandTinder, IconNewsOff } from "@tabler/icons-react";
-import EventCard, { EventCardSkeleton } from "../shared/molecules/event-card";
+import { IconBrandTinder } from "@tabler/icons-react";
 import { Badge } from "../ui/badge";
-import EventsEmptyState from "../shared/molecules/events-empty-state";
+import { EventsSection } from "../events/events.section";
+import { usePathname } from "next/navigation";
+import { cn } from "@/lib/utils";
 
 interface UpcomingEventSectionProps {
   events: EventWithType[] | null | undefined;
@@ -15,9 +17,16 @@ export default function UpcomingEventSection({
   count,
   isSkeleton,
 }: UpcomingEventSectionProps) {
+  const pathname = usePathname();
+
   return (
-    <section className="flex flex-col w-full">
-      <header className="flex justify-between">
+    <section
+      className={cn("w-full", {
+        "hidden md:flex md:flex-col": pathname !== "/dashboard",
+        "flex flex-col": pathname === "/dashboard",
+      })}
+    >
+      <header className="flex justify-between pb-4">
         <div className="flex gap-1.5 items-center">
           <i className="p-0.5 rounded-full bg-memora-orange">
             <IconBrandTinder size={16} className="stroke-black" />
@@ -30,22 +39,7 @@ export default function UpcomingEventSection({
             : `${count} ${count === 1 ? "event" : "events"}`}
         </Badge>
       </header>
-      <main className="w-full">
-        <div className="flex flex-col w-full gap-4 mt-4">
-          {isSkeleton ? (
-            Array.from({ length: 3 }, (_, index) => (
-              <EventCardSkeleton key={index} />
-            ))
-          ) : (
-            <>
-              {count === 0 && <EventsEmptyState />}
-              {events?.map((event) => (
-                <EventCard key={event.id} event={event} />
-              ))}
-            </>
-          )}
-        </div>
-      </main>
+      <EventsSection events={events} />
     </section>
   );
 }

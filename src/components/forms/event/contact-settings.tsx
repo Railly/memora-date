@@ -50,6 +50,7 @@ interface IContactSettingsProps {
   user: User | undefined;
   clearErrors: UseFormClearErrors<CreateEventSchema>;
   isEditing?: boolean;
+  isReady?: boolean;
 }
 export const ContactSettings: React.FC<IContactSettingsProps> = ({
   control,
@@ -59,6 +60,7 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
   user,
   clearErrors,
   isEditing,
+  isReady = true,
 }) => {
   const router = useRouter();
   const selectContactUuid = watch("contact.selectedContact");
@@ -122,10 +124,15 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
                 <FormItem>
                   <FormControl>
                     <Switch
+                      disabled={isEditing && !isReady}
                       checked={field.value}
                       onCheckedChange={(value) => {
                         field.onChange(value);
                         if (!isEditing && !value) {
+                          console.log({
+                            isEditing,
+                            "no deberia entrar": "ga",
+                          });
                           setValue("contact.selectedContact", "");
                         }
                       }}
@@ -229,7 +236,7 @@ export const ContactSettings: React.FC<IContactSettingsProps> = ({
                   <span className="hidden ml-2 sm:inline">
                     Create a new contact
                   </span>
-                  <span className="ml-2 sm:hidden">Create one</span>
+                  <span className="ml-2 sm:hidden">Create</span>
                 </Button>
               </ContactDialog>
             </div>

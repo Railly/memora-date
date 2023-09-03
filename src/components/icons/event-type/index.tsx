@@ -78,6 +78,12 @@ export const eventTypeUtils: EventTypeUtils = {
     icon: <IconWindmill size={18} />,
     color: "default",
     className:
-      "bg-white focus:bg-white hover:bg-white/80 focus-visible:bg-white/80",
+      "bg-foreground text-background focus:bg-foreground hover:bg-foreground/80 focus-visible:bg-foreground/80",
   },
-};
+  secondary: {
+    icon: <IconWindmill size={18} />,
+    color: "secondary",
+    className:
+      "bg-secondary text-secondary-foreground focus:bg-secondary hover:bg-secondary/80 focus-visible:bg-secondary/80",
+  },
+} as const;

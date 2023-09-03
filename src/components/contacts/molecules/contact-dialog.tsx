@@ -2,6 +2,7 @@
 
 import {
   IconCheck,
+  IconLoader2,
   IconMail,
   IconPhone,
   IconUser,
@@ -83,7 +84,7 @@ export const ContactDialog: React.FC<IContactCardProps> = ({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={setIsOpen} modal={true}>
+    <Dialog open={isOpen} onOpenChange={setIsOpen} modal>
       <DialogTrigger
         aria-controls={
           contact ? `update-contact-${contact.id}` : "create-contact"
@@ -196,12 +197,21 @@ export const ContactDialog: React.FC<IContactCardProps> = ({
                   className="flex w-full gap-1"
                   type="button"
                   onClick={() => setIsOpen(false)}
+                  disabled={form.formState.isSubmitting}
                 >
                   <IconX size={20} />
                   <span>Cancel</span>
                 </Button>
-                <Button type="submit" className="flex w-full gap-1">
-                  <IconCheck size={20} />
+                <Button
+                  disabled={form.formState.isSubmitting}
+                  type="submit"
+                  className="flex w-full gap-1"
+                >
+                  {form.formState.isSubmitting ? (
+                    <IconLoader2 className="w-4 h-4 transition ease-in-out left-20 animate-spin inset-x-32" />
+                  ) : (
+                    <IconCheck size={20} />
+                  )}
                   <span>{contact ? "Update" : "Create"}</span>
                 </Button>
               </div>

@@ -57,6 +57,7 @@ export const contactSettingsSchema = zod.discriminatedUnion("isEnabled", [
   }),
   zod.object({
     isEnabled: zod.literal(false),
+    selectedContact: zod.string().optional(),
   }),
 ]);
 

@@ -17,11 +17,9 @@ import Link from "next/link";
 
 const AuthForm = () => {
   const [isLoading, setIsLoading] = useState<{
-    login: boolean;
     google: boolean;
     github: boolean;
   }>({
-    login: false,
     google: false,
     github: false,
   });
@@ -39,7 +37,6 @@ const AuthForm = () => {
   });
 
   const onSubmit = async (data: SignInSchema) => {
-    setIsLoading({ ...isLoading, login: true });
     try {
       const response = await clientApiProvider.auth.signInWithEmailAndPassword(
         data
@@ -58,7 +55,6 @@ const AuthForm = () => {
         title: error.message,
         variant: "danger",
       });
-      setIsLoading({ ...isLoading, login: false });
     }
   };
 
@@ -92,6 +88,9 @@ const AuthForm = () => {
     }
   };
 
+  const areButtonsDisabled =
+    form.formState.isSubmitting || isLoading.google || isLoading.github;
+
   return (
     <Form {...form}>
       <form
@@ -102,10 +101,10 @@ const AuthForm = () => {
         <div className="flex flex-row items-center justify-between w-full">
           <Button
             type="submit"
-            disabled={isLoading.login || isLoading.google || isLoading.github}
+            disabled={areButtonsDisabled}
             className="relative w-full mt-3"
           >
-            {isLoading.login && !(isLoading.google && isLoading.github) && (
+            {form.formState.isSubmitting && (
               <IconLoader2 className="absolute w-4 h-4 mr-2 transition ease-in-out animate-spin inset-x-32" />
             )}
             <span>Login</span>
@@ -120,11 +119,11 @@ const AuthForm = () => {
       <div className="flex flex-col w-full gap-3">
         <Button
           className="relative flex h-10 gap-3 font-medium text-white bg-google hover:bg-google/90"
-          disabled={isLoading.login || isLoading.google || isLoading.github}
+          disabled={areButtonsDisabled}
           type="button"
           onClick={handleGoogleSignIn}
         >
-          {isLoading.google && !(isLoading.login && isLoading.github) ? (
+          {isLoading.google ? (
             <IconLoader2 className="w-4 h-4 transition ease-in-out left-20 animate-spin inset-x-32" />
           ) : (
             <Google />
@@ -133,11 +132,11 @@ const AuthForm = () => {
         </Button>
         <Button
           className="relative flex h-10 gap-3 text-white bg-github hover:bg-github/90"
-          disabled={isLoading.login || isLoading.google || isLoading.github}
+          disabled={areButtonsDisabled}
           onClick={handleGithubSignIn}
           type="button"
         >
-          {isLoading.github && !(isLoading.login && isLoading.google) ? (
+          {isLoading.github ? (
             <IconLoader2 className="w-4 h-4 transition ease-in-out left-20 animate-spin inset-x-32" />
           ) : (
             <GitHub />

@@ -1,7 +1,7 @@
 interface IEventDetailsCardProps {
   icon: JSX.Element;
   title: string;
-  content: string;
+  content: string | React.ReactNode;
 }
 
 export const EventDetailsCard: React.FC<IEventDetailsCardProps> = ({
@@ -10,10 +10,10 @@ export const EventDetailsCard: React.FC<IEventDetailsCardProps> = ({
   content,
 }) => {
   return (
-    <div className="flex flex-col gap-1 p-2 rounded-md text-black bg-[#ECF2F9] h-24 w-28">
+    <div className="flex flex-col gap-1 p-2 rounded-md bg-muted text-primary border border-form-stroke/20 h-24 w-28">
       <div className="flex flex-row justify-between">
         <div className="flex flex-row items-center gap-1">
-          <div className="flex items-center justify-center rounded-md bg-black p-0.5">
+          <div className="flex items-center justify-center rounded-md p-0.5">
             {icon}
           </div>
           <p className="text-sm font-medium">{title}</p>

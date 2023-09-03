@@ -1,6 +1,5 @@
 import { cookies } from "next/headers";
 import NextEventSection from "@/components/dashboard/next-event.section";
-import UpcomingEventSection from "@/components/dashboard/upcoming-event.section";
 import RscApiProvider from "@/services/rsc";
 import {
   ACTION_BUTTON_PATHS,
@@ -13,17 +12,9 @@ export default async function DashBoardPage() {
   const nextEvent = events.data?.shift();
 
   return (
-    <div className="flex justify-center w-full">
-      <div className="flex flex-col w-full gap-6">
-        <NextEventSection event={nextEvent} />
-        <UpcomingEventSection
-          events={events.data}
-          count={
-            events.count && events.count != 0 ? events.count - 1 : events.count
-          }
-        />
-        <FloatingActionButton to={ACTION_BUTTON_PATHS.EVENT_CREATOR} />
-      </div>
-    </div>
+    <>
+      <NextEventSection event={nextEvent} />
+      <FloatingActionButton to={ACTION_BUTTON_PATHS.EVENT_CREATOR} />
+    </>
   );
 }
