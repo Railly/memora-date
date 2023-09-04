@@ -28,6 +28,7 @@ export interface EventWithType extends Event {
     recurrence_value: Reminder["recurrence_value"];
     created_at: Reminder["created_at"];
     notification_methods: Reminder["notification_methods"];
+    message_schedule_id: Reminder["message_schedule_id"];
   }> | null;
   // reminders_with_overdue: Array<{
   //   is_overdue: RemindersWithOverdue["is_overdue"];

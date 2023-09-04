@@ -39,6 +39,7 @@ export type UpdateReminderParams = {
   reminder: CreateEventSchema["reminder"];
   event_id: string;
   reminder_id: string | null;
+  message_schedule_id?: string | null;
 };
 
 export type UpdateEventParams = {
@@ -57,6 +58,8 @@ interface BaseReminderParams {
   assertedEndDate: string;
   event_id: string;
   reminder_id?: string;
+  isEnabled: boolean;
+  message_schedule_id?: string;
 }
 
 export interface HandleOneTimeReminderParams extends BaseReminderParams {

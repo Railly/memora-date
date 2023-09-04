@@ -132,3 +132,22 @@ export const generateCards = ({
     content: visibility ? "Public" : "Private",
   },
 ];
+
+export const generateCronExpression = (interval_unit: string) => {
+  switch (interval_unit) {
+    case "Minute":
+      return "* * * * *";
+    case "Hour":
+      return "0 * * * *";
+    case "Day":
+      return "0 0 * * *";
+    case "Week":
+      return "0 0 * * 0";
+    case "Month":
+      return "0 0 1 * *";
+    case "Year":
+      return "0 0 1 1 *";
+    default:
+      throw new Error("Invalid interval_unit");
+  }
+};

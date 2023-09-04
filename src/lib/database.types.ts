@@ -139,6 +139,7 @@ export interface Database {
           interval_unit: string | null
           interval_value: number | null
           last_sent: string | null
+          message_schedule_id: string | null
           notification_methods: string[]
           recurrence_type: string | null
           recurrence_value: string | null
@@ -154,6 +155,7 @@ export interface Database {
           interval_unit?: string | null
           interval_value?: number | null
           last_sent?: string | null
+          message_schedule_id?: string | null
           notification_methods: string[]
           recurrence_type?: string | null
           recurrence_value?: string | null
@@ -169,6 +171,7 @@ export interface Database {
           interval_unit?: string | null
           interval_value?: number | null
           last_sent?: string | null
+          message_schedule_id?: string | null
           notification_methods?: string[]
           recurrence_type?: string | null
           recurrence_value?: string | null

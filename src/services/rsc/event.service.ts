@@ -10,7 +10,7 @@ class RscEventService extends RscServiceApi {
       `*,
          event_type (value),
          contact (id, full_name),
-         reminder (id, date, time, reminder_type, interval_unit, interval_value, recurrence_type, recurrence_value, created_at, notification_methods)
+         reminder (id, date, time, reminder_type, interval_unit, interval_value, recurrence_type, recurrence_value, created_at, notification_methods, message_schedule_id)
       `,
       {
         count: "exact",
@@ -31,8 +31,8 @@ class RscEventService extends RscServiceApi {
         `*,
          event_type (value),
          contact (id, full_name),
-         reminder (id, date, time, reminder_type, interval_unit, interval_value, recurrence_type, recurrence_value, created_at, notification_methods)
-      `
+         reminder (id, date, time, reminder_type, interval_unit, interval_value, recurrence_type, recurrence_value, created_at, notification_methods, message_schedule_id)
+        `
       )
       .eq("id", id);
     return event;

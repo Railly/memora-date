@@ -23,13 +23,13 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 export async function POST(req: Request) {
   try {
     const nextHeaders = headers();
+    const body = await req.json();
     const isValid = await qstashReceiver.verify({
-      signature: nextHeaders.get("x-qstash-signature") as string,
-      body: await req.text(),
+      signature: nextHeaders.get("upstash-signature") as string,
+      body: JSON.stringify(body),
     });
 
     if (isValid) {
-      const body = await req.json();
       const { event, reminder } = body;
       const data = await resend.emails.send({
         from: "onboarding@resend.dev",
