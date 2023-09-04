@@ -12,6 +12,7 @@ const EMPTY_CONTACT_SCHEMA: ContactSchema = {
   image: null,
   phone: "",
   selectedContact: "",
+  isImported: false,
 };
 
 export const parseContactBeforeCreate = ({

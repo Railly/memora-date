@@ -1,15 +1,13 @@
-import { IconNotebook, IconPhone, IconTrash } from "@tabler/icons-react";
+import { IconNotebook, IconPencil, IconTrash } from "@tabler/icons-react";
 
+import { Spinner } from "@/components/shared/atoms/Spinner";
 import { ConfirmDialog } from "@/components/shared/atoms/confirm-dialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { Contact } from "@/lib/entities.types";
-import { ContactSchema } from "@/schemas/contact.schema";
-import { IconPencil } from "@tabler/icons-react";
-import { ContactDialog } from "./contact-dialog";
-import { Spinner } from "@/components/shared/atoms/Spinner";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
 import { buttonVariants } from "@/components/ui/button";
+import { Contact } from "@/lib/entities.types";
+import { cn } from "@/lib/utils";
+import { ContactSchema } from "@/schemas/contact.schema";
+import { ContactDialog } from "./contact-dialog";
 
 interface IContactCardProps {
   contact: Contact;
@@ -43,7 +41,7 @@ const ContactCard: React.FC<IContactCardProps> = ({
         buttonVariants({
           variant: "event",
         }),
-        "h-full justify-between flex-row focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary"
+        "h-full justify-between flex-row focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary relative"
       )}
     >
       <Avatar className="flex justify-center items-center w-14 h-14">
@@ -69,13 +67,13 @@ const ContactCard: React.FC<IContactCardProps> = ({
       </Avatar>
       <div className="flex flex-col w-full py-2 px-4">
         <div className="flex w-full gap-1">
-          <span className="text-xl max-w-[20ch] sm:w-full font-bold overflow-hidden overflow-ellipsis whitespace-nowrap">
+          <span className="text-sm sm:text-xl max-w-[20ch] font-bold overflow-hidden overflow-ellipsis whitespace-break-spaces line-clamp-3">
             {contact?.full_name}
           </span>
           {contact?.is_imported && (
-            <Badge variant="imported">
-              <IconNotebook size={24} />
-            </Badge>
+            <div className="absolute top-0 left-0 bg-foreground text-background flex justify-center items-center rounded-tl-md p-0.5">
+              <IconNotebook size={20} />
+            </div>
           )}
         </div>
         <ContactInfo value={!contact.email ? "-" : contact.email} />
@@ -87,7 +85,7 @@ const ContactCard: React.FC<IContactCardProps> = ({
           onUpdatedContact={onUpdateContact}
           triggerClassName="p-0.5 rounded-sm bg-foreground text-background cursor-pointer flex justify-center items-center p-1"
         >
-          <span className="hidden md:inline-flex px-2 text-base">Edit</span>
+          <span className="hidden lg:inline-flex px-2">Edit</span>
           {<IconPencil size={20} />}
         </ContactDialog>
         <ConfirmDialog
@@ -97,7 +95,7 @@ const ContactCard: React.FC<IContactCardProps> = ({
           triggerClassName="rounded-sm bg-destructive text-destructive-foreground cursor-pointer flex justify-center items-center p-1"
           onConfirm={() => onDeleteContact(contact.id, contact?.image_url)}
         >
-          <span className="hidden md:inline-flex px-2 text-base">Delete</span>
+          <span className="hidden lg:inline-flex px-2">Delete</span>
           {<IconTrash size={20} />}
         </ConfirmDialog>
       </div>
@@ -109,7 +107,7 @@ export const ContactCardSkeleton: React.FC = () => {
   return (
     <div className="flex justify-center items-center bg-muted p-3 border border-form-stroke/20 rounded-xl min-w-full">
       <Avatar className="flex justify-center items-center w-14 h-14">
-        <AvatarFallback className="text-3l font-bold text-white">
+        <AvatarFallback className="text-3xl font-bold text-white">
           <div className="scale-50 pt-1">
             <Spinner />
           </div>

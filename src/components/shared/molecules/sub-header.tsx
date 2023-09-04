@@ -1,9 +1,10 @@
 "use client";
 
+import { useRouter } from "next/navigation";
+import { IconArrowLeft } from "@tabler/icons-react";
+
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { IconArrowLeft } from "@tabler/icons-react";
-import { useRouter } from "next/navigation";
 
 interface ISubHeaderProps {
   title: string;
@@ -20,17 +21,19 @@ export const SubHeader: React.FC<ISubHeaderProps> = ({
   const goBack = () => router.back();
 
   return (
-    <section className={cn("flex justify-between w-full", className)}>
+    <section
+      className={cn("flex justify-between items-center w-full", className)}
+    >
       <div className="flex items-center gap-2">
         <Button
           type="button"
           onClick={goBack}
-          className="p-0 px-2"
+          className="p-0 px-1 bg-white h-6"
           variant="outline"
         >
-          <IconArrowLeft size={20} />
+          <IconArrowLeft size={20} className="stroke-black" />
         </Button>
-        <h1 className="text-xl">{title}</h1>
+        <h1>{title}</h1>
       </div>
       {children}
     </section>
