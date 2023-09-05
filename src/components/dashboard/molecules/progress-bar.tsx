@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { EventWithType } from "@/lib/entities.types";
-import { cn } from "@/lib/utils";
+import { cn, getNextOccurrence } from "@/lib/utils";
 import { Progress } from "@/components/ui/progress";
 
 interface ProgressBarProps {
@@ -14,60 +14,70 @@ const ProgressBar: React.FC<ProgressBarProps> = ({ reminder }) => {
   const intervalUnit = reminder?.[0]?.interval_unit;
   const intervalValue = reminder?.[0]?.interval_value;
   const reminderType = reminder?.[0]?.reminder_type;
-  const createdAt = reminder?.[0]?.created_at;
-
-  const localDateMerged = useMemo(() => {
-    if (reminder?.length) {
-      const date = reminder[0]?.date;
-      const time = reminder[0]?.time;
-      const rawDateMerged = new Date(`${date}T${time}`);
-      return rawDateMerged.toLocaleString("en-US");
-    }
-    return null;
-  }, [reminder]);
 
   useEffect(() => {
-    if (localDateMerged) {
-      let interval: NodeJS.Timeout;
+    if (reminder) {
+      const now = new Date();
+      const createdDate = new Date(reminder[0]?.created_at || now);
+      const nextOccurrence = getNextOccurrence(reminder);
+      if (!nextOccurrence) return; // Handle appropriately
 
-      if (reminderType === "RECURRING" && intervalUnit && intervalValue) {
-        const intervalMultiplier = {
-          Minute: 60000,
-          Hour: 3600000,
-          Day: 86400000,
-          Week: 604800000,
-          Month: 2592000000, // Consider using a library like date-fns for more accurate calculation
-          Year: 31536000000, // Same as above
-        };
+      if (now >= nextOccurrence) {
+        setProgress(100);
+        return;
+      }
 
-        const endDate = new Date(localDateMerged);
-        const now = new Date();
-        const totalDuration = endDate.getTime() - now.getTime();
-        const updateIncrement =
-          intervalValue *
-          intervalMultiplier[intervalUnit as keyof typeof intervalMultiplier];
+      const totalDuration = nextOccurrence.getTime() - createdDate.getTime();
+      const elapsed = now.getTime() - createdDate.getTime();
+      const newProgress = (elapsed / totalDuration) * 100;
 
-        interval = setInterval(() => {
-          const elapsed = new Date().getTime() - now.getTime();
+      setProgress(Math.min(newProgress, 100));
+
+      const intervalMultiplier = {
+        Minute: 60000,
+        Hour: 3600000,
+        Day: 86400000,
+        Week: 604800000,
+        Month: 2592000000,
+        Year: 31536000000,
+      };
+
+      const updateIncrement_one =
+        intervalMultiplier[intervalUnit as keyof typeof intervalMultiplier];
+
+      if (reminderType === "ONE_TIME") {
+        const interval = setInterval(() => {
+          const now = new Date();
+          const elapsed = now.getTime() - createdDate.getTime();
+          const newProgress = (elapsed / totalDuration) * 100;
+          console.log({ newProgress });
+          setProgress(Math.min(newProgress, 100));
+        }, updateIncrement_one);
+
+        return () => clearInterval(interval);
+      }
+
+      if (!nextOccurrence || !intervalUnit || !intervalValue) return; // Handle appropriately
+
+      const updateIncrement_rec =
+        intervalValue *
+        intervalMultiplier[intervalUnit as keyof typeof intervalMultiplier];
+      console.log({ updateIncrement_rec });
+
+      if (reminderType === "RECURRING") {
+        console.log("recurring", { updateIncrement_rec });
+        const interval = setInterval(() => {
+          console.log("recurring");
+          const now = new Date();
+          const elapsed = now.getTime() - createdDate.getTime();
           const newProgress = (elapsed / totalDuration) * 100;
           setProgress(Math.min(newProgress, 100));
-        }, updateIncrement);
-      } else if (reminderType === "ONE_TIME" && createdAt) {
-        setProgress(
-          Math.min(
-            ((new Date().getTime() - new Date(createdAt).getTime()) /
-              (new Date(localDateMerged).getTime() -
-                new Date(createdAt).getTime())) *
-              100,
-            100
-          )
-        );
+        }, updateIncrement_rec);
+
+        return () => clearInterval(interval);
       }
-      return () => {
-        clearInterval(interval);
-      };
     }
-  }, [localDateMerged, reminderType, intervalUnit, intervalValue]);
+  }, [reminder, reminderType, intervalUnit, intervalValue]);
 
   return (
     <div className="relative w-full h-8 bg-muted border border-form-stroke/20 rounded-lg overflow-hidden">

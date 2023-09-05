@@ -30,7 +30,4 @@ export interface EventWithType extends Event {
     notification_methods: Reminder["notification_methods"];
     message_schedule_id: Reminder["message_schedule_id"];
   }> | null;
-  // reminders_with_overdue: Array<{
-  //   is_overdue: RemindersWithOverdue["is_overdue"];
-  // }> | null;
 }
