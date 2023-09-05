@@ -124,7 +124,7 @@ export const EventsSection: React.FC<IEventsSectionProps> = ({
                       event={event}
                       isSelected={
                         (pathname === "/dashboard" && index === 0) ||
-                        event.id === params.eventId
+                        event.id === params?.eventId
                       }
                     />
                   );
@@ -134,7 +134,7 @@ export const EventsSection: React.FC<IEventsSectionProps> = ({
                     event={event}
                     isSelected={
                       (pathname === "/dashboard" && index === 0) ||
-                      event.id === params.eventId
+                      event.id === params?.eventId
                     }
                   />
                 );

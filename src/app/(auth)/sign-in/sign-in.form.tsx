@@ -48,7 +48,7 @@ const AuthForm = () => {
         });
         return;
       }
-      const redirectTo = searchParams.get("redirectTo") || "/dashboard";
+      const redirectTo = searchParams?.get("redirectTo") || "/dashboard";
       router.push(redirectTo);
     } catch (error: any) {
       toast({
@@ -63,7 +63,7 @@ const AuthForm = () => {
     try {
       const response = await clientApiProvider.auth.signInWithProvider(
         "google",
-        searchParams.get("redirectTo") || "/dashboard"
+        searchParams?.get("redirectTo") || "/dashboard"
       );
       if (response.ok) {
         router.push(response.data.url);
@@ -78,7 +78,7 @@ const AuthForm = () => {
     try {
       const response = await clientApiProvider.auth.signInWithProvider(
         "github",
-        searchParams.get("redirectTo") || "/dashboard"
+        searchParams?.get("redirectTo") || "/dashboard"
       );
       if (response.ok) {
         router.push(response.data.url);

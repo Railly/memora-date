@@ -7,9 +7,10 @@ import {
   differenceInSeconds,
   differenceInMonths,
   differenceInYears,
+  add,
 } from "date-fns";
 import { EventWithType } from "@/lib/entities.types";
-import { cn } from "@/lib/utils";
+import { cn, getNextOccurrence } from "@/lib/utils";
 
 type Countdown = {
   years: number;
@@ -26,28 +27,25 @@ interface CountdownProps {
 
 const Countdown: React.FC<CountdownProps> = ({ reminder }) => {
   const [countdown, setCountdown] = useState<Countdown | null>(null);
-  const frameRef = useRef<number>();
-
-  const localDateMerged = useMemo(() => {
-    if (reminder?.length) {
-      const date = reminder[0].date;
-      const time = reminder[0].time;
-      const rawDateMerged = new Date(`${date}T${time}`);
-      return rawDateMerged.toLocaleString("en-US");
-    }
-    return null;
-  }, [reminder]);
 
   useEffect(() => {
-    if (localDateMerged) {
-      const eventDate = new Date(localDateMerged);
+    if (reminder) {
       const updateCountdown = () => {
         const now = new Date();
-        const nextEventDate = new Date(
-          now.getFullYear(),
-          eventDate.getMonth(),
-          eventDate.getDate()
-        );
+        const nextEventDate = getNextOccurrence(reminder);
+        if (!nextEventDate) return;
+
+        if (now >= nextEventDate) {
+          setCountdown({
+            years: 0,
+            months: 0,
+            days: 0,
+            hours: 0,
+            minutes: 0,
+            seconds: 0,
+          });
+          return;
+        }
 
         setCountdown({
           years: differenceInYears(nextEventDate, now),
@@ -57,15 +55,12 @@ const Countdown: React.FC<CountdownProps> = ({ reminder }) => {
           minutes: differenceInMinutes(nextEventDate, now) % 60,
           seconds: differenceInSeconds(nextEventDate, now) % 60,
         });
-
-        frameRef.current = requestAnimationFrame(updateCountdown);
       };
 
-      frameRef.current = requestAnimationFrame(updateCountdown);
-
-      return () => cancelAnimationFrame(frameRef.current as number);
+      const intervalId = setInterval(updateCountdown, 1000);
+      return () => clearInterval(intervalId);
     }
-  }, [localDateMerged]);
+  }, [reminder]);
 
   return (
     <>
@@ -130,11 +125,12 @@ function CountDownUnit({
 }) {
   const strValue = value?.toString().padStart(2, "0") || "00";
 
-  const isGray =
-    strValue === "00" &&
-    (upperValue === null ||
-      upperValue === 0 ||
-      (lowerValue !== undefined && Number(value) <= Number(lowerValue)));
+  const isGray = useMemo(() => {
+    if (upperValue === null && value === 0) return true;
+    if (upperValue === null) return false;
+    if (lowerValue === null) return false;
+    if (value === 0) return true;
+  }, [upperValue, lowerValue]);
 
   return (
     <div
