@@ -15,7 +15,7 @@ const CompactEventCard: React.FC<CompactEventCardProps> = ({ event }) => {
     <Link
       className={cn(
         buttonVariants({ variant: "event" }),
-        "h-full justify-normal items-start focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary flex flex-col w-40 gap-1 p-2 rounded-md text-black cursor-pointer",
+        "justify-normal items-start focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary flex flex-col w-40 gap-1 p-2 rounded-md text-black cursor-pointer h-[6.6rem]",
         eventTypeUtils[event.event_type?.value || "default"].className
       )}
       href={`/events/details/${event.id}`}
@@ -32,7 +32,7 @@ const CompactEventCard: React.FC<CompactEventCardProps> = ({ event }) => {
         </p>
       </div>
       <div className="w-full">
-        <p className="font-bold leading-snug sm:w-full overflow-hidden overflow-ellipsis whitespace-break-spaces line-clamp-3">
+        <p className="overflow-hidden font-bold leading-snug sm:w-full overflow-ellipsis whitespace-break-spaces line-clamp-3">
           {event.description}
         </p>
       </div>
