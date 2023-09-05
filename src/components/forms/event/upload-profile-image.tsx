@@ -69,7 +69,7 @@ export const UploadProfileImage: React.FC<IUploadProfileImageProps> = ({
       {isProfile ? (
         <div
           onClick={handleSelectImage}
-          className="absolute bottom-0 right-0 z-10 p-1 border rounded-full cursor-pointer bg-foreground border-muted/40"
+          className="absolute bottom-0 right-0 z-10 p-1 border-2 rounded-full cursor-pointer bg-foreground border-muted"
         >
           <input
             type="file"
