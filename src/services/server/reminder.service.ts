@@ -443,6 +443,27 @@ class ServerReminderService extends ServerServiceApi {
       };
     }
   }
+
+  async getReminder({ reminder_id }: { reminder_id: string }) {
+    try {
+      const { error, data } = await this.supabase
+        .from("reminder")
+        .select()
+        .eq("id", reminder_id);
+
+      return { error, data };
+    } catch (error) {
+      console.error(error);
+      return {
+        data: null,
+        error: {
+          name: REMINDER_ERROR,
+          message: "Something went wrong, please try again later",
+          status: 500,
+        },
+      };
+    }
+  }
 }
 
 export default ServerReminderService;
