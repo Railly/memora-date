@@ -1,9 +1,9 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { User } from "@supabase/supabase-js";
 import { IconSearch, IconX } from "@tabler/icons-react";
-import { useRouter } from "next/navigation";
 
 import { useSearch } from "@/hooks/useSearch";
 import { Contact } from "@/lib/entities.types";
@@ -15,13 +15,13 @@ import ContactsEmptyState from "../shared/molecules/contacts-empty-state";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { useToast } from "../ui/use-toast";
-import ContactCard, { ContactCardSkeleton } from "./molecules/contact-card";
-import { ContactDialog } from "./molecules/contact-dialog";
-import ContactPicker from "./molecules/contact-picker";
 import {
   parseContactBeforeCreate,
   parseContactBeforeUpdate,
 } from "./contacts.helpers";
+import ContactCard, { ContactCardSkeleton } from "./molecules/contact-card";
+import { ContactDialog } from "./molecules/contact-dialog";
+import ContactPicker from "./molecules/contact-picker";
 
 interface IContactsSectionProps {
   contacts: Contact[] | null;
@@ -223,7 +223,7 @@ export const ContactsSection: React.FC<IContactsSectionProps> = ({
       </form>
       <ContactPicker currentContacts={contacts} user={user} />
 
-      <main className="md:h-[84vh] md:overflow-y-auto pb-0 md:pb-16 pr-0 md:pr-2">
+      <section className="md:h-[84vh] md:overflow-y-auto pb-0 md:pb-16 pr-0 md:pr-2">
         <div className="flex flex-col gap-4">
           {isSkeleton
             ? Array.from({ length: 3 }, (_, index) => (
@@ -242,7 +242,7 @@ export const ContactsSection: React.FC<IContactsSectionProps> = ({
             <ContactsEmptyState onCreatedContact={onCreateContact} />
           )}
         </div>
-      </main>
+      </section>
       <ContactDialog onCreatedContact={onCreateContact}>
         {<FloatingActionButton />}
       </ContactDialog>

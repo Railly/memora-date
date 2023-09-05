@@ -14,9 +14,9 @@ export default async function MyContactsPage() {
 
   return (
     <div className="flex justify-center">
-      <div className="flex flex-col items-center w-full gap-6">
+      <div className="flex flex-col items-center w-full gap-6 md:gap-4">
         <SubHeader title="My Contacts">
-          <Badge variant="yellow">
+          <Badge variant="yellow" className="h-6">
             {contacts?.data?.length}{" "}
             {contacts?.data?.length === 1 ? "contact" : "contacts"}
           </Badge>
