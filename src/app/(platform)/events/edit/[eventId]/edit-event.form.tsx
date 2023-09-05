@@ -80,6 +80,7 @@ const EditEventForm: React.FC<IEditEventFormProps> = ({
       reminder: data.reminder,
       event_id: event.id,
       reminder_id: reminderId,
+      message_schedule_id: event.reminder?.[0].message_schedule_id,
     });
 
     debugFormValues({

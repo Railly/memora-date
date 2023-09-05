@@ -1,7 +1,7 @@
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import { Reminder } from "./entities.types";
-import { format } from "date-fns";
+import { EventWithType, Reminder } from "./entities.types";
+import { add, format } from "date-fns";
 import {
   IconBell,
   IconCalendar,
@@ -132,3 +132,53 @@ export const generateCards = ({
     content: visibility ? "Public" : "Private",
   },
 ];
+
+export const generateCronExpression = (interval_unit: string) => {
+  switch (interval_unit) {
+    case "Minute":
+      return "* * * * *";
+    case "Hour":
+      return "0 * * * *";
+    case "Day":
+      return "0 0 * * *";
+    case "Week":
+      return "0 0 * * 0";
+    case "Month":
+      return "0 0 1 * *";
+    case "Year":
+      return "0 0 1 1 *";
+    default:
+      throw new Error("Invalid interval_unit");
+  }
+};
+
+export const getNextOccurrence = (reminder: EventWithType["reminder"]) => {
+  if (!reminder?.length) return null;
+
+  const { date, time, reminder_type, interval_unit, interval_value } =
+    reminder[0];
+  if (!date || !time) return null;
+
+  const now = new Date();
+  let nextEventDate = new Date(`${date}T${time}`);
+
+  if (reminder_type === "RECURRING") {
+    if (!interval_unit || !interval_value) return null;
+
+    let loopSafetyCounter = 0; // Add a safety counter
+    while (nextEventDate <= now) {
+      if (loopSafetyCounter > 1000) {
+        console.error("Infinite loop detected");
+        return null;
+      }
+
+      nextEventDate = add(nextEventDate, {
+        [interval_unit.toLowerCase()]: interval_value,
+      });
+
+      loopSafetyCounter++;
+    }
+  }
+
+  return nextEventDate;
+};
