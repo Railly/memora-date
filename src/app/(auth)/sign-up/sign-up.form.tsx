@@ -40,7 +40,7 @@ const SignUpForm = () => {
       }
     } catch (error: any) {
       toast({
-        title: error.message,
+        title: error.statusText,
         variant: "danger",
       });
       setIsLoading(false);

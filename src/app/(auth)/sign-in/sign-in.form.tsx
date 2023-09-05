@@ -52,7 +52,7 @@ const AuthForm = () => {
       router.push(redirectTo);
     } catch (error: any) {
       toast({
-        title: error.message,
+        title: error.statusText,
         variant: "danger",
       });
     }
