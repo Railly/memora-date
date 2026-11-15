@@ -11,7 +11,7 @@ export const siteConfig = {
   authors: [
     {
       name: "Railly Hugo",
-      url: "https://raillyhugo.com",
+      url: "https://railly.dev",
     },
     {
       name: "Carlos Tarmeño",
